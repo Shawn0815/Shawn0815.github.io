@@ -14,7 +14,7 @@ timezone: Asia/Taipei
 # jekyll-seo-tag settings › https://github.com/jekyll/jekyll-seo-tag/blob/master/docs/usage.md
 # ↓ --------------------------
 
-title: Shawn # the main title
+title: Shawn Yu # the main title
 
 tagline: Software Backend Engineer # it will display as the subtitle
 
@@ -98,7 +98,7 @@ theme_mode: dark # [light | dark]
 cdn:
 
 # the avatar on sidebar, support local or CORS resources
-avatar: /assets/img/lotso.jpg
+avatar: /assets/img/me.jpg
 
 # The URL of the site-wide social preview image used in SEO `og:image` meta tag.
 # It can be overridden by a customized `page.image` in front matter.
