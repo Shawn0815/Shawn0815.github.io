@@ -1,10 +1,15 @@
 ---
-title: 217. Contains Duplicate
+title: Easy | Leetcode 217. Contains Duplicate
 author: <author_id>
 date: 2025-06-19T16:15:03.175Z
 categories: [Leetcode, Easy, Array & Hashing]
 tags: [Leetcode, Java]
+description: Given an integer array nums, return true if any value appears at least twice in the array, and return false if every element is distinct.
+image:
+  path: /assets/img/2025-06-20-09-03-41.png
 math: true
+neetcode_url: "https://neetcode.io/problems/duplicate-integer"
+leetcode_url: "https://leetcode.com/problems/contains-duplicate/description/"
 ---
 
 ## Question
