@@ -6,7 +6,7 @@ categories: [Leetcode, Easy, Array & Hashing]
 tags: [Leetcode, Java]
 description: Given an integer array nums, return true if any value appears at least twice in the array, and return false if every element is distinct.
 image:
-  path: /assets/img/2025-06-20-09-03-41.png
+  path: /assets/img/2025-06-20-16-16-28.png
 math: true
 neetcode_url: "https://neetcode.io/problems/duplicate-integer"
 leetcode_url: "https://leetcode.com/problems/contains-duplicate/description/"
