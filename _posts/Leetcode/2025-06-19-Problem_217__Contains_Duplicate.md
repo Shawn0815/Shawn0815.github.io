@@ -8,8 +8,10 @@ description: Given an integer array nums, return true if any value appears at le
 image:
   path: /assets/img/2025-06-20-16-16-28.png
 math: true
-neetcode_url: "https://neetcode.io/problems/duplicate-integer"
 leetcode_url: "https://leetcode.com/problems/contains-duplicate/description/"
+leetcode_title: "點此進入LeetCode"
+neetcode_url: "https://neetcode.io/problems/duplicate-integer"
+neetcode_title: "點此進入NeetCode"
 ---
 
 ## Question
