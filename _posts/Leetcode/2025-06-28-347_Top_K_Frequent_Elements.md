@@ -1,7 +1,7 @@
 ---
 title: Easy | Leetcode 347. Top K Frequent Elements
 author: <author_id>
-date: 2025-06-27 23:10 
+date: 2025-06-28 00:10 
 categories: [Leetcode, Easy, Array & Hashing]
 tags: [Leetcode, Java]
 description: Given an integer array nums and an integer k, return the k most frequent elements. You may return the answer in any order.
@@ -18,7 +18,7 @@ neetcode_title: "點此進入NeetCode"
 
 Given an integer array nums and an integer k, return the k most frequent elements. You may return the answer in any order.
 
-![](./assets/img/IMG_6500.jpeg)
+![](/assets/img/IMG_6500.jpeg)
 
 ---
 
@@ -153,7 +153,7 @@ public class Solution2 {
 3. 遍歷這個frequncy array，從index (count)最大開始，若其value list有數字，將他加入reuslt陣列。
     - result陣列個數為k的時候，返回結果。  
 
-![](./assets/img/2025-06-28-02-03.png)  
+![](/assets/img/2025-06-28-02-03.png)  
 <br>
 
 **程式碼：**
