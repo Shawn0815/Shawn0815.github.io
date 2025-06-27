@@ -1,7 +1,7 @@
 ---
 title: Easy | Leetcode 347. Top K Frequent Elements
 author: <author_id>
-date: 2025-06-19T16:15:03.175Z
+date: 2025-06-27 23:10 
 categories: [Leetcode, Easy, Array & Hashing]
 tags: [Leetcode, Java]
 description: Given an integer array nums and an integer k, return the k most frequent elements. You may return the answer in any order.
@@ -85,3 +85,6 @@ public class Solution1 {
     - 儲存map：$O(m)$，最壞 $O(n)$
     - 儲存list：$O(m)$，最壞 $O(n)$
     - 儲存結果：$O(k)$ => 總共：$O(n)$
+<!--stackedit_data:
+eyJoaXN0b3J5IjpbLTgwMTM0MTI3M119
+-->
