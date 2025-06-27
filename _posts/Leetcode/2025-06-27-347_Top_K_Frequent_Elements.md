@@ -20,7 +20,7 @@ Given an integer array nums and an integer k, return the k most frequent element
 
 ![](./assets/img/IMG_6500.jpeg)
 
-- - -
+---
 
 ## Solution
 
