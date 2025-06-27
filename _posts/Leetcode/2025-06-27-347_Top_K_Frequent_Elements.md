@@ -1,10 +1,18 @@
-# 347. Top K Frequent Elements
-
-Description：Given an integer array  `nums`  and an integer  `k`, return  _the_  `k`  _most frequent elements_. You may return the answer in  **any order**.
-
-Leetcode：https://leetcode.com/problems/top-k-frequent-elements/
-
-Neetcode：https://neetcode.io/problems/top-k-elements-in-list
+---
+title: Easy | Leetcode 347. Top K Frequent Elements
+author: <author_id>
+date: 2025-06-19T16:15:03.175Z
+categories: [Leetcode, Easy, Array & Hashing]
+tags: [Leetcode, Java]
+description: Given an integer array nums and an integer k, return the k most frequent elements. You may return the answer in any order.
+image:
+  path: /assets/img/2025-06-20-16-16-28.png
+math: true
+leetcode_url: https://leetcode.com/problems/top-k-frequent-elements/
+leetcode_title: "點此進入LeetCode"
+neetcode_url: https://neetcode.io/problems/top-k-elements-in-list
+neetcode_title: "點此進入NeetCode"
+---
 
 ## Question
 
@@ -68,15 +76,12 @@ public class Solution1 {
 <br>
 
 **複雜度分析：**
-- Time complexity: O(n logn)
-    - 遍歷num所有元素存入map：O(n)
-    -   將map轉為list：O(m)，m為map的key個數，最壞為O(n)
-    -   排序：O(m logm)，最壞為 O(n logn)
-    -   取出前K個元素：O(k) => 總共：O(n logn)
-- Space complexity: O(n)
-    - 儲存map：O(m)，最壞O(n)
-    - 儲存list：O(m)，最壞O(n)
-    - 儲存結果：O(k) => 總共：O(n)
-<!--stackedit_data:
-eyJoaXN0b3J5IjpbMTQwNjk5Mjk0OV19
--->
+- Time complexity: $O(n logn)$
+    - 遍歷num所有元素存入map：$O(n)$
+    -   將map轉為list：$O(m)$，m為map的key個數，最壞為 $O(n)$
+    -   排序：$O(m logm)$，最壞為 $O(n logn)$
+    -   取出前K個元素：$O(k)$ => 總共：$O(n logn)$
+- Space complexity: $O(n)$
+    - 儲存map：$O(m)$，最壞 $O(n)$
+    - 儲存list：$O(m)$，最壞 $O(n)$
+    - 儲存結果：$O(k)$ => 總共：$O(n)$
