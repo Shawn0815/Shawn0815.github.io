@@ -89,3 +89,11 @@ hr {
     border-left: none;
     border-right: none;
 }
+
+.card {
+  border: 2px solid black !important;
+}
+
+html[data-mode='dark'] .card {
+  border: 2px solid white !important;
+}
