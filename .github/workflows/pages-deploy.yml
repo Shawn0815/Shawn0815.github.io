@@ -44,26 +44,6 @@ jobs:
         with:
           ruby-version: 3.3
           bundler-cache: true
-      
-      ## ✅ 這裡是新加的 Node 環境設定
-      - name: Setup Node
-        uses: actions/setup-node@v3
-        with:
-          node-version: 18  # 建議 Node 16 或 18，看 Chirpy 要求
-
-      ## ✅ 新增：安裝 yarn 相依套件
-      - name: Install Node dependencies
-        run: yarn install
-
-      ## ✅ 新增：執行 assets 編譯
-      - name: Build assets with Webpack
-        run: yarn build
-
-      ## ✅ Jekyll build：這時 assets 才有完整 CSS
-      - name: Build site
-        run: bundle exec jekyll b -d "_site${{ steps.pages.outputs.base_path }}"
-        env:
-          JEKYLL_ENV: "production"
 
       - name: Build site
         run: bundle exec jekyll b -d "_site${{ steps.pages.outputs.base_path }}"
