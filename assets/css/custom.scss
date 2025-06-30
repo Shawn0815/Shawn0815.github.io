@@ -1,0 +1,117 @@
+---
+---
+
+/* 先把主題的主體樣式 import 進來 */
+@use "main";
+
+h1 {
+    // h1 設定
+    font-size: 32px;
+
+    // h1 沒有 margin 設定
+}
+
+h2 {
+    // h2 設定
+    .content & {
+        line-height: 1.75;
+        font-weight: 700;
+        font-size: 28px;
+        margin-top: 1em; // 28px
+        margin-bottom: 0.5em; // 14px
+    }
+}
+
+h3 {
+    // h3 設定
+    .content & {
+        line-height: 1.75;
+        font-weight: 700;
+        font-size: 24px;
+        margin-top: 1em; // 24px
+        margin-bottom: 0.5em; // 12px
+    }
+}
+
+h4 {
+    // h4 設定
+    .content & {
+        line-height: 1.75;
+        font-weight: 700;
+        font-size: 18px;
+        margin-top: 1em; // 18px
+        margin-bottom: 1em; // 18px
+    }
+}
+
+h5 {
+    // h5 設定
+    .content & {
+        line-height: 1.5;
+        font-weight: 700;
+        font-size: 16px;
+        margin-top: 1em;
+        margin-bottom: 0.5em;
+    }
+}
+
+.content p {
+    font-size: 18px;
+    margin-top: 0em;
+    margin-bottom: 1em;
+}
+
+/* 全站通用標題樣式 */
+.content h2, h3 {
+    position: relative;
+    padding-left: 1rem;  /* 為左側彩條預留空間 */
+}
+
+/* H2：主色條，長且醒目 */
+.content h2::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 0;                    /* 拉到整個 h2 的頂端 */
+    height: 100%;              /* 撐滿整個 h2 */
+    width: 0.5rem;             /* 更粗一點 */
+    background-color: #007bff; /* 主色（藍） */
+}
+
+/* H3：副色條，較細但同樣高 */
+.content h3::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 0;
+    height: 100%;
+    width: 0.4rem;
+    background-color: #28a745; /* 副色（綠） */
+}
+
+hr {
+    -moz-box-sizing: content-box;
+    box-sizing: content-box;
+    border: 1px solid #aaa;
+    border-radius: 1px;
+    height: 2px;
+    width: 100%;
+    max-width: 35%;
+    margin: 30px auto;
+    border-left: none;
+    border-right: none;
+}
+
+#post-list {
+    .card {
+        html[data-mode='light'] {
+        --bs-card-border-color: black;
+        --bs-body-color: black;
+        }
+
+        html[data-mode='dark'] {
+        --bs-card-border-color: white;
+        --bs-body-color: white;
+        }
+    }
+}
