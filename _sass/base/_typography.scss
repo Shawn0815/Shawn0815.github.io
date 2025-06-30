@@ -1,0 +1,343 @@
+@use '../abstracts/variables' as v;
+@use '../abstracts/breakpoints' as bp;
+@use '../abstracts/mixins' as mx;
+@use '../abstracts/placeholders';
+
+h1 {
+  @extend %heading;
+  // h1 沒有 @extend %anchor
+
+  // h1 設定
+  line-height: 1.75;
+  font-size: 32px;
+  // h1 沒有 margin 設定
+}
+
+h2 {
+  @extend %heading;
+  @extend %anchor;
+
+  // h2 設定
+  .content & {
+    line-height: 1.75;
+    font-weight: 700;
+    font-size: 28px;
+    margin-top: 1em; // 28px
+    margin-bottom: 0.5em; // 14px
+  }
+}
+
+h3 {
+  @extend %heading;
+  @extend %anchor;
+
+  // h3 設定
+  .content & {
+    line-height: 1.75;
+    font-weight: 700;
+    font-size: 24px;
+    margin-top: 1em; // 24px
+    margin-bottom: 0.5em; // 12px
+  }
+}
+
+h4 {
+  @extend %heading;
+  @extend %anchor;
+
+  // h4 設定
+  .content & {
+    line-height: 1.75;
+    font-weight: 700;
+    font-size: 18px;
+    margin-top: 1em; // 18px
+    margin-bottom: 0.5em; // 9px
+  }
+}
+
+h5 {
+  @extend %heading;
+  @extend %anchor;
+
+  // h5 設定
+  .content & {
+    line-height: 1.5;
+    font-weight: 700;
+    font-size: 16px;
+    margin-top: 1em;
+    margin-bottom: 0.5em;
+  }
+}
+
+
+.content p {
+  font-size: 16px;
+  margin-top: 1em;
+  margin-bottom: 1em;
+}
+
+/* 全站通用標題樣式 */
+.content h2, h3 {
+  position: relative;
+  padding-left: 1rem;  /* 為左側彩條預留空間 */
+}
+
+/* H2：主色條，長且醒目 */
+.content h2::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0;                    /* 拉到整個 h2 的頂端 */
+  height: 100%;              /* 撐滿整個 h2 */
+  width: 0.5rem;             /* 更粗一點 */
+  background-color: #007bff; /* 主色（藍） */
+}
+
+/* H3：副色條，較細但同樣高 */
+.content h3::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0;
+  height: 100%;
+  width: 0.4rem;
+  background-color: #28a745; /* 副色（綠） */
+}
+
+a {
+  @extend %link-color;
+
+  text-decoration: none;
+}
+
+img {
+  max-width: 100%;
+  height: auto;
+  transition: all 0.35s ease-in-out;
+
+  .blur & {
+    $blur: 20px;
+
+    -webkit-filter: blur($blur);
+    filter: blur($blur);
+  }
+}
+
+blockquote {
+  border-left: 0.125rem solid var(--blockquote-border-color);
+  padding-left: 1rem;
+  color: var(--blockquote-text-color);
+  margin-top: 0.5rem;
+
+  > p:last-child {
+    margin-bottom: 0;
+  }
+
+  &[class^='prompt-'] {
+    border-left: 0;
+    position: relative;
+    padding: 1rem 1rem 1rem 3rem;
+    color: var(--prompt-text-color);
+
+    @extend %rounded;
+
+    &::before {
+      text-align: center;
+      width: 3rem;
+      position: absolute;
+      left: 0.25rem;
+      margin-top: 0.4rem;
+      text-rendering: auto;
+      -webkit-font-smoothing: antialiased;
+    }
+  }
+
+  @include mx.prompt('tip', '\f0eb', $fa-style: 'regular');
+  @include mx.prompt('info', '\f06a', $rotate: 180);
+  @include mx.prompt('warning', '\f06a');
+  @include mx.prompt('danger', '\f071');
+}
+
+kbd {
+  font-family: Lato, sans-serif;
+  display: inline-block;
+  vertical-align: middle;
+  line-height: 1.3rem;
+  min-width: 1.75rem;
+  text-align: center;
+  margin: 0 0.3rem;
+  padding-top: 0.1rem;
+  color: var(--kbd-text-color);
+  background-color: var(--kbd-bg-color);
+  border-radius: v.$radius-sm;
+  border: solid 1px var(--kbd-wrap-color);
+  box-shadow: inset 0 -2px 0 var(--kbd-wrap-color);
+}
+
+hr {
+    -moz-box-sizing: content-box;
+    box-sizing: content-box;
+    border: 1px solid #aaa;
+    border-radius: 1px;
+    height: 2px;
+    width: 100%;
+    max-width: 35%;
+    margin: 30px auto;
+    border-left: none;
+    border-right: none;
+}
+
+footer {
+  background-color: var(--main-bg);
+  height: v.$footer-height;
+  border-top: 1px solid var(--main-border-color);
+
+  @extend %text-xs;
+
+  a {
+    @extend %text-highlight;
+
+    &:hover {
+      @extend %link-hover;
+    }
+  }
+
+  em {
+    @extend %text-highlight;
+  }
+
+  p {
+    text-align: center;
+    margin-bottom: 0;
+  }
+}
+
+/* fontawesome icons */
+i {
+  &.far,
+  &.fas {
+    @extend %no-cursor;
+  }
+}
+
+sup {
+  @extend %sup-fn-target;
+}
+
+main {
+  line-height: 1.75;
+
+  h1 {
+    margin-top: 2rem;
+
+    @include bp.lg {
+      margin-top: 3rem;
+    }
+  }
+
+  p {
+    > a.popup {
+      &:not(.normal):not(.left):not(.right) {
+        @include mx.align-center;
+      }
+    }
+  }
+
+  .categories,
+  #tags,
+  #archives {
+    a:not(:hover) {
+      @extend %no-bottom-border;
+    }
+  }
+
+  @include bp.lte(bp.get(sm)) {
+    .content {
+      > blockquote[class^='prompt-'] {
+        @include mx.ml-mr(-1rem);
+
+        border-radius: 0;
+        max-width: none;
+      }
+    }
+  }
+}
+
+.footnotes > ol {
+  padding-left: 2rem;
+  margin-top: 0.5rem;
+
+  > li {
+    &:not(:last-child) {
+      margin-bottom: 0.3rem;
+    }
+
+    @extend %sup-fn-target;
+
+    > p {
+      margin-left: 0.25em;
+
+      @include mx.mt-mb(0);
+    }
+  }
+}
+
+.footnote {
+  @at-root a#{&} {
+    @include mx.ml-mr(1px);
+    @include mx.pl-pr(2px);
+
+    border-bottom-style: none !important;
+  }
+}
+
+.reversefootnote {
+  @at-root a#{&} {
+    font-size: 0.6rem;
+    line-height: 1;
+    position: relative;
+    bottom: 0.25em;
+    margin-left: 0.25em;
+    border-bottom-style: none !important;
+  }
+}
+
+/* --- Begin of Markdown table style --- */
+
+/* it will be created by Liquid */
+.table-wrapper {
+  overflow-x: auto;
+  margin-bottom: 1.5rem;
+
+  > table {
+    min-width: 100%;
+    overflow-x: auto;
+    border-spacing: 0;
+
+    thead {
+      border-bottom: solid 2px rgba(210, 215, 217, 0.75);
+
+      th {
+        @extend %table-cell;
+      }
+    }
+
+    tbody {
+      tr {
+        border-bottom: 1px solid var(--tb-border-color);
+
+        &:nth-child(2n) {
+          background-color: var(--tb-even-bg);
+        }
+
+        &:nth-child(2n + 1) {
+          background-color: var(--tb-odd-bg);
+        }
+
+        td {
+          @extend %table-cell;
+        }
+      }
+    } /* tbody */
+  } /* table */
+}
