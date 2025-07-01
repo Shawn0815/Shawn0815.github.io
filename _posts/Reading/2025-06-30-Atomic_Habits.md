@@ -1,5 +1,5 @@
 ---
-title: 《原子習慣》重點心得
+title: 《原子習慣》重點心得：不靠意志力就變成你想要的人
 author: shawn_yu
 date: 2025-06-30 04:38:00 +0800
 categories: [閱讀]
