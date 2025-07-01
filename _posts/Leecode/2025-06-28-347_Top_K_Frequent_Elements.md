@@ -1,6 +1,6 @@
 ---
 title: Easy | Leetcode 347. Top K Frequent Elements
-author: <author_id>
+author: shawn_yu
 date: 2025-06-28 00:10 
 categories: [Leetcode, Easy, Array & Hashing]
 tags: [Leetcode, Java]

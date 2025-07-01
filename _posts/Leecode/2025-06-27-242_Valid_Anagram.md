@@ -1,6 +1,6 @@
 ---
 title: Easy | Leetcode 242. Valid Anagram
-author: <author_id>
+author: shawn_yu
 date: 2025-06-27 01:19:00 +0800
 categories: [Leetcode, Easy, Array & Hashing]
 tags: [Leetcode, Java]

@@ -1,6 +1,6 @@
 ---
 title: Easy | Leetcode 49. Group Anagrams
-author: <author_id>
+author: shawn_yu
 date: 2025-06-27 03:33:00 +0800
 categories: [Leetcode, Easy, Array & Hashing]
 tags: [Leetcode, Java]
