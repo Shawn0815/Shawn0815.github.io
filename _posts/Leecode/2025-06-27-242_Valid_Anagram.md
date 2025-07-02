@@ -18,7 +18,7 @@ neetcode_title: "點此進入NeetCode"
 
 給定兩個字串 s 和 t，如果 t 是 s 的「字母異位詞」，就回傳 true，否則回傳 false。
 
-![](/assets/img/2025-06-27-01-20-29.png)
+![](/assets/img/2025-07-03-00-30-32.png)
 
 ---
 

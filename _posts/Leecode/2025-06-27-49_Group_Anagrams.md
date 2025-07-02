@@ -16,7 +16,7 @@ neetcode_title: "點此進入NeetCode"
 
 ## Question
 
-![](/assets/img/2025-06-27-15-38-27.png)
+![](/assets/img/2025-07-03-00-29-10.png)
 
 ---
 

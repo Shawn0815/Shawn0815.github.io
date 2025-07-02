@@ -18,7 +18,7 @@ neetcode_title: "點此進入NeetCode"
 
 Given an integer array nums and an integer k, return the k most frequent elements. You may return the answer in any order.
 
-![](/assets/img/2025-07-01-12-57-48.jpeg)
+![](/assets/img/2025-07-03-00-31-52.png)
 
 ---
 

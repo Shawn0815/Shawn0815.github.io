@@ -17,7 +17,7 @@ neetcode_title: "點此進入NeetCode"
 
 給定一個整數陣列，判斷是否存在重複元素。
 
-![](/assets/img/2025-06-20-02-51-04.png)
+![](/assets/img/2025-07-03-00-27-20.png)
 
 ---
 
