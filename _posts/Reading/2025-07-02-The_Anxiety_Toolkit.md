@@ -4,7 +4,7 @@ author: shawn_yu
 date: 2025-06-30 04:38:00 +0800
 categories: [閱讀]
 tags: [閱讀, 自我成長]
-image: /assets/img/2025-06-30-23-22-30.png
+image: /assets/img/2025-07-02-anxiety.png
 ---
 
 ## 前言
