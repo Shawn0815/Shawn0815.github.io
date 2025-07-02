@@ -7,52 +7,48 @@ h1 {
   font-size: 32px;
 }
 
-.content h2 {
-  font-family: 'Inter', sans-serif;
-  font-weight: 700;
-  line-height: 1.75;
-  font-size: 28px;
-  margin-top: 1em; // 28px
-  margin-bottom: 0.5em; // 14px
-}
-
-.content h3 {
-  font-family: 'Inter', sans-serif;
-  font-weight: 700;
-  line-height: 1.75;
-  font-size: 24px;
-  margin-top: 1em; // 24px
-  margin-bottom: 0.6em; // 14px
-}
-
-.content h4 {
-  font-family: 'Inter', sans-serif;
-  font-weight: 700;
-  line-height: 1.75;
-  font-size: 18px;
-  margin-top: 1em; // 18px
-  margin-bottom: 0.5em; // 9px
-}
-
+.content h2,
+.content h3,
+.content h4,
 .content h5 {
   font-family: 'Inter', sans-serif;
   font-weight: 700;
   line-height: 1.75;
+  margin-top: 22px;
+  margin-bottom: 14px;
+}
+
+.content h2 {
+  font-size: 28px;
+}
+
+.content h3 {
+  font-size: 24px;
+}
+
+.content h4 {
+  font-size: 18px;
+  margin-bottom: 6px;
+}
+
+.content h5 {
   font-size: 16px;
-  margin-top: 1em; // 16px
-  margin-bottom: 0.5em; // 8px
 }
 
 .content p {
   font-family: 'Inter', sans-serif;
   font-size: 18px;
-  margin-top: 0em; // 0px
-  margin-bottom: 1em; // 18px
 }
 
-.content :not(.sidebar) li {
+.content :not(.sidebar) li{
   font-family: 'Inter', sans-serif;
   font-size: 18px;
+}
+
+.content :not(.sidebar) li ul,
+.content :not(.sidebar) li ol {
+    margin-top: 0px;
+    margin-bottom: 10px;
 }
 
 /* 全站通用標題樣式 */
