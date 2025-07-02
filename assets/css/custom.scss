@@ -14,7 +14,7 @@ h1 {
   font-family: 'Inter', sans-serif;
   font-weight: 700;
   line-height: 1.75;
-  margin-top: 22px;
+  margin-top: 24px;
   margin-bottom: 14px;
 }
 
@@ -27,8 +27,9 @@ h1 {
 }
 
 .content h4 {
-  font-size: 18px;
-  margin-bottom: 6px;
+  font-size: 19px;
+  margin-top: 26px;
+  margin-bottom: 8px;
 }
 
 .content h5 {
@@ -38,6 +39,8 @@ h1 {
 .content p {
   font-family: 'Inter', sans-serif;
   font-size: 18px;
+  margin-top: 0px;
+  margin-bottom: 18px;
 }
 
 .content :not(.sidebar) li{
@@ -48,35 +51,34 @@ h1 {
 .content :not(.sidebar) li ul,
 .content :not(.sidebar) li ol {
     margin-top: 0px;
-    margin-bottom: 10px;
+    margin-bottom: 8px;
 }
 
-/* 全站通用標題樣式 */
 .content h2, h3 {
   position: relative;
-  padding-left: 1rem;  /* 為左側彩條預留空間 */
+  padding-left: 1rem;
 }
 
-/* H2：主色條，長且醒目 */
 .content h2::before {
   content: "";
   position: absolute;
   left: 0;
-  top: 0;                    /* 拉到整個 h2 的頂端 */
-  height: 100%;              /* 撐滿整個 h2 */
-  width: 0.5rem;             /* 更粗一點 */
-  background-color: #007bff; /* 主色（藍） */
+  top: 50%;               /* 定位點到容器高度 50% */
+  transform: translateY(-50%); /* 再往上拉一半高度 */
+  height: 85%;            /* 如果還要留空，可用 */
+  width: 0.5rem;
+  background-color: #007bff;
 }
 
-/* H3：副色條，較細但同樣高 */
 .content h3::before {
   content: "";
   position: absolute;
   left: 0;
-  top: 0;
-  height: 100%;
-  width: 0.4rem;
-  background-color: #28a745; /* 副色（綠） */
+  top: 50%;               /* 定位點到容器高度 50% */
+  transform: translateY(-50%); /* 再往上拉一半高度 */
+  height: 85%;            /* 如果還要留空，可用 */
+  width: 0.5rem;
+  background-color: #28a745;
 }
 
 hr {
