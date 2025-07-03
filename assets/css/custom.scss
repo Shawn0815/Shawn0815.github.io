@@ -19,20 +19,20 @@ h1 {
 
 .content h2 {
   font-size: 28px;
-  margin-top: 36px;
-  margin-bottom: 14px;
+  margin-top: 44px;
+  margin-bottom: 16px;
 }
 
 .content h3 {
   font-size: 24px;
-  margin-top: 32px;
-  margin-bottom: 12px;
+  margin-top: 36px;
+  margin-bottom: 14px;
 }
 
 .content h4 {
   font-size: 18px;
-  margin-top: 20px;
-  margin-bottom: 8px;
+  margin-top: 30px;
+  margin-bottom: 12px;
 }
 
 .content h5 {
@@ -41,12 +41,22 @@ h1 {
   margin-bottom: 6px;
 }
 
+.content h2 + h3 {
+  margin-top: 28px;
+}
+
+.content h3 + h4,
+.content h2 + h4 {
+  margin-top: 24px;
+}
+
+
 .content p {
   font-family: 'Inter', sans-serif;
   line-height: 1.75;
   font-size: 17px;
   margin-top: 0px;
-  margin-bottom: 24px;
+  margin-bottom: 18px;
 }
 
 .content :not(.sidebar) li{
@@ -61,8 +71,8 @@ h1 {
     margin-bottom: 8px;
 }
 
-pre {
-  margin-bottom: 24px !important;
+.highlight {
+  margin-bottom: 20px;
 }
 
 .content h2, h3 {
@@ -90,6 +100,14 @@ pre {
   height: 100%;            /* 如果還要留空，可用 */
   width: 0.4rem;
   background-color: #28a745;
+}
+
+.content h4::before {
+  content: "➤";
+  display: inline-block;
+  margin-right: 14px;
+  color: #f39c12;    /* 例如亮黃色 */
+  font-size: 1em;    /* 跟 h4 差不多大 */
 }
 
 hr {
