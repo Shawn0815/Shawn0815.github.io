@@ -32,13 +32,13 @@ h1 {
 .content h4 {
   font-size: 18px;
   margin-top: 30px;
-  margin-bottom: 12px;
+  margin-bottom: 10px;
 }
 
 .content h5 {
-  font-size: 16px;
-  margin-top: 16px;
-  margin-bottom: 6px;
+  font-size: 18px;
+  margin-top: 24px;
+  margin-bottom: 8px;
 }
 
 .content h2 + h3 {
@@ -50,6 +50,11 @@ h1 {
   margin-top: 24px;
 }
 
+.content h2 + h5,
+.content h3 + h5,
+.content h4 + h5 {
+  margin-top: 18px;
+}
 
 .content p {
   font-family: 'Inter', sans-serif;
