@@ -31,7 +31,7 @@ h1 {
 
 .content h4 {
   font-size: 18px;
-  margin-top: 30px;
+  margin-top: 32px;
   margin-bottom: 10px;
 }
 
@@ -45,9 +45,9 @@ h1 {
   margin-top: 28px;
 }
 
-.content h3 + h4,
-.content h2 + h4 {
-  margin-top: 24px;
+.content h2 + h4,
+.content h3 + h4 {
+  margin-top: 22px;
 }
 
 .content h2 + h5,
@@ -123,7 +123,7 @@ hr {
     height: 2px;
     width: 100%;
     max-width: 35%;
-    margin: 30px auto;
+    margin: 40px auto;
     border-left: none;
     border-right: none;
 }
