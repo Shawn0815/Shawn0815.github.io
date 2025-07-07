@@ -156,3 +156,27 @@ public class Solution4 {
 - Space complexity: $O(n)$
   - 主要的空間使用來自於 boxed() 和 collect(Collectors.toSet())，這兩者皆需要 O(n) 的額外空間來存儲 Integer 物件和 Set。
   - 其餘操作都是O(1)。
+
+> 💡**Question: 為什麼isSubtree還要檢查subroot跟root是否為null，isSametree不是會檢查？**  
+> 
+> 因為如果不檢查上面標示的那兩個部分，如果今天root==null，但subRoot != null，會出問題。
+> 
+> Ex: 這段會返回false，然後往下一段走（把root的左右子樹跟subroot比對）
+> 
+> ``` java
+> // root跟subroot相等，return true
+> if (isSametree(root, subRoot)) {
+>      return true;
+> }
+> ```
+> 
+> 這行就會出現null pointer的問題，因為root是null
+> 
+> ``` java
+> // 繼續往root的左右子樹跟subroot比對
+> return isSametree(root.left, subRoot) || isSametree(root.right, subRoot);
+> ```
+> 
+> **結論：**  
+> **在一開始就排除root=null的狀況，分為：(1) subroot是null 跟 (2) subroot不是null**  
+> (1) 前者直接return true（因為null一定是任何樹的subtree）  > (2) 後者> return false（也就是上面討論的root==null, subroot != null）**
