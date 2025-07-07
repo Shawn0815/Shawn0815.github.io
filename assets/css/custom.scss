@@ -1,6 +1,9 @@
 ---
 ---
 
+/*
+設定h1~h5的字體和行距、間距
+*/
 h1 {
   font-family: 'Inter', sans-serif;
   font-weight: 700;
@@ -14,75 +17,110 @@ h1 {
 .content h5 {
   font-family: 'Inter', sans-serif;
   font-weight: 700;
-  line-height: 1.4;
+  line-height: 1.7;
 }
 
 .content h2 {
   font-size: 28px;
-  margin-top: 40px;
+  margin-top: 44px;
   margin-bottom: 16px;
 }
 
 .content h3 {
   font-size: 24px;
-  margin-top: 36px;
+  margin-top: 40px;
   margin-bottom: 14px;
 }
 
 .content h4 {
   font-size: 18px;
   margin-top: 32px;
-  margin-bottom: 10px;
+  margin-bottom: 8px;
 }
 
 .content h5 {
   font-size: 18px;
-  margin-top: 24px;
-  margin-bottom: 8px;
+  margin-top: 32px;
+  margin-bottom: 6px;
 }
 
+
+// 特別設定標題間的間距（縮小）
+// 否則標題間的間距會是標題本身的margin-top，太大
 .content h2 + h3 {
-  margin-top: 28px;
+  margin-top: 20px;
 }
 
 .content h2 + h4,
 .content h3 + h4 {
-  margin-top: 22px;
+  margin-top: 18px;
 }
 
 .content h2 + h5,
 .content h3 + h5,
 .content h4 + h5 {
-  margin-top: 18px;
+  margin-top: 16px;
 }
 
+
+/*
+設定內文的字體和行距、間距
+*/
 .content p {
   font-family: 'Inter', sans-serif;
   line-height: 1.75;
   font-size: 17px;
   margin-top: 0px;
-  margin-bottom: 18px;
-}
-
-.content :not(.sidebar) li{
-  font-family: 'Inter', sans-serif;
-  font-size: 17px;
-  margin-bottom: 24px;
-}
-
-.content :not(.sidebar) li ul,
-.content :not(.sidebar) li ol {
-    margin-top: 0px;
-    margin-bottom: 8px;
-}
-
-.highlight {
   margin-bottom: 32px;
 }
 
+// 特別設定內文跟列點的間距（縮小）
+// 否則內文跟列點的間距會是p的margin-bottom，太大
+.content p:has(+ ul),
+.content p:has(+ ol) {
+  margin-bottom: 8px;
+}
+
+
+/*
+設定列點的字體（對齊內文）
+*/
+.content :not(.sidebar) li{
+  font-family: 'Inter', sans-serif;
+  font-size: 17px;
+}
+
+// 特別設定子列點與母列點間的距離（縮小）
+// 否則子列點跟母列點間距會是模板預設，太大
+.content :not(.sidebar) li ul,
+.content :not(.sidebar) li ol {
+    margin-top: 0px;
+    margin-bottom: 6px;
+}
+
+// 特別設定列點跟內文的距離（放大）
+// 否則列點跟內文間距會是模板預設，太小，要對齊內文段落的間距
+.content ul + p,
+.content ol + p {
+  margin-top: 32px;
+}
+
+
+/*
+設定程式碼區塊的下間距（放大）
+否則程式碼區塊跟下一段落間距會是模板預設，太小，要對齊內文段落的間距
+*/
+.highlight {
+  margin-bottom: 36px;
+}
+
+
+/*
+設定h2~h4的左側標示符號
+*/
 .content h2, h3 {
   position: relative;
-  padding-left: 1rem;
+  padding-left: 22px;
 }
 
 .content h2::before {
@@ -91,8 +129,8 @@ h1 {
   left: 0;
   top: 50%;               /* 定位點到容器高度 50% */
   transform: translateY(-50%); /* 再往上拉一半高度 */
-  height: 100%;            /* 如果還要留空，可用 */
-  width: 0.5rem;
+  height: 80%;            /* 如果還要留空，可用 */
+  width: 0.6rem;
   background-color: #007bff;
 }
 
@@ -102,8 +140,8 @@ h1 {
   left: 0;
   top: 50%;               /* 定位點到容器高度 50% */
   transform: translateY(-50%); /* 再往上拉一半高度 */
-  height: 100%;            /* 如果還要留空，可用 */
-  width: 0.4rem;
+  height: 80%;            /* 如果還要留空，可用 */
+  width: 0.5rem;
   background-color: #28a745;
 }
 
@@ -115,6 +153,10 @@ h1 {
   font-size: 1em;    /* 跟 h4 差不多大 */
 }
 
+
+/*
+設定分隔線的格式
+*/
 hr {
     -moz-box-sizing: content-box;
     box-sizing: content-box;
@@ -128,10 +170,14 @@ hr {
     border-right: none;
 }
 
+
+/*
+設定主頁面卡片的邊框
+*/
 .card {
-  border: 2px solid black !important;
+  border: 2px solid black !important; // 預設黑邊框
 }
 
 html[data-mode='dark'] .card {
-  border: 2px solid white !important;
+  border: 2px solid white !important; // 深色模式白邊框
 }
