@@ -56,7 +56,7 @@
   line-height: 1.75;
   font-size: 17px;
   margin-top: 0px;
-  margin-bottom: 10px;
+  margin-bottom: 14px;
 }
 
 // 特別設定內文跟列點的間距（縮小）
@@ -81,23 +81,6 @@
 .content :not(.sidebar) li ol {
     margin-top: 0px;
     margin-bottom: 6px;
-}
-
-// 特別設定列點跟內文的距離（放大）
-// 否則列點跟內文間距會是模板預設，太小，要對齊內文段落的間距
-.content ul + p,
-.content ol + p {
-  margin-top: 32px;
-}
-
-
-/*
-設定程式碼區塊的下間距（放大）
-否則程式碼區塊跟下一段落間距會是模板預設，太小，要對齊內文段落的間距
-*/
-.highlight {
-  margin-top: 24px;
-  margin-bottom: 36px;
 }
 
 /* 修復手機版程式碼左右貼邊問題 */
@@ -206,20 +189,6 @@ html[data-mode='dark'] .card {
   color: #6b7280;  /* Notion-style gray icon */
 }
 
-.content strong {
-  color: #d11f1f;
-  font-weight: 700;
-}
-
-.content strong.strong-line-black {
-  color: black !important;
-}
-
-.content span.black-bold {
-  color: #111 !important;
-  font-weight: 700;
-}
-
 h1.card-title {
   font-family: "Source Sans Pro", "Microsoft Yahei", sans-serif !important;
   font-size: 1.5rem !important;
@@ -228,7 +197,7 @@ h1.card-title {
 }
 
 .post-title {
-  font-size: 2.4rem;
+  font-size: 36px;
   font-weight: 700;
   line-height: 1.25;
   margin-top: 32px;     /* ← 補回上方空白 */
