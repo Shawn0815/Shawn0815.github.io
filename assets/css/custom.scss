@@ -1040,3 +1040,18 @@ html[data-mode='dark'] .card.categories {
   height: 0;
   visibility: hidden;
 }
+
+// 文章卡片上的 LeetCode 難度（_includes/post-card.html），顏色跟文章資訊框的難度標籤一樣
+.card-wrapper .level-badge {
+  display: inline-block;
+  padding: 0 0.5rem;
+  border-radius: 8px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  line-height: 1.4rem;
+  flex-shrink: 0;
+
+  &.level-easy { color: #065f46; background: #d1fae5; }
+  &.level-medium { color: #92400e; background: #fef3c7; }
+  &.level-hard { color: #991b1b; background: #fee2e2; }
+}

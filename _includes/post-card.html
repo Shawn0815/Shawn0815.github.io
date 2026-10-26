@@ -70,6 +70,11 @@
             {% endif %}
           </div>
 
+          <!-- LeetCode 難度：放在這一行的最後（不放在左邊那段裡，那段太長會被截成 …），顏色跟文章裡的資訊框一樣 -->
+          {% if post.level %}
+            <span class="level-badge level-{{ post.level | downcase }} ms-2">{{ post.level }}</span>
+          {% endif %}
+
           {% if post.pin %}
             <div class="pin ms-1">
               <i class="fas fa-thumbtack fa-fw"></i>
