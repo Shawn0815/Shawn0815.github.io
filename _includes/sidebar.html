@@ -92,7 +92,7 @@
 
 
   <script>
-    // 記住展開狀態（只存在這台瀏覽器）；文章頁預設展開，目前這篇所在的分支一律展開
+    /* 記住展開狀態（只存在這台瀏覽器）；文章頁預設展開，目前這篇所在的分支一律展開 */
     (function () {
       var KEY = 'category-tree-open';
       var saved = {};
@@ -110,7 +110,7 @@
         var isPost = {{ page.layout | jsonify }} === 'post';
         setOpen(saved.__root !== undefined ? saved.__root || isPost : isPost);
         var flip = function (e) {
-          e.preventDefault();      // 圖示在 <a> 裡，點圖示只展開，不換頁
+          e.preventDefault();      /* 圖示在 <a> 裡，點圖示只展開，不換頁 */
           e.stopPropagation();
           var open = body.hidden;
           setOpen(open);
@@ -123,11 +123,11 @@
         });
       }
 
-      // 資料夾：點名稱換頁，點圖示展開（跟「分類」一樣）
+      /* 資料夾：點名稱換頁，點圖示展開（跟「分類」一樣） */
       document.querySelectorAll('.category-tree-body .tree-node > summary').forEach(function (summary) {
         summary.addEventListener('click', function (e) {
           if (!e.target.closest('.tree-icon')) {
-            e.preventDefault();          // 不展開
+            e.preventDefault();          /* 不展開 */
             var link = e.target.closest('a.tree-label');
             if (link) window.location.href = link.href;
           }
