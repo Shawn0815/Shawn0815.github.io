@@ -1,0 +1,253 @@
+<!-- The Side Bar -->
+
+<aside aria-label="Sidebar" id="sidebar" class="d-flex flex-column align-items-end">
+  <header class="profile-wrapper">
+    <a href="{{ '/' | relative_url }}" id="avatar" class="rounded-circle">
+      {%- if site.avatar != empty and site.avatar -%}
+        {%- capture avatar_url -%}
+          {% include media-url.html src=site.avatar %}
+        {%- endcapture -%}
+        <img src="{{- avatar_url -}}" width="112" height="112" alt="avatar" onerror="this.style.display='none'">
+      {%- endif -%}
+    </a>
+
+    <a class="site-title d-block" href="{{ '/' | relative_url }}">{{ site.title }}</a>
+    <p class="site-subtitle fst-italic mb-0">{{ site.tagline }}</p>
+  </header>
+  <!-- .profile-wrapper -->
+
+  <nav class="flex-column flex-grow-1 w-100 ps-0 sidebar-nav">
+    <ul class="nav">
+      <!-- home -->
+      <li class="nav-item{% if page.layout == 'home' %}{{ " active" }}{% endif %}">
+        <a href="{{ '/' | relative_url }}" class="nav-link">
+          <i class="fa-fw fas fa-home"></i>
+          <span>{{ site.data.locales[include.lang].tabs.home | upcase }}</span>
+        </a>
+      </li>
+      <!-- the real tabs -->
+      {% for tab in site.tabs %}
+        {% if tab.url contains 'categories' %}
+          {% capture tab_name %}{{ tab.url | split: '/' }}{% endcapture %}
+          <!-- 分類：點了在下面展開分類樹（大分類 › 子分類 › 文章），像 Notion 側欄。
+               文章依 source（筆記路徑，含 x.y 編號）排序；目前這篇所在的分支預設展開。 -->
+          <li class="nav-item category-tree-item{% if tab.url == page.url %}{{ " active" }}{% endif %}">
+            <!-- 像 Notion：滑鼠移到圖示上，圖示換成 ▸，點了在下面展開分類樹；點「分類」文字照舊進分類頁 -->
+            <a href="{{ tab.url | relative_url }}" class="nav-link">
+              <span class="tree-toggle" role="button" tabindex="0" aria-label="Toggle category tree" aria-expanded="false" aria-controls="category-tree-body">
+                <i class="fa-fw {{ tab.icon }}"></i>
+                <span class="tree-arrow" aria-hidden="true"><i class="fas fa-angle-right fa-fw"></i></span>
+              </span>
+              <span>{{ site.data.locales[include.lang].tabs.[tab_name] | default: tab.title | upcase }}</span>
+            </a>
+              <div class="category-tree-body" id="category-tree-body" hidden>
+    {% assign top_groups = site.posts | group_by_exp: "p", "p.categories[0]" | sort: "name" %}
+              {% for top in top_groups %}
+                {% assign top_open = false %}
+                {% if page.categories[0] == top.name %}{% assign top_open = true %}{% endif %}
+                {% assign has_sub = top.items | where_exp: "p", "p.categories[1]" | size %}
+                <details class="tree-node" data-key="{{ top.name }}"{% if top_open %} open{% endif %}>
+                  <summary><span class="tree-icon"><i class="far fa-folder{% if has_sub > 0 %}-open{% endif %} fa-fw"></i><span class="tree-arrow" aria-hidden="true"><i class="fas fa-angle-right fa-fw"></i></span></span><a class="tree-label" href="{% capture _url %}/categories/{{ top.name | slugify | url_encode }}/{% endcapture %}{{ _url | relative_url }}">{{ top.name }}</a><span class="tree-count">{{ top.size }}</span></summary>
+                  {% assign sub_groups = top.items | group_by_exp: "p", "p.categories[1]" | sort: "name" %}
+                  {% for sub in sub_groups %}
+                    {% assign posts = sub.items | sort: "source" %}
+                    {% if sub.name == "" or sub.name == nil %}
+                      <ul class="tree-posts">
+                        {% for post in posts %}
+                          <li{% if post.url == page.url %} class="active"{% endif %}><a href="{{ post.url | relative_url }}"><i class="far fa-file-lines fa-fw"></i><span>{{ post.title | split: "  " | last }}</span></a></li>
+                        {% endfor %}
+                      </ul>
+                    {% else %}
+                      {% assign sub_open = false %}
+                      {% if top_open and page.categories[1] == sub.name %}{% assign sub_open = true %}{% endif %}
+                      <details class="tree-node tree-sub" data-key="{{ top.name }}/{{ sub.name }}"{% if sub_open %} open{% endif %}>
+                        <summary><span class="tree-icon"><i class="far fa-folder fa-fw"></i><span class="tree-arrow" aria-hidden="true"><i class="fas fa-angle-right fa-fw"></i></span></span><a class="tree-label" href="{% capture _url %}/categories/{{ sub.name | slugify | url_encode }}/{% endcapture %}{{ _url | relative_url }}">{{ sub.name }}</a><span class="tree-count">{{ sub.size }}</span></summary>
+                        <ul class="tree-posts">
+                          {% for post in posts %}
+                            <li{% if post.url == page.url %} class="active"{% endif %}><a href="{{ post.url | relative_url }}"><i class="far fa-file-lines fa-fw"></i><span>{{ post.title | split: "  " | last }}</span></a></li>
+                          {% endfor %}
+                        </ul>
+                      </details>
+                    {% endif %}
+                  {% endfor %}
+                </details>
+              {% endfor %}
+              </div>
+          </li>
+          {% continue %}
+        {% endif %}
+        <li class="nav-item{% if tab.url == page.url %}{{ " active" }}{% endif %}">
+          <a href="{{ tab.url | relative_url }}" class="nav-link">
+            <i class="fa-fw {{ tab.icon }}"></i>
+            {% capture tab_name %}{{ tab.url | split: '/' }}{% endcapture %}
+
+            <span>{{ site.data.locales[include.lang].tabs.[tab_name] | default: tab.title | upcase }}</span>
+          </a>
+        </li>
+        <!-- .nav-item -->
+      {% endfor %}
+    </ul>
+  </nav>
+
+
+
+  <script>
+    // 記住展開狀態（只存在這台瀏覽器）；文章頁預設展開，目前這篇所在的分支一律展開
+    (function () {
+      var KEY = 'category-tree-open';
+      var saved = {};
+      try { saved = JSON.parse(localStorage.getItem(KEY) || '{}'); } catch (e) {}
+      function save() { try { localStorage.setItem(KEY, JSON.stringify(saved)); } catch (e) {} }
+
+      var toggle = document.querySelector('.category-tree-item .tree-toggle');
+      var body = document.getElementById('category-tree-body');
+      if (toggle && body) {
+        var setOpen = function (open) {
+          body.hidden = !open;
+          toggle.setAttribute('aria-expanded', open);
+          toggle.closest('li').classList.toggle('tree-open', open);
+        };
+        var isPost = {{ page.layout | jsonify }} === 'post';
+        setOpen(saved.__root !== undefined ? saved.__root || isPost : isPost);
+        var flip = function (e) {
+          e.preventDefault();      // 圖示在 <a> 裡，點圖示只展開，不換頁
+          e.stopPropagation();
+          var open = body.hidden;
+          setOpen(open);
+          saved.__root = open;
+          save();
+        };
+        toggle.addEventListener('click', flip);
+        toggle.addEventListener('keydown', function (e) {
+          if (e.key === 'Enter' || e.key === ' ') flip(e);
+        });
+      }
+
+      // 資料夾：點名稱換頁，點圖示展開（跟「分類」一樣）
+      document.querySelectorAll('.category-tree-body .tree-node > summary').forEach(function (summary) {
+        summary.addEventListener('click', function (e) {
+          if (!e.target.closest('.tree-icon')) {
+            e.preventDefault();          // 不展開
+            var link = e.target.closest('a.tree-label');
+            if (link) window.location.href = link.href;
+          }
+        });
+      });
+
+      document.querySelectorAll('.category-tree-body details').forEach(function (node) {
+        var k = node.dataset.key;
+        if (!node.open && saved[k]) node.open = true;
+        node.addEventListener('toggle', function () { saved[k] = node.open; save(); });
+      });
+    })();
+  </script>
+
+  <div class="sidebar-bottom d-flex flex-wrap  align-items-center w-100">
+    {% unless site.theme_mode %}
+      <button type="button" class="btn btn-link nav-link" aria-label="Switch Mode" id="mode-toggle">
+        <i class="fas fa-adjust"></i>
+      </button>
+
+      {% if site.data.contact.size > 0 %}
+        <span class="icon-border"></span>
+      {% endif %}
+    {% endunless %}
+
+    {% for entry in site.data.contact %}
+      {%- assign url = null -%}
+
+      {% case entry.type %}
+        {% when 'github', 'twitter' %}
+          {%- unless site[entry.type].username -%}
+            {%- continue -%}
+          {%- endunless -%}
+          {%- capture url -%}
+            https://{{ entry.type }}.com/{{ site[entry.type].username }}
+          {%- endcapture -%}
+        {% when 'email' %}
+          {%- unless site.social.email -%}
+            {%- continue -%}
+          {%- endunless -%}
+          {%- assign email = site.social.email | split: '@' -%}
+          {%- capture url -%}
+            javascript:location.href = 'mailto:' + ['{{ email[0] }}','{{ email[1] }}'].join('@')
+          {%- endcapture -%}
+        {% when 'rss' %}
+          {% assign url = '/feed.xml' | relative_url %}
+        {% else %}
+          {% assign url = entry.url %}
+      {% endcase %}
+
+      {% if url %}
+        <a
+          href="{{ url }}"
+          aria-label="{{ entry.type }}"
+          {% assign link_types = '' %}
+
+          {% unless entry.noblank %}
+            target="_blank"
+            {% assign link_types = 'noopener noreferrer' %}
+          {% endunless %}
+
+          {% if entry.type == 'mastodon' %}
+            {% assign link_types = link_types | append: ' me' | strip %}
+          {% endif %}
+
+          {% unless link_types == empty %}
+            rel="{{ link_types }}"
+          {% endunless %}
+        >
+          <i class="{{ entry.icon }}"></i>
+        </a>
+      {% endif %}
+    {% endfor %}
+  </div>
+  <!-- .sidebar-bottom -->
+</aside>
+<!-- #sidebar -->
+
+<!-- 側欄右邊緣的拖拉把手：拖拉調整側欄寬度（200～480px），記在這台瀏覽器；雙擊回到預設寬度。手機版不顯示 -->
+<div class="sidebar-resizer" role="separator" aria-orientation="vertical" aria-label="Resize sidebar" title="拖拉調整寬度，雙擊還原"></div>
+<script>
+  (function () {
+    var KEY = 'sidebar-width', MIN = 200, MAX = 480;
+    var root = document.documentElement;
+    var handle = document.querySelector('.sidebar-resizer');
+
+    function apply(width) {
+      if (width) {
+        root.style.setProperty('--sidebar-width', width + 'px');
+        root.setAttribute('data-sidebar-resized', '');
+      } else {
+        root.style.removeProperty('--sidebar-width');
+        root.removeAttribute('data-sidebar-resized');
+      }
+    }
+
+    var saved = null;
+    try { saved = parseInt(localStorage.getItem(KEY), 10); } catch (e) {}
+    if (saved >= MIN && saved <= MAX) apply(saved);
+
+    handle.addEventListener('mousedown', function (e) {
+      e.preventDefault();
+      root.classList.add('sidebar-resizing');
+      function move(ev) {
+        apply(Math.min(MAX, Math.max(MIN, ev.clientX)));
+      }
+      function up() {
+        root.classList.remove('sidebar-resizing');
+        document.removeEventListener('mousemove', move);
+        document.removeEventListener('mouseup', up);
+        var w = parseInt(getComputedStyle(root).getPropertyValue('--sidebar-width'), 10);
+        try { if (w) localStorage.setItem(KEY, w); } catch (e) {}
+      }
+      document.addEventListener('mousemove', move);
+      document.addEventListener('mouseup', up);
+    });
+
+    handle.addEventListener('dblclick', function () {
+      apply(null);
+      try { localStorage.removeItem(KEY); } catch (e) {}
+    });
+  })();
+</script>

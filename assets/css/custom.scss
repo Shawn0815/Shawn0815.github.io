@@ -25,8 +25,15 @@
 
 .content h3 {
   font-size: 24px;
-  margin-top: 32px;
-  margin-bottom: 14px;
+  margin-top: 24px;
+  margin-bottom: 8px;
+}
+
+// 小標下面直接接程式碼框時，8px 太擠（框有底色和邊框），留跟 h3 上方一樣的 24px
+// （上下 margin 會合併，取大的，所以這裡就是實際間距）
+.content h3 + div.highlighter-rouge,
+.content h4 + div.highlighter-rouge {
+  margin-top: 24px;
 }
 
 .content h4 {
@@ -100,8 +107,34 @@
   padding-left: 0 !important;
 }
 
+// 行號的 pre 也會吃到上面的 padding-right 12px，讓程式碼離行號更遠，歸零
+.post-content td.rouge-gutter pre {
+  padding-right: 0 !important;
+}
+
 .post-content .highlight td.rouge-gutter {
-  margin-left: 0.25rem !important;
+  margin-left: 0.75rem !important;
+}
+
+// 程式碼離行號太遠：Chirpy 程式碼欄的 padding-left 1rem，加上上面「手機貼邊」給 pre 的 12px，
+// 疊起來快 40px。程式碼欄只留 0.5rem，pre 本身不再加
+.post-content td.rouge-code {
+  padding-left: 0.5rem !important;
+
+  pre {
+    padding-left: 0 !important;
+  }
+}
+
+// Chirpy 預設把 plaintext（筆記裡的 ```txt）的行號藏起來，這裡顯示回來，跟其他語言一致
+// Chirpy 也把 plaintext 行號欄的 padding 歸零，行號會比程式碼高 5px，所以補回其他語言的 5px
+.post-content div.language-plaintext td.rouge-gutter {
+  padding: 5px !important;
+  margin-right: 0.75rem !important;
+
+  .lineno {
+    display: block;
+  }
 }
 
 /*
@@ -615,4 +648,214 @@ article > header .img-fluid {
   aspect-ratio: 10 / 3;
   object-fit: contain;
   background: #fff;
+}
+
+// 巢狀的編號列點：第二層用 a, b, c，第三層用 i, ii, iii（跟 Word / Notion 一樣）
+.post-content ol ol {
+  list-style-type: lower-alpha;
+}
+
+.post-content ol ol ol {
+  list-style-type: lower-roman;
+}
+
+// 左側分類樹（_includes/sidebar.html）：「分類」左邊的 ▸ 展開分類樹，像 Notion 側欄的展開收合清單
+#sidebar .sidebar-nav {
+  overflow-y: auto;    // 樹很長時只捲動導覽區，左下角按鈕不會被擠掉
+  min-height: 0;       // flex 子元素預設不會縮到比內容矮，要設 0 才會出現捲軸
+}
+
+#sidebar .category-tree-item {
+  position: relative;
+
+  // 圖示的位置：平常顯示原本的圖示，滑鼠移到圖示上換成 ▸（展開時 ▾），像 Notion
+  .tree-toggle {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 1.4rem;
+    height: 1.4rem;
+    margin: 0 1.5rem 0 -0.2rem;    // 讓「分類」兩個字跟其他項目對齊
+    border-radius: 4px;
+    cursor: pointer;
+
+    i { margin-right: 0 !important; }
+
+    .tree-arrow {
+      display: none;
+
+      i { transition: transform 0.15s; }
+    }
+
+    &:hover {
+      background: var(--sidebar-hover-bg);
+
+      > i { display: none; }
+      .tree-arrow { display: inline-block; }
+    }
+  }
+
+  &.tree-open > a .tree-arrow i { transform: rotate(90deg); }
+
+  // 展開後的文字跟「首頁、分類、標籤」用同一套字型樣式（Chirpy 的 nav-link span：90%、粗體、0.2px 字距、同一個顏色）
+  .category-tree-body {
+    padding: 0.25rem 0 0.5rem 1rem;
+    font-size: 90%;
+    font-weight: 600;
+    letter-spacing: 0.2px;
+    color: var(--sidebar-muted-color);
+
+    a { color: inherit; }
+  }
+
+  // 每一列（大分類、子分類、文章）的外觀一樣
+  .tree-node > summary,
+  .tree-posts li a {
+    display: flex;
+    align-items: center;
+    padding: 0.3rem 0.5rem;
+    border-radius: 0.5rem;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+
+    &:hover { background-color: var(--sidebar-hover-bg); }
+  }
+
+  .tree-node > summary {
+    cursor: default;
+    list-style: none;
+
+    &::-webkit-details-marker { display: none; }
+  }
+
+  // 每一列的圖示：樣式跟「首頁、分類」的圖示一樣；分類的資料夾圖示滑鼠移上去換成 ▸（展開時 ▾），像 Notion
+  .tree-icon,
+  .tree-posts li a > i {
+    flex: none;
+    width: 1.25rem;
+    margin-right: 0.75rem;
+    font-size: 95%;
+    opacity: 0.8;
+    text-align: center;
+  }
+
+  // 資料夾圖示：跟「分類」的 toggle 一樣的大小、圓角和 hover 底框
+  .tree-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 1.4rem;
+    height: 1.4rem;
+    border-radius: 4px;
+    cursor: pointer;
+
+    &:hover { background: var(--sidebar-hover-bg); }
+
+    .tree-arrow {
+      display: none;
+
+      i { transition: transform 0.15s; }
+    }
+
+    &:hover {
+      > i { display: none; }
+      .tree-arrow { display: inline-block; }
+    }
+  }
+
+  .tree-node[open] > summary > .tree-icon .tree-arrow i { transform: rotate(90deg); }
+
+  .tree-label {
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .tree-label {
+    flex: 1;
+  }
+
+  // 篇數：字型、顏色跟名稱一樣，靠右
+  .tree-count {
+    margin-left: 0.5rem;
+  }
+
+  .tree-sub { margin-left: 0.75rem; }
+
+  .tree-posts {
+    list-style: none;
+    margin: 0 0 0 0.75rem;  // Chirpy 給側欄所有 ul 下方 2rem，這裡歸零
+    padding: 0;
+
+    li a { display: flex; }
+
+    // 目前這篇：跟「首頁」被選到時一樣
+    li.active a {
+      color: var(--sidebar-active-color);
+      background-color: var(--sidebar-hover-bg);
+    }
+  }
+}
+
+// 導覽列（首頁、分類、標籤…）整排往左一點：Chirpy 預設左右 1.5rem（超寬螢幕 2.75rem）
+#sidebar ul li.nav-item {
+  padding-left: 0.75rem !important;
+}
+
+// 側欄可以拖拉調整寬度（_includes/sidebar.html 的 .sidebar-resizer）。
+// Chirpy 的側欄寬度寫死 260px（1650px 以上 300px），主內容的 margin-left 跟著它，
+// 拖拉後用 --sidebar-width 一起覆蓋；手機版（850px 以下）側欄是滑出來的，不處理。
+.sidebar-resizer {
+  display: none;
+}
+
+@media all and (min-width: 850px) {
+  .sidebar-resizer {
+    display: block;
+    position: fixed;
+    top: 0;
+    left: calc(var(--sidebar-width, 260px) - 3px);
+    width: 6px;
+    height: 100%;
+    z-index: 1000;
+    cursor: col-resize;
+
+    // 滑鼠移上去或拖拉中，出現一條細線
+    &::after {
+      content: "";
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      left: 2px;
+      width: 2px;
+      background: transparent;
+      transition: background 0.15s;
+    }
+
+    &:hover::after { background: var(--sidebar-border-color); }
+  }
+
+  html.sidebar-resizing {
+    cursor: col-resize;
+    user-select: none;
+
+    .sidebar-resizer::after { background: var(--sidebar-border-color); }
+  }
+
+  html[data-sidebar-resized] {
+    #sidebar { width: var(--sidebar-width); }
+    #main-wrapper { margin-left: var(--sidebar-width); }
+    #toc-popup { left: var(--sidebar-width); }
+  }
+}
+
+@media all and (min-width: 1650px) {
+  .sidebar-resizer {
+    left: calc(var(--sidebar-width, 300px) - 3px);
+  }
+}
+
+// 分類頁（_layouts/categories.html）：科目卡片收合時箭頭朝右、展開時朝下；資料夾圖示不換
+.categories .post-list-trigger.collapsed i {
+  transform: rotate(-90deg);
 }
