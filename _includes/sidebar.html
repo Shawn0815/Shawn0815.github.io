@@ -43,10 +43,8 @@
               <div class="category-tree-body" id="category-tree-body" hidden>
     {% assign top_groups = site.posts | group_by_exp: "p", "p.categories[0]" | sort: "name" %}
               {% for top in top_groups %}
-                {% assign top_open = false %}
-                {% if page.categories[0] == top.name %}{% assign top_open = true %}{% endif %}
                 {% assign has_sub = top.items | where_exp: "p", "p.categories[1]" | size %}
-                <details class="tree-node" data-key="{{ top.name }}"{% if top_open %} open{% endif %}>
+                <details class="tree-node" data-key="{{ top.name }}">
                   <summary><span class="tree-icon"><i class="far fa-folder{% if has_sub > 0 %}-open{% endif %} fa-fw"></i><span class="tree-arrow" aria-hidden="true"><i class="fas fa-angle-right fa-fw"></i></span></span><a class="tree-label" href="{% capture _url %}/categories/{{ top.name | slugify | url_encode }}/{% endcapture %}{{ _url | relative_url }}">{{ top.name }}</a><span class="tree-count">{{ top.size }}</span></summary>
                   {% assign sub_groups = top.items | group_by_exp: "p", "p.categories[1]" | sort: "name" %}
                   {% for sub in sub_groups %}
@@ -58,9 +56,7 @@
                         {% endfor %}
                       </ul>
                     {% else %}
-                      {% assign sub_open = false %}
-                      {% if top_open and page.categories[1] == sub.name %}{% assign sub_open = true %}{% endif %}
-                      <details class="tree-node tree-sub" data-key="{{ top.name }}/{{ sub.name }}"{% if sub_open %} open{% endif %}>
+                      <details class="tree-node tree-sub" data-key="{{ top.name }}/{{ sub.name }}">
                         <summary><span class="tree-icon"><i class="far fa-folder fa-fw"></i><span class="tree-arrow" aria-hidden="true"><i class="fas fa-angle-right fa-fw"></i></span></span><a class="tree-label" href="{% capture _url %}/categories/{{ sub.name | slugify | url_encode }}/{% endcapture %}{{ _url | relative_url }}">{{ sub.name }}</a><span class="tree-count">{{ sub.size }}</span></summary>
                         <ul class="tree-posts">
                           {% for post in posts %}
@@ -92,7 +88,7 @@
 
 
   <script>
-    /* 記住展開狀態（只存在這台瀏覽器）；文章頁預設展開，目前這篇所在的分支一律展開 */
+    /* 記住展開狀態（只存在這台瀏覽器）；預設全部收合，不會因為打開文章自動展開 */
     (function () {
       var KEY = 'category-tree-open';
       var saved = {};
@@ -107,8 +103,7 @@
           toggle.setAttribute('aria-expanded', open);
           toggle.closest('li').classList.toggle('tree-open', open);
         };
-        var isPost = {{ page.layout | jsonify }} === 'post';
-        setOpen(saved.__root !== undefined ? saved.__root || isPost : isPost);
+        setOpen(!!saved.__root);
         var flip = function (e) {
           e.preventDefault();      /* 圖示在 <a> 裡，點圖示只展開，不換頁 */
           e.stopPropagation();
@@ -248,6 +243,62 @@
     handle.addEventListener('dblclick', function () {
       apply(null);
       try { localStorage.removeItem(KEY); } catch (e) {}
+    });
+  })();
+</script>
+
+<script>
+  /* 右側面板（最近更新、熱門標籤、目錄）也可以拖拉寬度：拖左邊的邊框，雙擊還原 */
+  (function () {
+    var KEY = 'panel-width', MIN = 200, MAX = 520;
+    var root = document.documentElement;
+
+    function apply(width) {
+      if (width) {
+        root.style.setProperty('--panel-width', width + 'px');
+        root.setAttribute('data-panel-resized', '');
+      } else {
+        root.style.removeProperty('--panel-width');
+        root.removeAttribute('data-panel-resized');
+      }
+    }
+
+    var saved = null;
+    try { saved = parseInt(localStorage.getItem(KEY), 10); } catch (e) {}
+    if (saved >= MIN && saved <= MAX) apply(saved);
+
+    document.addEventListener('DOMContentLoaded', function () {
+      var panel = document.getElementById('panel-wrapper');
+      if (!panel) return;
+      var handle = document.createElement('div');
+      handle.className = 'panel-resizer';
+      handle.setAttribute('role', 'separator');
+      handle.setAttribute('aria-orientation', 'vertical');
+      handle.title = '拖拉調整寬度，雙擊還原';
+      panel.appendChild(handle);
+
+      handle.addEventListener('mousedown', function (e) {
+        e.preventDefault();
+        var right = panel.getBoundingClientRect().right;
+        root.classList.add('sidebar-resizing');
+        function move(ev) {
+          apply(Math.round(Math.min(MAX, Math.max(MIN, right - ev.clientX))));
+        }
+        function up() {
+          root.classList.remove('sidebar-resizing');
+          document.removeEventListener('mousemove', move);
+          document.removeEventListener('mouseup', up);
+          var w = parseInt(getComputedStyle(root).getPropertyValue('--panel-width'), 10);
+          try { if (w) localStorage.setItem(KEY, w); } catch (e) {}
+        }
+        document.addEventListener('mousemove', move);
+        document.addEventListener('mouseup', up);
+      });
+
+      handle.addEventListener('dblclick', function () {
+        apply(null);
+        try { localStorage.removeItem(KEY); } catch (e) {}
+      });
     });
   })();
 </script>

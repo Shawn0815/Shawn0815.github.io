@@ -37,23 +37,6 @@ script_includes:
       {% endif %}
     </div>
 
-    {% if page.image %}
-      {% capture src %}src="{{ page.image.path | default: page.image }}"{% endcapture %}
-      {% capture class %}class="preview-img{% if page.image.no_bg %}{{ ' no-bg' }}{% endif %}"{% endcapture %}
-      {% capture alt %}alt="{{ page.image.alt | xml_escape | default: "Preview Image" }}"{% endcapture %}
-
-      {% if page.image.lqip %}
-        {%- capture lqip -%}lqip="{{ page.image.lqip }}"{%- endcapture -%}
-      {% endif %}
-
-      <div class="mt-3 mb-3 text-center">
-        <img {{ src }} class="img-fluid rounded shadow-sm{% if page.image.no_bg %} no-bg{% endif %}" {{ alt }} {{ lqip }}>
-        {% if page.image.alt %}
-          <figcaption class="text-center pt-2 pb-2 text-muted small">{{ page.image.alt }}</figcaption>
-        {% endif %}
-      </div>
-    {% endif %}
-
     {% if page.topic or page.level or page.class or page.important or page.company or page.neetcode_url or page.leetcode_url %}
     <div class="meta-card" style="
       border: 1px solid #e5e7eb; 
@@ -136,6 +119,23 @@ script_includes:
       </div>
 
     </div>
+    {% endif %}
+
+    {% if page.image %}
+      {% capture src %}src="{{ page.image.path | default: page.image }}"{% endcapture %}
+      {% capture class %}class="preview-img{% if page.image.no_bg %}{{ ' no-bg' }}{% endif %}"{% endcapture %}
+      {% capture alt %}alt="{{ page.image.alt | xml_escape | default: "Preview Image" }}"{% endcapture %}
+
+      {% if page.image.lqip %}
+        {%- capture lqip -%}lqip="{{ page.image.lqip }}"{%- endcapture -%}
+      {% endif %}
+
+      <div class="mt-3 mb-3 text-center">
+        <img {{ src }} class="img-fluid rounded shadow-sm{% if page.image.no_bg %} no-bg{% endif %}" {{ alt }} {{ lqip }}>
+        {% if page.image.alt %}
+          <figcaption class="text-center pt-2 pb-2 text-muted small">{{ page.image.alt }}</figcaption>
+        {% endif %}
+      </div>
     {% endif %}
 
     <div class="post-meta text-muted">

@@ -220,39 +220,25 @@ html[data-mode='dark'] .content hr {
 
 
 /*
-設定粗體：紅字加黃色螢光筆底線（表格、callout 開頭的標籤、段落開頭的短標籤除外）
+設定螢光：==重點== 是紅字加黃色螢光筆底線（_plugins/highlight-mark.rb）；**粗體** 維持一般粗體
 */
-.content strong {
+.content mark {
   color: #c0392b;
   background: linear-gradient(transparent 60%, rgb(255 230 0 / 35%) 60%);
   padding: 0 2px;
+  font-weight: 600;
 }
 
-html[data-mode='dark'] .content strong {
+html[data-mode='dark'] .content mark {
   color: #ff7b72;
   background: linear-gradient(transparent 60%, rgb(255 215 0 / 25%) 60%);
 }
 
 @media (prefers-color-scheme: dark) {
-  html:not([data-mode]) .content strong {
+  html:not([data-mode]) .content mark {
     color: #ff7b72;
     background: linear-gradient(transparent 60%, rgb(255 215 0 / 25%) 60%);
   }
-}
-
-// 表格裡的粗體、callout（aside）開頭的「重點」、段落開頭的短標籤（**意思**：，見 _plugins/strong-label.rb），維持一般顏色（深色模式也是）
-.content table strong,
-.content aside strong.strong-line-black,
-.content strong.strong-label,
-html[data-mode='dark'] .content table strong,
-html[data-mode='dark'] .content aside strong.strong-line-black,
-html[data-mode='dark'] .content strong.strong-label,
-html:not([data-mode]) .content table strong,
-html:not([data-mode]) .content aside strong.strong-line-black,
-html:not([data-mode]) .content strong.strong-label {
-  color: inherit;
-  background: none;
-  padding: 0;
 }
 
 
@@ -891,4 +877,76 @@ article > header .img-fluid {
     opacity: .7;
     font-size: .75rem;
   }
+}
+
+/* 文章目錄：二標、三標一次全部展開，不顯示四標；長標題換行顯示，不截成「…」 */
+#toc-wrapper {
+  padding-right: .75rem !important;
+
+  ul li a { padding-left: 1rem; }
+
+  ul ul { padding-left: .6rem; }
+
+  .toc-link {
+    white-space: normal;
+    overflow: visible;
+    text-overflow: clip;
+  }
+}
+
+#toc, #toc-popup-content {
+  .is-collapsed {
+    max-height: none !important;
+    opacity: 1 !important;
+  }
+
+  ul ul ul { display: none; }
+}
+
+// 右側面板（_includes/sidebar.html 的 .panel-resizer 拖拉）：預設跟左側欄一樣寬，
+// 拖過就用 --panel-width；面板只在 1200px 以上出現
+@media all and (min-width: 1200px) {
+  #main-wrapper .row > main {
+    flex: 1 1 0;
+    max-width: none;
+    width: auto;
+  }
+
+  #panel-wrapper {
+    --panel-default: var(--sidebar-width, 260px);
+
+    position: relative;
+    flex: 0 0 var(--panel-width, var(--panel-default));
+    max-width: var(--panel-width, var(--panel-default));
+    width: var(--panel-width, var(--panel-default));
+  }
+
+  .panel-resizer {
+    position: absolute;
+    top: 0;
+    left: -3px;
+    width: 6px;
+    height: 100%;
+    z-index: 10;
+    cursor: col-resize;
+
+    &::after {
+      content: "";
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      left: 2px;
+      width: 2px;
+      background: transparent;
+      transition: background 0.15s;
+    }
+
+    &:hover::after { background: var(--sidebar-border-color); }
+  }
+
+  html.sidebar-resizing .panel-resizer::after { background: var(--sidebar-border-color); }
+}
+
+@media all and (min-width: 1650px) {
+  #panel-wrapper { --panel-default: var(--sidebar-width, 300px); }
 }
