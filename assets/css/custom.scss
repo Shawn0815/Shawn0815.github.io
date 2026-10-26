@@ -93,6 +93,17 @@
   box-sizing: border-box;
 }
 
+// 行號靠左：上面的 padding 會疊加在表格和行號的 pre 上，加上 Chirpy 行號欄本身的 margin-left，
+// 行號離左邊太遠，所以這兩層歸零、margin 縮小，只留程式碼框本身的 12px
+.post-content table.rouge-table,
+.post-content td.rouge-gutter pre {
+  padding-left: 0 !important;
+}
+
+.post-content .highlight td.rouge-gutter {
+  margin-left: 0.25rem !important;
+}
+
 /*
 設定引文的下間距（放大）
 否則引文跟下一段落間距會是模板預設，太小，要對齊內文段落的間距
@@ -176,7 +187,7 @@ html[data-mode='dark'] .content hr {
 
 
 /*
-設定粗體：紅字加黃色螢光筆底線（表格、callout 開頭的標籤除外）
+設定粗體：紅字加黃色螢光筆底線（表格、callout 開頭的標籤、段落開頭的短標籤除外）
 */
 .content strong {
   color: #c0392b;
@@ -196,13 +207,16 @@ html[data-mode='dark'] .content strong {
   }
 }
 
-// 表格裡的粗體、callout（aside）開頭的「重點」這種整行粗體標籤，維持一般顏色（深色模式也是）
+// 表格裡的粗體、callout（aside）開頭的「重點」、段落開頭的短標籤（**意思**：，見 _plugins/strong-label.rb），維持一般顏色（深色模式也是）
 .content table strong,
 .content aside strong.strong-line-black,
+.content strong.strong-label,
 html[data-mode='dark'] .content table strong,
 html[data-mode='dark'] .content aside strong.strong-line-black,
+html[data-mode='dark'] .content strong.strong-label,
 html:not([data-mode]) .content table strong,
-html:not([data-mode]) .content aside strong.strong-line-black {
+html:not([data-mode]) .content aside strong.strong-line-black,
+html:not([data-mode]) .content strong.strong-label {
   color: inherit;
   background: none;
   padding: 0;
@@ -584,4 +598,21 @@ html[data-mode='dark'] .highlight .p {
   .level-easy { color: #065f46; background: #d1fae5; }
   .level-medium { color: #92400e; background: #fef3c7; }
   .level-hard { color: #991b1b; background: #fee2e2; }
+}
+
+
+/*
+設定文章頂端的封面：寬度填滿內文、高度壓扁成 10:3，整張圖放進去不裁切，左右空的地方補白（跟封面圖的白底接起來）
+Chirpy 會把圖片包在 inline 的 <a class="img-link">（點了放大用），要改成 block 寬度才填得滿
+*/
+article > header .img-link {
+  display: block;
+  width: 100%;
+}
+
+article > header .img-fluid {
+  width: 100%;
+  aspect-ratio: 10 / 3;
+  object-fit: contain;
+  background: #fff;
 }
