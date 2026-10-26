@@ -859,3 +859,36 @@ article > header .img-fluid {
 .categories .post-list-trigger.collapsed i {
   transform: rotate(-90deg);
 }
+
+/* 首頁分類篩選：外觀跟標籤一致，選中的反白 */
+#post-filter {
+  gap: .5rem;
+
+  .filter-chip {
+    border: 1px solid var(--btn-border-color);
+    border-radius: 1rem;
+    padding: .2rem .8rem;
+    background: transparent;
+    color: var(--text-muted-color);
+    font-size: .85rem;
+    line-height: 1.5;
+    transition: background-color .15s, color .15s;
+
+    &:hover {
+      background: var(--sidebar-hover-bg);
+      color: var(--text-color);
+    }
+
+    &.active {
+      background: var(--link-color);
+      border-color: var(--link-color);
+      color: #fff;
+    }
+  }
+
+  .filter-count {
+    margin-left: .4rem;
+    opacity: .7;
+    font-size: .75rem;
+  }
+}
