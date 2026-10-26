@@ -871,8 +871,6 @@ html[data-mode='dark'] .card.categories {
   &:hover { color: var(--link-color); }
 }
 
-// 從網址 #子分類 只看一個子分類時，段落標題跟頁面標題重複，藏起來（科目本來就只有一個子分類時照常顯示）
-#page-category #post-list:has(.subcategory-group.d-none) .subcategory-heading { display: none; }
 
 // 分類頁標題列：科目和子分類的資料夾圖示一樣大（Chirpy 只設了 h1 > i，子分類的圖示在 span 裡）
 #page-category h1 i { font-size: 1.25rem; }
@@ -923,7 +921,7 @@ html[data-mode='dark'] .card.categories {
 
   ul {
     list-style: none;
-    margin: 0 0 0.5rem;
+    margin: 0.25rem 0 0.5rem;    // 跟上面的「分類」留一點空
     padding: 0 1.5rem 0 3.4rem;
   }
 
@@ -992,18 +990,53 @@ html[data-mode='dark'] .card.categories {
 ::view-transition-old(root),
 ::view-transition-new(root) { animation-duration: 0.15s; }
 
-// 分類頁的科目標題：Chirpy 預設上面空 3rem，太空
-#page-category h1 { margin-top: 1rem; }
+// 分類頁的科目標題：Chirpy 預設上面空 3rem 太空，1rem 又太擠
+#page-category h1 { margin-top: 2rem; }
 
 // 子分類標題跟下面第一張卡片拉開一點（原本 0.75rem）
 #page-category .subcategory-heading { margin-bottom: 1.25rem; }
 
-// 分類頁的主題 filter：上下跟科目標題、第一個子分類標題的距離一樣（都是 1.5rem）
+// 分類頁的主題 filter：上面跟科目標題 1.5rem，下面跟子分類標題 2rem（每段標題上面都是 2rem，選哪個主題距離都一樣）
 #page-category #post-filter {
   margin-top: 1.5rem;
   margin-bottom: 0 !important;
 
   + #post-list { margin-top: 0; }    // Chirpy 給 #post-list 上邊距 2.5rem，會蓋過下面這條
 
-  + #post-list .subcategory-group:first-child .subcategory-heading { margin-top: 1.5rem; }
+}
+
+// 分類頁：Chirpy 給頁面裡「所有」連結 hover 時變橘色、加底線、margin-bottom -1px（#page-category a:hover），
+// 文章卡片、主題標籤、標題連結都被套到，滑鼠移上去就變色、往上跳。這幾種連結改回各自的 hover。
+#page-category {
+  a.post-preview:hover,
+  .category-title-link:hover,
+  .sub-link:hover,
+  .subcategory-heading a:hover {
+    margin-bottom: 0;
+    border-bottom: 0;
+  }
+
+  a.post-preview:hover { color: inherit !important; }
+
+  .category-title-link:hover,
+  .sub-link:hover,
+  .subcategory-heading a:hover { color: var(--link-color) !important; }
+
+  #post-filter .filter-chip:hover {
+    margin-bottom: 0;
+    border-bottom: 1px solid var(--link-color);
+    color: var(--link-color) !important;
+  }
+
+  #post-filter .filter-chip.active:hover { color: #fff !important; }
+}
+
+
+// 分類頁子分類的錨點（#api-design）：固定在畫面頂端、看不見，跳到它時瀏覽器不會捲動
+#page-category .subcategory-anchor {
+  position: fixed;
+  top: 0;
+  width: 0;
+  height: 0;
+  visibility: hidden;
 }

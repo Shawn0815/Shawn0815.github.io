@@ -37,7 +37,9 @@ script_includes:
       {% endif %}
     </div>
 
-    {% if page.topic or page.level or page.class or page.important or page.company or page.neetcode_url or page.leetcode_url %}
+    {% comment %} LeetCode 的主題 = 子分類（題型資料夾，例如 Array & Hashing） {% endcomment %}
+    {% assign topic = page.topic | default: page.categories[1] %}
+    {% if page.leetcode_url and topic or page.level or page.class or page.important or page.company or page.neetcode_url or page.leetcode_url %}
     <div class="meta-card" style="
       border: 1px solid #e5e7eb; 
       border-radius: 12px; 
@@ -50,9 +52,9 @@ script_includes:
       <!-- 內容 -->
       <div style="font-size: 0.95rem; line-height:1.6; color:#374151;">
 
-        {% if page.topic %}
+        {% if topic %}
           <p style="margin:0 0 8px 0;">
-            <strong style="color:#111;">主題：</strong> {{ page.topic }}
+            <strong style="color:#111;">主題：</strong> {{ topic }}
           </p>
         {% endif %}
 

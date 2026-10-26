@@ -3,7 +3,8 @@ layout: page
 # 覆蓋 Chirpy 的單一分類頁：跟筆記資料夾一樣，依子分類分段，每段前面一個標題，文章用首頁的卡片。
 # 子分類和文章都照 VS Code 檔案總管的順序（front matter 的 order，publish_blog.py 產生）。
 # 子分類名稱可能在不同科目重複（Python、Java 都有 Basics），所以子分類不另開頁面：
-# 網址帶 #子分類（/categories/python/#basics）時只顯示那一段，標題後面加上子分類名稱。
+# 網址帶 #子分類（/categories/python/#basics）時只顯示那一段，標題後面加上子分類名稱；
+# 錨點放在固定在畫面頂端的看不見元素上（.subcategory-anchor），連結有目標、瀏覽器跳過去也不會捲動，點 filter 時版面不跳。
 ---
 
 {% include lang.html %}
@@ -27,7 +28,7 @@ layout: page
   {% assign named_groups = groups | where_exp: "g", "g.name != nil and g.name != ''" %}
   {% if named_groups.size > 0 %}
     <nav id="post-filter" class="d-flex flex-wrap px-xl-1 mb-3" aria-label="Topics">
-      <a class="filter-chip" data-sub="" href="{{ category_url | relative_url }}">全部<span class="filter-count">{{ page.posts | size }}</span></a>
+      <a class="filter-chip" data-sub="" href="#">全部<span class="filter-count">{{ page.posts | size }}</span></a>
       {% for group in named_groups %}
         <a class="filter-chip" data-sub="{{ group.name | slugify }}" href="#{{ group.name | slugify }}">{{ group.name }}<span class="filter-count">{{ group.size }}</span></a>
       {% endfor %}
@@ -37,8 +38,9 @@ layout: page
   <div id="post-list" class="flex-grow-1 px-xl-1">
     {% for group in groups %}
       <section class="subcategory-group" data-sub="{{ group.name | slugify }}" data-name="{{ group.name | escape }}">
+        {% if group.name != "" and group.name != nil %}<span class="subcategory-anchor" id="{{ group.name | slugify }}"></span>{% endif %}
         {% if group.name != "" and group.name != nil %}
-          <h2 class="subcategory-heading" id="{{ group.name | slugify }}">
+          <h2 class="subcategory-heading">
             <!-- 點子分類（圖示或名稱）只看那一段 -->
             <a href="#{{ group.name | slugify }}"><i class="far fa-folder fa-fw me-1"></i>{{ group.name }}</a><span class="subcategory-count">{{ group.size }}</span>
           </h2>
@@ -60,17 +62,38 @@ layout: page
 
     var chips = document.querySelectorAll('#post-filter .filter-chip');
 
+    /* 導覽路徑：選了主題是 首頁 › 科目 › 主題（科目變成連結，回到「全部」），沒選是 首頁 › 科目 */
+    var crumbs = document.getElementById('breadcrumb');
+    var subject = crumbs.lastElementChild;
+    var subjectName = subject.textContent.trim();
+    var topic = document.createElement('span');
+
+    function crumb(match) {
+      if (match) {
+        subject.innerHTML = '';
+        var a = document.createElement('a');
+        a.href = '#';
+        a.textContent = subjectName;
+        subject.appendChild(a);
+        topic.textContent = match.dataset.name;
+        crumbs.appendChild(topic);
+      } else {
+        subject.textContent = subjectName;
+        topic.remove();
+      }
+    }
+
     function show() {
       var id = decodeURIComponent(location.hash.slice(1));
       var match = Array.prototype.find.call(groups, function (g) { return id && g.dataset.sub === id; });
       chips.forEach(function (c) { c.classList.toggle('active', c.dataset.sub === (match ? match.dataset.sub : '')); });
       groups.forEach(function (g) { g.classList.toggle('d-none', !!match && g !== match); });
       title.classList.toggle('d-none', !match);
+      crumb(match);
       if (match) {
         title.querySelector('.name').textContent = match.dataset.name;
         title.querySelector('.sub-link').href = '#' + match.dataset.sub;
         count.textContent = match.querySelectorAll('.card-wrapper').length;
-        window.scrollTo(0, 0);    /* 只剩一段，從頁首開始看，不用跳到錨點 */
       } else {
         count.textContent = total;
       }

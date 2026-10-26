@@ -1,4 +1,4 @@
-<!-- The Top Bar（覆蓋 Chirpy：文章頁的麵包屑顯示完整路徑 首頁 › 科目 › 子分類 › 文章） -->
+<!-- The Top Bar（覆蓋 Chirpy：文章頁的麵包屑顯示完整路徑 首頁 › 科目 › 子分類 › 文章；科目分類頁是 首頁 › 科目，跟文章一樣不插「分類」） -->
 
 <header id="topbar-wrapper" class="flex-shrink-0" aria-label="Top Bar">
   <div
@@ -41,7 +41,7 @@
               <span>{{ page.title }}</span>
             {% endif %}
 
-          {% elsif page.layout == 'category' or page.layout == 'tag' %}
+          {% elsif page.layout == 'tag' %}
             <span>
               <a href="{{ item | append: '/' | relative_url }}">
                 {{- site.data.locales[include.lang].tabs[item] | default: page.title -}}

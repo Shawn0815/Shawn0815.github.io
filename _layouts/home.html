@@ -61,6 +61,24 @@ layout: default
         li.classList.toggle('d-none', !ok || matched > limit);
       });
       more.classList.toggle('d-none', matched <= limit);
+      dateHeadings();
+    }
+
+    /* 日期標題：顯示中的文章照更新日期分段，每段前面一行日期（樣式跟分類頁的子分類標題一樣） */
+    function dateHeadings() {
+      list.querySelectorAll('.date-heading').forEach(function (h) { h.remove(); });
+      var last = '';
+      items.forEach(function (li) {
+        if (li.classList.contains('d-none')) return;
+        var d = new Date(li.dataset.updated * 1000);
+        var day = d.getFullYear() + '/' + ('0' + (d.getMonth() + 1)).slice(-2) + '/' + ('0' + d.getDate()).slice(-2);
+        if (day === last) return;
+        last = day;
+        var h = document.createElement('h2');
+        h.className = 'subcategory-heading date-heading';
+        h.textContent = day;
+        list.insertBefore(h, li);
+      });
     }
 
     chips.forEach(function (chip) {
