@@ -5,7 +5,7 @@ date: 2026-04-23 11:38 +0800
 author: shawn_yu
 categories: [SQL]
 tags: [SQL, ORDER BY, LIMIT]
-image: {path: "assets/img/2026-04-23-MySQL.png"}
+image: {path: "/assets/img/covers/SQL.png"}
 math: true
 ---
 
