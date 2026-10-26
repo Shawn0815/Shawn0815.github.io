@@ -4,16 +4,18 @@ date: 2026-10-26 11:43 +0800
 categories: ["Languages", "Python"]
 tags: ["Python"]
 image: {path: "/assets/img/covers/Python.png"}
-source: DDAN_Usandbox/0_Personal/Python/1.1_Basic_Syntax.md
+source: DDAN_Usandbox/0_Personal/Python/1_Basics/1.1_Basic-Syntax.md
 ---
 
-**用途**：用 Python 寫 LeetCode 必須會的語法，以及容易寫錯的地方。
-**環境**：本機 `/opt/homebrew/bin/python3`，`Python 3.14.8`。程式碼區塊裡 `# →` 後面是實際執行的輸出。
-**下一篇**：內建資料結構（list / dict / set、deque、heapq…）在 1.2。
+## Abstract
+
+用 Python 寫 LeetCode 必須會的語法，以及容易寫錯的地方：程式結構、型別、縮排、運算子、真假值、條件與迴圈、函式、字串。
+
+範例都在本機 `Python 3.14.8` 跑過，程式碼區塊裡 `# →` 後面是實際執行的輸出。
 
 ---
 
-## 1. 程式結構：LeetCode 模板與本機執行
+## 程式結構：LeetCode 模板與本機執行
 
 LeetCode 給的模板：
 
@@ -28,7 +30,7 @@ class Solution:
 - `nums: List[int]`、`-> List[int]` 是 type hints，見下面 2.4。
 - `...` 是佔位用的語法，等於「這裡還沒寫」。
 
-### 1.1 建立物件、呼叫方法
+### 建立物件、呼叫方法
 
 ```python
 sol = Solution()                 # class 名稱加 () 就是建立物件，不需要其他關鍵字
@@ -39,13 +41,11 @@ result = Solution().twoSum([2, 7, 11, 15], 9)    # 同一件事寫成一行
 
 一行的寫法是「建立物件後馬上呼叫方法」，物件沒有存進變數。物件只用一次就寫一行；同一個物件要用好幾次時才存成變數。
 
-### 1.2 本機測試
+### 本機測試
 
-本機測試用 pytest，測試直接寫在 `Solution.py` 裡，按 VS Code 的 ▶ 就能跑：
-- 測試的寫法：3.1 pytest
-- 環境（venv）和按 ▶ 跑測試的設定：4.1 第 8 節
+本機測試用 pytest，測試直接寫在 `Solution.py` 裡，按 VS Code 的 ▶ 就能跑。
 
-### 1.3 `if __name__ == "__main__":`
+### `if __name__ == "__main__":`
 
 檔案最下面常見的這段：
 
@@ -65,9 +65,9 @@ print(__name__)
 
 ---
 
-## 2. 變數與型別
+## 變數與型別
 
-### 2.1 不用宣告型別
+### 不用宣告型別
 
 ```python
 x = 5
@@ -89,7 +89,7 @@ print(type(10), type(3.5), type("a"), type(True), type(None))
 | `bool` | `True`、`False` | 大寫開頭 |
 | `None` | `None` | 「沒有值」 |
 
-### 2.2 int 沒有上限
+### int 沒有上限
 
 ```python
 print(2 ** 100)      # ** 是次方
@@ -98,7 +98,7 @@ print(2 ** 100)      # ** 是次方
 
 Python 的整數會自動變大，不會 overflow，所以「答案很大」的題目不用特別處理型別。但題目要求「回傳 mod 10^9+7」時，還是要自己 `%`。
 
-### 2.3 無限大
+### 無限大
 
 找最小值時，初始值常設成無限大：
 
@@ -110,7 +110,7 @@ print(float("inf") > 10**18, -float("inf"))
 
 最大值的初始值就用 `-float("inf")`。
 
-### 2.4 Type hints：只是註解
+### Type hints：只是註解
 
 ```python
 def add(a: int, b: int) -> int:
@@ -124,7 +124,7 @@ print(add("a", "b"))
 
 LeetCode 模板的 `List[int]` 來自 `typing` 模組。LeetCode 網站已經 import 好了；本機要自己加 `from typing import List`，不然會出現 `NameError: name 'List' is not defined`。也可以直接寫小寫的 `list[int]`，不用 import。
 
-### 2.5 變數名稱不要用內建名稱 ⚠️
+### 變數名稱不要用內建名稱 ⚠️
 
 `dict`、`list`、`set`、`str`、`sum`、`max`、`min`、`len` 這些都是 Python 內建的名字。拿來當變數名稱不會報錯，但從那之後，這個名字就變成你的變數，原本的功能就不能用了：
 
@@ -142,7 +142,7 @@ list("abc")
 
 變數名稱取「它存了什麼」，例如 `seen`、`count`、`index_of`，讀的人也比較好懂。
 
-### 2.6 編輯器裡變灰色的變數
+### 編輯器裡變灰色的變數
 
 VS Code 的 Python 擴充（Pylance）會把**有定義、但後面沒有用到**的變數顯示成灰色：
 
@@ -157,7 +157,7 @@ complement = target - num      # 後面還沒用到 → 灰色
 
 ---
 
-## 3. 縮排就是區塊
+## 縮排就是區塊
 
 Python 用 **`:` 加縮排**表示區塊，沒有大括號。縮排錯了就是語法錯誤。慣例是 4 個空白。
 
@@ -177,9 +177,9 @@ if x > 0:
 
 ---
 
-## 4. 運算子
+## 運算子
 
-### 4.1 算術
+### 算術
 
 | 運算子 | 意思 | 例子 |
 |--------|------|------|
@@ -207,7 +207,7 @@ print(int(-7 / 2))
 - 需要「往 0 取整」時寫 `int(a / b)`，例如 `-7` 除以 `2` 要得到 `-3`（LeetCode 150 Evaluate Reverse Polish Notation 就要這樣）。
 - `%` 的結果正負號跟除數一樣，所以 `-7 % 2` 是 `1`。「取最後一位數」「判斷奇偶」只要處理正數就不會出問題。
 
-### 4.2 遞增：沒有 `++`
+### 遞增：沒有 `++`
 
 ```python
 i += 1     # 正確
@@ -215,7 +215,7 @@ i -= 1
 i++        # SyntaxError
 ```
 
-### 4.3 邏輯：`and` / `or` / `not`
+### 邏輯：`and` / `or` / `not`
 
 ```python
 if not visited and 0 <= r < rows:
@@ -224,7 +224,7 @@ if not visited and 0 <= r < rows:
 
 用英文單字，沒有符號版本。
 
-### 4.4 比較：`==` 和 `is`
+### 比較：`==` 和 `is`
 
 - `==`：比較**值是否相等**
 - `is`：比較**是不是同一個物件**
@@ -238,7 +238,7 @@ print(a == b, a is b)
 
 **判斷 `None` 一律用 `is`**：`if node is None:`、`if node is not None:`。這是 Python 的慣例，工作上的 code 也都這樣寫。其他情況用 `==`。
 
-### 4.5 連續比較
+### 連續比較
 
 比較可以串在一起，檢查 index 有沒有越界很好用：
 
@@ -250,7 +250,7 @@ print(0 <= i < n)       # 等於 0 <= i and i < n
 
 走格子（BFS / DFS）時常寫成 `0 <= r < rows and 0 <= c < cols`。
 
-### 4.6 條件運算式（一行的 if-else）
+### 條件運算式（一行的 if-else）
 
 ```python
 print("even" if i % 2 == 0 else "odd")
@@ -261,7 +261,7 @@ print("even" if i % 2 == 0 else "odd")
 
 ---
 
-## 5. 真假值（Truthiness）
+## 真假值（Truthiness）
 
 `if` 和 `while` 後面可以放任何值，不一定要是 `True` / `False`。以下這些都當作 **False**，其他都是 True：
 
@@ -303,9 +303,9 @@ if idx is not None:     # ✅
 
 ---
 
-## 6. 條件與迴圈
+## 條件與迴圈
 
-### 6.1 if / elif / else
+### if / elif / else
 
 ```python
 if x > 0:
@@ -318,7 +318,7 @@ else:
 
 `elif` 是 else if 的縮寫，寫成 `else if` 會報錯。
 
-### 6.2 for：逐一取出序列的值
+### for：逐一取出序列的值
 
 Python 的 `for` 一律是「**從一個序列裡逐一取值**」：
 
@@ -344,7 +344,7 @@ print(list(range(5)), list(range(2, 8, 2)), list(range(4, -1, -1)))
 
 **`range` 不包含結尾**。倒著走到 0 時，結尾要寫 `-1`。
 
-### 6.3 enumerate：同時要 index 和值
+### enumerate：同時要 index 和值
 
 ```python
 for idx, val in enumerate(["a", "b", "c"]):
@@ -356,7 +356,7 @@ for idx, val in enumerate(["a", "b", "c"]):
 
 需要 index 又需要值時，用 `enumerate` 比 `for i in range(len(nums)):` 再寫 `nums[i]` 更簡潔。**寫題很常用。**
 
-### 6.4 zip：兩個序列一起走
+### zip：兩個序列一起走
 
 ```python
 for p, q in zip([1, 2, 3], ["x", "y"]):
@@ -365,7 +365,7 @@ for p, q in zip([1, 2, 3], ["x", "y"]):
 # → 2 y       ← 以短的為準，3 被丟掉
 ```
 
-### 6.5 while、break、continue
+### while、break、continue
 
 ```python
 while left <= right:
@@ -378,7 +378,7 @@ while left <= right:
 
 Python 沒有 do-while。要「至少跑一次」時，寫 `while True:`，在裡面判斷後 `break`。
 
-### 6.6 for-else
+### for-else
 
 `for` 後面可以接 `else`：**迴圈正常跑完、沒有被 `break` 中斷**時才執行。
 
@@ -396,9 +396,9 @@ else:
 
 ---
 
-## 7. 函式
+## 函式
 
-### 7.1 定義與回傳多個值
+### 定義與回傳多個值
 
 ```python
 def min_max(nums):
@@ -412,7 +412,7 @@ print(lo, hi, min_max([3, 1, 4]))
 - 用 `def` 定義，不用寫回傳型別。
 - **可以一次回傳多個值**：實際上回傳的是一個 tuple `(1, 4)`，接收時用多個變數拆開（unpacking，細節在 1.3）。
 
-### 7.2 交換兩個變數
+### 交換兩個變數
 
 ```python
 p, q = 1, 2
@@ -423,7 +423,7 @@ print(p, q)
 
 不需要暫存變數。Two Pointers 交換兩個位置：`nums[l], nums[r] = nums[r], nums[l]`。
 
-### 7.3 函式裡的函式（DFS 常用）
+### 函式裡的函式（DFS 常用）
 
 函式裡可以再定義函式，內層函式可以直接**讀**外層的變數：
 
@@ -461,7 +461,7 @@ def outer():
 
 只是**修改內容**（`visited.add(x)`、`result.append(x)`）不算重新賦值，不需要 `nonlocal`。
 
-### 7.4 預設參數的陷阱 ⚠️
+### 預設參數的陷阱 ⚠️
 
 ```python
 def append_to(x, bucket=[]):
@@ -491,9 +491,9 @@ print(append_ok(1), append_ok(2))
 
 ---
 
-## 8. 字串
+## 字串
 
-### 8.1 取值與切片
+### 取值與切片
 
 ```python
 s = "hello"
@@ -511,7 +511,7 @@ print(s[0], type(s[0]), s[-1], s[1:3], s[::-1], len(s))
 
 切片的完整寫法是 `[start:stop:step]`，list 也通用，細節在 1.2。
 
-### 8.2 字串不能修改
+### 字串不能修改
 
 ```python
 s[0] = "H"
@@ -529,7 +529,7 @@ print("".join(chars))
 
 `"".join(list)` 是把 list 裡的字串用 `""` 接起來。迴圈裡一直用 `s += ch` 也能跑，但每次都會建立新字串；量大時，先收集到 list，最後再 `join`。
 
-### 8.3 字元和數字互轉
+### 字元和數字互轉
 
 ```python
 print(ord("a"), chr(98), ord("c") - ord("a"))
@@ -541,7 +541,7 @@ print(ord("a"), chr(98), ord("c") - ord("a"))
 
 `ord(ch) - ord("a")` 可以把 `a`～`z` 轉成 `0`～`25`，統計 26 個字母次數的題目常用。
 
-### 8.4 f-string：格式化
+### f-string：格式化
 
 ```python
 name, cnt = "py", 3
@@ -563,7 +563,7 @@ print("%s-%d" % ("a", 1), "{}-{}".format("a", 1))
 
 ---
 
-## 9. 常見錯誤速查
+## 常見錯誤速查
 
 | 錯誤訊息 | 常見原因 |
 |----------|----------|
@@ -574,18 +574,6 @@ print("%s-%d" % ("a", 1), "{}-{}".format("a", 1))
 | `TypeError: list indices must be integers or slices, not float` | 用 `/` 算 index，要改用 `//` |
 | `TypeError: 'str' object does not support item assignment` | 想直接改字串，要先轉 list |
 | `NameError: name 'List' is not defined` | 本機跑 LeetCode 模板沒有 `from typing import List` |
-| `TypeError: 'dict' object is not callable`（或 `'list'`） | 前面把 `dict`、`list` 當成變數名稱，蓋掉了內建的名字（2.5） |
+| `TypeError: 'dict' object is not callable`（或 `'list'`） | 前面把 `dict`、`list` 當成變數名稱，蓋掉了內建的名字 |
 | `UnboundLocalError: cannot access local variable ...` | 內層函式重新賦值外層變數，要加 `nonlocal` |
 | `IndexError: list index out of range` | index 越界，檢查 `range` 的邊界和 `len()` |
-
----
-
-## 重點整理
-
-1. **區塊靠 `:` 和縮排**，空區塊寫 `pass`。
-2. **整數除法用 `//`**，`/` 一定得到 float；負數的 `//` 往負無限大取整。
-3. **遞增寫 `+= 1`**，邏輯用 `and` / `or` / `not`，`elif` 不是 `else if`。
-4. **`None`、`0`、空容器都是 False**：檢查空寫 `if not stack:`；要分 `0` 和 `None` 時用 `is None`。
-5. **for 是逐一取值**：要 index 用 `range()`，index 和值都要時用 `enumerate()`。
-6. **字串不能修改**，要改先轉 list 再 `"".join()`；字元轉數字用 `ord()`。
-7. **內層函式重新賦值外層變數要 `nonlocal`**；預設參數不要用 `[]`、`{}`，用 `None`。
