@@ -16,7 +16,7 @@
 
 .content h2 {
   font-size: 28px !important;
-  margin-top: 40px !important;
+  margin-top: 24px !important;
   margin-bottom: 16px !important;
   font-family: 'Inter', sans-serif !important;
   font-weight: 700 !important;
@@ -144,22 +144,65 @@ blockquote {
 
 
 /*
-設定分隔線的格式
+設定分隔線的格式：跟 Notion / Confluence 一樣，滿版的一條細灰線
 */
-hr {
-    -moz-box-sizing: content-box;
-    box-sizing: content-box;
-    border: 1px solid #aaa;
-    border-radius: 1px;
-    height: 2px;
-    width: 100%;
-    max-width: 35%;
-    margin-top: 50px;
-    margin-bottom: 40px;
-    margin-left: auto;
-    margin-right: auto;
-    border-left: none;
-    border-right: none;
+.content hr {
+  border: 0;
+  border-top: 1px solid rgb(0 0 0 / 12%);
+  height: 0;
+  width: 100%;
+  margin: 56px 0 28px;  /* 上方跟段落空一行，下方接標題縮小 */
+  opacity: 1;
+}
+
+html[data-mode='dark'] .content hr {
+  border-top-color: rgb(255 255 255 / 15%);
+}
+
+@media (prefers-color-scheme: dark) {
+  html:not([data-mode]) .content hr {
+    border-top-color: rgb(255 255 255 / 15%);
+  }
+}
+
+
+/*
+設定表格填滿內文寬度（Chirpy 預設在寬螢幕只有 70%）
+*/
+.content .table-wrapper > table {
+  width: 100%;
+  min-width: 100%;
+}
+
+
+/*
+設定粗體：紅字加黃色螢光筆底線（表格裡的粗體除外）
+*/
+.content strong {
+  color: #c0392b;
+  background: linear-gradient(transparent 60%, rgb(255 230 0 / 35%) 60%);
+  padding: 0 2px;
+}
+
+html[data-mode='dark'] .content strong {
+  color: #ff7b72;
+  background: linear-gradient(transparent 60%, rgb(255 215 0 / 25%) 60%);
+}
+
+@media (prefers-color-scheme: dark) {
+  html:not([data-mode]) .content strong {
+    color: #ff7b72;
+    background: linear-gradient(transparent 60%, rgb(255 215 0 / 25%) 60%);
+  }
+}
+
+// 表格裡的粗體維持一般顏色（深色模式也是）
+.content table strong,
+html[data-mode='dark'] .content table strong,
+html:not([data-mode]) .content table strong {
+  color: inherit;
+  background: none;
+  padding: 0;
 }
 
 
@@ -203,4 +246,310 @@ h1.card-title {
   line-height: 1.25;
   margin-top: 32px;     /* ← 補回上方空白 */
   margin-bottom: 24px;  /* 與下方資訊卡保持距離 */
+}
+
+
+/*
+設定程式碼區塊的標題列：macOS 視窗的紅黃綠三個點，滑鼠移到三個點上出現 ×、−、全螢幕的圖案
+三個點是 _plugins/code-header-dots.rb 插入的 <i class="mac-dots">，取代 Chirpy 原本的 ::before 灰點
+寬度 576px 以下跟 Chirpy 原本一樣不顯示
+*/
+.code-header::before {
+  display: none !important;
+}
+
+.code-header .mac-dots {
+  display: none;
+}
+
+@media all and (min-width: 576px) {
+  .code-header .mac-dots {
+    display: inline-block;
+    flex-shrink: 0;
+    width: 52px;
+    height: 12px;
+    margin-left: 1rem;
+    margin-right: -40px;  /* 抵掉多出來的寬度，標籤位置維持原樣 */
+    background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='52' height='12' viewBox='0 0 52 12'%3E%3Ccircle cx='6' cy='6' r='5.5' fill='%23ff5f57' stroke='%23e0443e' stroke-width='1'/%3E%3Ccircle cx='26' cy='6' r='5.5' fill='%23febc2e' stroke='%23dea123' stroke-width='1'/%3E%3Ccircle cx='46' cy='6' r='5.5' fill='%2328c840' stroke='%231aab29' stroke-width='1'/%3E%3C/svg%3E") no-repeat center / 52px 12px;
+    cursor: default;
+  }
+
+  .code-header .mac-dots:hover {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='52' height='12' viewBox='0 0 52 12'%3E%3Ccircle cx='6' cy='6' r='5.5' fill='%23ff5f57' stroke='%23e0443e' stroke-width='1'/%3E%3Ccircle cx='26' cy='6' r='5.5' fill='%23febc2e' stroke='%23dea123' stroke-width='1'/%3E%3Ccircle cx='46' cy='6' r='5.5' fill='%2328c840' stroke='%231aab29' stroke-width='1'/%3E%3Cpath d='M3.8 3.8 L8.2 8.2 M8.2 3.8 L3.8 8.2' stroke='rgba%280%2C0%2C0%2C0.55%29' stroke-width='1.2' stroke-linecap='round'/%3E%3Cpath d='M23 6 L29 6' stroke='rgba%280%2C0%2C0%2C0.55%29' stroke-width='1.2' stroke-linecap='round'/%3E%3Cpath d='M43.2 3.2 L43.2 6.8 L46.8 3.2 Z M48.8 8.8 L48.8 5.2 L45.2 8.8 Z' fill='rgba%280%2C0%2C0%2C0.55%29'/%3E%3C/svg%3E");
+  }
+}
+
+
+/*
+設定程式碼的語法顏色：照 VS Code 預設配色，淺色模式用 Light+，深色模式用 Dark+
+Chirpy 預設是 GitHub 配色，主題的選擇器比較強，所以這裡用 !important
+Rouge 分不出 def 和 if，所以 def 跟 if、return 一樣是紫色（VS Code 的 def 是藍色）
+*/
+.highlight .k,
+.highlight .kn,
+.highlight .kp,
+.highlight .kr,
+.highlight .ow {
+  color: #af00db !important;
+}
+
+.highlight .kd,
+.highlight .kt,
+.highlight .kv,
+.highlight .kc,
+.highlight .bp {
+  color: #0000ff !important;
+}
+
+.highlight .nf,
+.highlight .fm,
+.highlight .nb,
+.highlight .nd {
+  color: #795e26 !important;
+}
+
+.highlight .nc,
+.highlight .ne,
+.highlight .nn {
+  color: #267f99 !important;
+}
+
+.highlight .s,
+.highlight .s1,
+.highlight .s2,
+.highlight .sa,
+.highlight .sb,
+.highlight .sc,
+.highlight .sd,
+.highlight .sh,
+.highlight .sr,
+.highlight .ss,
+.highlight .dl,
+.highlight .sx {
+  color: #a31515 !important;
+}
+
+.highlight .se,
+.highlight .si {
+  color: #ee0000 !important;
+}
+
+.highlight .m,
+.highlight .mi,
+.highlight .mf,
+.highlight .mh,
+.highlight .mo,
+.highlight .mb,
+.highlight .il {
+  color: #098658 !important;
+}
+
+.highlight .c,
+.highlight .c1,
+.highlight .cm,
+.highlight .cs,
+.highlight .ch,
+.highlight .cd,
+.highlight .cp,
+.highlight .cpf {
+  color: #008000 !important;
+}
+
+.highlight .n,
+.highlight .nv,
+.highlight .vi,
+.highlight .vc,
+.highlight .vg,
+.highlight .na,
+.highlight .py {
+  color: #001080 !important;
+}
+
+.highlight .o,
+.highlight .p {
+  color: #000000 !important;
+}
+
+html[data-mode='dark'] .highlight,
+html[data-mode='dark'] .highlight .w {
+  color: #d4d4d4 !important;
+  background-color: #1e1e1e !important;
+}
+
+html[data-mode='dark'] .highlight .k,
+html[data-mode='dark'] .highlight .kn,
+html[data-mode='dark'] .highlight .kp,
+html[data-mode='dark'] .highlight .kr,
+html[data-mode='dark'] .highlight .ow {
+  color: #c586c0 !important;
+}
+
+html[data-mode='dark'] .highlight .kd,
+html[data-mode='dark'] .highlight .kt,
+html[data-mode='dark'] .highlight .kv,
+html[data-mode='dark'] .highlight .kc,
+html[data-mode='dark'] .highlight .bp {
+  color: #569cd6 !important;
+}
+
+html[data-mode='dark'] .highlight .nf,
+html[data-mode='dark'] .highlight .fm,
+html[data-mode='dark'] .highlight .nb,
+html[data-mode='dark'] .highlight .nd {
+  color: #dcdcaa !important;
+}
+
+html[data-mode='dark'] .highlight .nc,
+html[data-mode='dark'] .highlight .ne,
+html[data-mode='dark'] .highlight .nn {
+  color: #4ec9b0 !important;
+}
+
+html[data-mode='dark'] .highlight .s,
+html[data-mode='dark'] .highlight .s1,
+html[data-mode='dark'] .highlight .s2,
+html[data-mode='dark'] .highlight .sa,
+html[data-mode='dark'] .highlight .sb,
+html[data-mode='dark'] .highlight .sc,
+html[data-mode='dark'] .highlight .sd,
+html[data-mode='dark'] .highlight .sh,
+html[data-mode='dark'] .highlight .sr,
+html[data-mode='dark'] .highlight .ss,
+html[data-mode='dark'] .highlight .dl,
+html[data-mode='dark'] .highlight .sx {
+  color: #ce9178 !important;
+}
+
+html[data-mode='dark'] .highlight .se,
+html[data-mode='dark'] .highlight .si {
+  color: #d7ba7d !important;
+}
+
+html[data-mode='dark'] .highlight .m,
+html[data-mode='dark'] .highlight .mi,
+html[data-mode='dark'] .highlight .mf,
+html[data-mode='dark'] .highlight .mh,
+html[data-mode='dark'] .highlight .mo,
+html[data-mode='dark'] .highlight .mb,
+html[data-mode='dark'] .highlight .il {
+  color: #b5cea8 !important;
+}
+
+html[data-mode='dark'] .highlight .c,
+html[data-mode='dark'] .highlight .c1,
+html[data-mode='dark'] .highlight .cm,
+html[data-mode='dark'] .highlight .cs,
+html[data-mode='dark'] .highlight .ch,
+html[data-mode='dark'] .highlight .cd,
+html[data-mode='dark'] .highlight .cp,
+html[data-mode='dark'] .highlight .cpf {
+  color: #6a9955 !important;
+}
+
+html[data-mode='dark'] .highlight .n,
+html[data-mode='dark'] .highlight .nv,
+html[data-mode='dark'] .highlight .vi,
+html[data-mode='dark'] .highlight .vc,
+html[data-mode='dark'] .highlight .vg,
+html[data-mode='dark'] .highlight .na,
+html[data-mode='dark'] .highlight .py {
+  color: #9cdcfe !important;
+}
+
+html[data-mode='dark'] .highlight .o,
+html[data-mode='dark'] .highlight .p {
+  color: #d4d4d4 !important;
+}
+
+@media (prefers-color-scheme: dark) {
+  html:not([data-mode]) .highlight,
+  html:not([data-mode]) .highlight .w {
+    color: #d4d4d4 !important;
+    background-color: #1e1e1e !important;
+  }
+
+  html:not([data-mode]) .highlight .k,
+  html:not([data-mode]) .highlight .kn,
+  html:not([data-mode]) .highlight .kp,
+  html:not([data-mode]) .highlight .kr,
+  html:not([data-mode]) .highlight .ow {
+    color: #c586c0 !important;
+  }
+
+  html:not([data-mode]) .highlight .kd,
+  html:not([data-mode]) .highlight .kt,
+  html:not([data-mode]) .highlight .kv,
+  html:not([data-mode]) .highlight .kc,
+  html:not([data-mode]) .highlight .bp {
+    color: #569cd6 !important;
+  }
+
+  html:not([data-mode]) .highlight .nf,
+  html:not([data-mode]) .highlight .fm,
+  html:not([data-mode]) .highlight .nb,
+  html:not([data-mode]) .highlight .nd {
+    color: #dcdcaa !important;
+  }
+
+  html:not([data-mode]) .highlight .nc,
+  html:not([data-mode]) .highlight .ne,
+  html:not([data-mode]) .highlight .nn {
+    color: #4ec9b0 !important;
+  }
+
+  html:not([data-mode]) .highlight .s,
+  html:not([data-mode]) .highlight .s1,
+  html:not([data-mode]) .highlight .s2,
+  html:not([data-mode]) .highlight .sa,
+  html:not([data-mode]) .highlight .sb,
+  html:not([data-mode]) .highlight .sc,
+  html:not([data-mode]) .highlight .sd,
+  html:not([data-mode]) .highlight .sh,
+  html:not([data-mode]) .highlight .sr,
+  html:not([data-mode]) .highlight .ss,
+  html:not([data-mode]) .highlight .dl,
+  html:not([data-mode]) .highlight .sx {
+    color: #ce9178 !important;
+  }
+
+  html:not([data-mode]) .highlight .se,
+  html:not([data-mode]) .highlight .si {
+    color: #d7ba7d !important;
+  }
+
+  html:not([data-mode]) .highlight .m,
+  html:not([data-mode]) .highlight .mi,
+  html:not([data-mode]) .highlight .mf,
+  html:not([data-mode]) .highlight .mh,
+  html:not([data-mode]) .highlight .mo,
+  html:not([data-mode]) .highlight .mb,
+  html:not([data-mode]) .highlight .il {
+    color: #b5cea8 !important;
+  }
+
+  html:not([data-mode]) .highlight .c,
+  html:not([data-mode]) .highlight .c1,
+  html:not([data-mode]) .highlight .cm,
+  html:not([data-mode]) .highlight .cs,
+  html:not([data-mode]) .highlight .ch,
+  html:not([data-mode]) .highlight .cd,
+  html:not([data-mode]) .highlight .cp,
+  html:not([data-mode]) .highlight .cpf {
+    color: #6a9955 !important;
+  }
+
+  html:not([data-mode]) .highlight .n,
+  html:not([data-mode]) .highlight .nv,
+  html:not([data-mode]) .highlight .vi,
+  html:not([data-mode]) .highlight .vc,
+  html:not([data-mode]) .highlight .vg,
+  html:not([data-mode]) .highlight .na,
+  html:not([data-mode]) .highlight .py {
+    color: #9cdcfe !important;
+  }
+
+  html:not([data-mode]) .highlight .o,
+  html:not([data-mode]) .highlight .p {
+    color: #d4d4d4 !important;
+  }
 }

@@ -166,6 +166,8 @@ kramdown:
       line_numbers: true
       start_line: 1
   parse_block_html: true
+  # 段落裡的換行直接顯示成換行（筆記一句一行）
+  hard_wrap: true
 
 collections:
   tabs:
