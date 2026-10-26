@@ -18,14 +18,14 @@ layout: page
     <a href="{{ category_url | relative_url }}" class="category-title-link">{{ page.title }}</a>
     <span id="subcategory-title" class="d-none">
       <i class="fas fa-angle-right fa-fw text-muted small"></i>
-      <a class="sub-link"><i class="far fa-folder fa-fw text-muted me-2"></i><span class="name"></span></a>
+      <a class="sub-link" href="{{ category_url | relative_url }}"><i class="far fa-folder fa-fw text-muted me-2"></i><span class="name"></span></a>
     </span>
     <span class="lead text-muted ps-2" id="category-count">{{ page.posts | size }}</span>
   </h1>
 
   <!-- 主題（子分類）filter：連到 #子分類，下面的 script 只顯示那一段；「全部」回到整個科目 -->
   {% assign named_groups = groups | where_exp: "g", "g.name != nil and g.name != ''" %}
-  {% if named_groups.size > 1 %}
+  {% if named_groups.size > 0 %}
     <nav id="post-filter" class="d-flex flex-wrap px-xl-1 mb-3" aria-label="Topics">
       <a class="filter-chip" data-sub="" href="{{ category_url | relative_url }}">全部<span class="filter-count">{{ page.posts | size }}</span></a>
       {% for group in named_groups %}

@@ -992,6 +992,12 @@ html[data-mode='dark'] .card.categories {
 ::view-transition-old(root),
 ::view-transition-new(root) { animation-duration: 0.15s; }
 
+// 分類頁的科目標題：Chirpy 預設上面空 3rem，太空
+#page-category h1 { margin-top: 1rem; }
+
+// 子分類標題跟下面第一張卡片拉開一點（原本 0.75rem）
+#page-category .subcategory-heading { margin-bottom: 1.25rem; }
+
 // 分類頁的主題 filter：上下跟科目標題、第一個子分類標題的距離一樣（都是 1.5rem）
 #page-category #post-filter {
   margin-top: 1.5rem;
