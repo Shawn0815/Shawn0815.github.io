@@ -71,15 +71,15 @@
 /*
 設定列點的字體（對齊內文）
 */
-.content :not(.sidebar) li{
+.post-content li {
   font-family: 'Inter', sans-serif;
   font-size: 17px;
 }
 
 // 特別設定子列點與母列點間的距離（縮小）
 // 否則子列點跟母列點間距會是模板預設，太大
-.content :not(.sidebar) li ul,
-.content :not(.sidebar) li ol {
+.post-content li ul,
+.post-content li ol {
     margin-top: 0px;
     margin-bottom: 6px;
 }
@@ -176,7 +176,7 @@ html[data-mode='dark'] .content hr {
 
 
 /*
-設定粗體：紅字加黃色螢光筆底線（表格裡的粗體除外）
+設定粗體：紅字加黃色螢光筆底線（表格、callout 開頭的標籤除外）
 */
 .content strong {
   color: #c0392b;
@@ -196,10 +196,13 @@ html[data-mode='dark'] .content strong {
   }
 }
 
-// 表格裡的粗體維持一般顏色（深色模式也是）
+// 表格裡的粗體、callout（aside）開頭的「重點」這種整行粗體標籤，維持一般顏色（深色模式也是）
 .content table strong,
+.content aside strong.strong-line-black,
 html[data-mode='dark'] .content table strong,
-html:not([data-mode]) .content table strong {
+html[data-mode='dark'] .content aside strong.strong-line-black,
+html:not([data-mode]) .content table strong,
+html:not([data-mode]) .content aside strong.strong-line-black {
   color: inherit;
   background: none;
   padding: 0;
@@ -225,6 +228,11 @@ html[data-mode='dark'] .card {
   margin: 28px 0;
   font-size: 0.95rem;
   line-height: 1.6;
+}
+
+// callout 的內容縮排，對齊第一行「💡 重點」的文字
+.content aside > :not(:first-child) {
+  margin-left: 1.75em;
 }
 
 .content aside::before {
@@ -552,4 +560,28 @@ html[data-mode='dark'] .highlight .p {
   html:not([data-mode]) .highlight .p {
     color: #d4d4d4 !important;
   }
+}
+
+
+/*
+設定 LeetCode 文章標題下的一行：難度標籤 + 題目連結（post.html 的 .problem-meta）
+*/
+.problem-meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px 14px;
+  margin: 10px 0 1.25rem;
+  font-size: 0.9rem;
+
+  .level {
+    padding: 2px 10px;
+    border-radius: 8px;
+    font-size: 0.78rem;
+    font-weight: 600;
+  }
+
+  .level-easy { color: #065f46; background: #d1fae5; }
+  .level-medium { color: #92400e; background: #fef3c7; }
+  .level-hard { color: #991b1b; background: #fee2e2; }
 }
