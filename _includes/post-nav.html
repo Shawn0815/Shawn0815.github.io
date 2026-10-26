@@ -1,0 +1,41 @@
+<!-- 文章底部的上一篇／下一篇（覆蓋 Chirpy）：只在同一個科目裡，照 VS Code 檔案總管的順序（front matter 的 order），像讀一本書。
+     標題去掉前面的 [科目]，下面一行小字是子分類。 -->
+
+<nav class="post-navigation d-flex justify-content-between" aria-label="Post Navigation">
+  {% assign previous_label = site.data.locales[include.lang].post.button.previous %}
+  {% assign next_label = site.data.locales[include.lang].post.button.next %}
+  {% assign top = page.categories | first %}
+  {% assign siblings = site.posts | where_exp: "p", "p.categories[0] == top" | sort: "order" %}
+  {% assign prev_post = nil %}
+  {% assign next_post = nil %}
+  {% for p in siblings %}
+    {% if p.url == page.url %}
+      {% assign prev_i = forloop.index0 | minus: 1 %}
+      {% if prev_i >= 0 %}{% assign prev_post = siblings[prev_i] %}{% endif %}
+      {% assign next_post = siblings[forloop.index] %}
+      {% break %}
+    {% endif %}
+  {% endfor %}
+
+  {% if prev_post %}
+    <a href="{{ prev_post.url | relative_url }}" class="btn btn-outline-primary" aria-label="{{ previous_label }}">
+      <p>{{ prev_post.title | split: "  " | last }}</p>
+      {% if prev_post.categories[1] %}<small class="post-nav-sub"><i class="far fa-folder fa-fw"></i>{{ prev_post.categories[1] }}</small>{% endif %}
+    </a>
+  {% else %}
+    <div class="btn btn-outline-primary disabled" aria-label="{{ previous_label }}">
+      <p>-</p>
+    </div>
+  {% endif %}
+
+  {% if next_post %}
+    <a href="{{ next_post.url | relative_url }}" class="btn btn-outline-primary" aria-label="{{ next_label }}">
+      <p>{{ next_post.title | split: "  " | last }}</p>
+      {% if next_post.categories[1] %}<small class="post-nav-sub"><i class="far fa-folder fa-fw"></i>{{ next_post.categories[1] }}</small>{% endif %}
+    </a>
+  {% else %}
+    <div class="btn btn-outline-primary disabled" aria-label="{{ next_label }}">
+      <p>-</p>
+    </div>
+  {% endif %}
+</nav>

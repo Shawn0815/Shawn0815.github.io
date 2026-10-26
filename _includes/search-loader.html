@@ -1,0 +1,74 @@
+<!--
+  Jekyll Simple Search loader（覆蓋 Chirpy 的版本）
+  See: <https://github.com/christian-fei/Simple-Jekyll-Search>
+  改了兩件事：結果最多 50 筆（預設 10）；摘要顯示關鍵字前後那一句，關鍵字用 <mark> 標起來（預設是文章開頭）。
+-->
+
+{% capture result_elem %}
+  <article class="px-1 px-sm-2 px-lg-4 px-xl-0">
+    <header>
+      <h2><a href="{url}">{title}</a></h2>
+      <div class="post-meta d-flex flex-column flex-sm-row text-muted mt-1 mb-1">
+        {categories}
+        {tags}
+      </div>
+    </header>
+    <p>{content}</p>
+  </article>
+{% endcapture %}
+
+{% capture not_found %}<p class="mt-5">{{ site.data.locales[include.lang].search.no_results }}</p>{% endcapture %}
+
+<script>
+  {% comment %} Note: dependent library will be loaded in `js-selector.html` {% endcomment %}
+  document.addEventListener('DOMContentLoaded', () => {
+    const input = document.getElementById('search-input');
+    const escape = (s) => s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+
+    /* 從內文切出關鍵字前後一段：前 40 字、後 80 字，關鍵字標起來 */
+    function snippet(text) {
+      const query = input.value.trim();
+      const at = query ? text.toLowerCase().indexOf(query.toLowerCase()) : -1;
+      if (at < 0) {
+        return escape(text.slice(0, 120)) + (text.length > 120 ? '…' : '');
+      }
+      const start = Math.max(0, at - 40);
+      const end = Math.min(text.length, at + query.length + 80);
+      return (start > 0 ? '…' : '') +
+        escape(text.slice(start, at)) +
+        '<mark>' + escape(text.slice(at, at + query.length)) + '</mark>' +
+        escape(text.slice(at + query.length, end)) +
+        (end < text.length ? '…' : '');
+    }
+
+    SimpleJekyllSearch({
+      searchInput: input,
+      resultsContainer: document.getElementById('search-results'),
+      json: '{{ '/assets/js/data/search.json' | relative_url }}',
+      searchResultTemplate: '{{ result_elem | strip_newlines }}',
+      noResultsText: '{{ not_found }}',
+      limit: 50,
+      templateMiddleware: function(prop, value, template) {
+        if (prop === 'content') {
+          return snippet(value);
+        }
+
+        if (prop === 'categories') {
+          if (value === '') {
+            return `${value}`;
+          } else {
+            return `<div class="me-sm-4"><i class="far fa-folder fa-fw"></i>${value}</div>`;
+          }
+        }
+
+        if (prop === 'tags') {
+          if (value === '') {
+            return `${value}`;
+          } else {
+            return `<div><i class="fa fa-tag fa-fw"></i>${value}</div>`;
+          }
+        }
+      }
+    });
+  });
+</script>

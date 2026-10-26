@@ -2,145 +2,71 @@
 layout: default
 ---
 
+<!-- 首頁 = 最近更新（覆蓋 Chirpy）：文章卡片照最後更新時間排，「全部」一次 PAGE_SIZE 篇，選了科目就列出那個科目的全部文章；
+     上面的科目 filter 只有一層，原地篩選、順序不變，選的科目記在這台瀏覽器。照科目、子分類讀去分類頁。 -->
+
 {% include lang.html %}
 
-{% assign all_pinned = site.posts | where: 'pin', 'true' %}
-{% assign all_normal = site.posts | where_exp: 'item', 'item.pin != true and item.hidden != true' %}
-
-{% assign posts = all_pinned | concat: all_normal %}
-{% assign categories = site.categories | sort %}
+{% assign posts = site.posts | where_exp: 'item', 'item.hidden != true' %}
+{% assign categories = posts | group_by_exp: "p", "p.categories[0]" | sort: "name" %}
 
 <div id="post-filter" class="d-flex flex-wrap px-xl-1 mb-3">
+  <button type="button" class="filter-chip" data-category="">
+    全部<span class="filter-count">{{ posts.size }}</span>
+  </button>
   {% for category in categories %}
-    <button type="button" class="filter-chip" data-category="{{ category[0] | escape }}">
-      {{ category[0] }}<span class="filter-count">{{ category[1].size }}</span>
+    <button type="button" class="filter-chip" data-category="{{ category.name | escape }}">
+      {{ category.name }}<span class="filter-count">{{ category.size }}</span>
     </button>
   {% endfor %}
 </div>
 
 <div id="post-list" class="flex-grow-1 px-xl-1">
   {% for post in posts %}
-    <article class="card-wrapper card" data-category="{{ post.categories | first | escape }}">
-      <a href="{{ post.url | relative_url }}" class="post-preview row g-0 flex-md-row-reverse">
-        {% assign card_body_col = '12' %}
-
-        {% if post.image %}
-          {% assign src = post.image.path | default: post.image %}
-
-          {% if post.media_subpath %}
-            {% unless src contains '://' %}
-              {% assign src = post.media_subpath
-                | append: '/'
-                | append: src
-                | replace: '///', '/'
-                | replace: '//', '/'
-              %}
-            {% endunless %}
-          {% endif %}
-
-          {% if post.image.lqip %}
-            {% assign lqip = post.image.lqip %}
-
-            {% if post.media_subpath %}
-              {% unless lqip contains 'data:' %}
-                {% assign lqip = post.media_subpath
-                  | append: '/'
-                  | append: lqip
-                  | replace: '///', '/'
-                  | replace: '//', '/'
-                %}
-              {% endunless %}
-            {% endif %}
-
-            {% assign lqip_attr = 'lqip="' | append: lqip | append: '"' %}
-          {% endif %}
-
-          {% assign alt = post.image.alt | xml_escape | default: 'Preview Image' %}
-
-          <div class="col-md-5">
-            <img src="{{ src }}" alt="{{ alt }}" {{ lqip_attr }}>
-          </div>
-
-          {% assign card_body_col = '7' %}
-        {% endif %}
-
-        <div class="col-md-{{ card_body_col }}">
-          <div class="card-body d-flex flex-column">
-            <h1 class="card-title my-2 mt-md-0">{{ post.title }}</h1>
-
-            <div class="card-text content mt-0 mb-3">
-              <p>{% include post-summary.html %}</p>
-            </div>
-
-            <div class="post-meta flex-grow-1 d-flex align-items-end">
-              <div class="me-auto">
-                <!-- posted date -->
-                <i class="far fa-calendar fa-fw me-1"></i>
-                {% include datetime.html date=post.date lang=lang %}
-
-                <!-- categories -->
-                {% if post.categories.size > 0 %}
-                  <i class="far fa-folder-open fa-fw me-1"></i>
-                  <span class="categories">
-                    {% for category in post.categories %}
-                      {{ category }}
-                      {%- unless forloop.last -%},{%- endunless -%}
-                    {% endfor %}
-                  </span>
-                {% endif %}
-              </div>
-
-              {% if post.pin %}
-                <div class="pin ms-1">
-                  <i class="fas fa-thumbtack fa-fw"></i>
-                  <span>{{ site.data.locales[lang].post.pin_prompt }}</span>
-                </div>
-              {% endif %}
-            </div>
-            <!-- .post-meta -->
-          </div>
-          <!-- .card-body -->
-        </div>
-      </a>
-    </article>
+    {% include post-card.html post=post %}
   {% endfor %}
 </div>
-<!-- #post-list -->
 
-<p id="post-filter-empty" class="text-muted text-center mt-5 d-none">沒有符合的文章</p>
 <div class="text-center">
-  <button type="button" id="post-filter-more" class="btn btn-outline-secondary btn-sm mt-2 mb-4 d-none">顯示更多</button>
+  <button type="button" id="post-filter-more" class="btn btn-outline-secondary btn-sm mt-3 mb-4 d-none">顯示更多</button>
 </div>
 
 <script>
   (function () {
     var PAGE_SIZE = 10;
-    var cards = Array.prototype.slice.call(document.querySelectorAll('#post-list > .card-wrapper'));
+    var list = document.getElementById('post-list');
+    var items = Array.prototype.slice.call(list.children);
     var chips = document.querySelectorAll('#post-filter .filter-chip');
-    var input = document.getElementById('search-input');
-    var empty = document.getElementById('post-filter-empty');
     var more = document.getElementById('post-filter-more');
+
+    /* 最近更新的在最上面（last_modified_at，沒有就用發佈日期） */
+    items.sort(function (a, b) { return b.dataset.updated - a.dataset.updated; });
+    items.forEach(function (li) { list.appendChild(li); });
+
+    /* 選的科目記在這台瀏覽器：重新整理、從文章回首頁都維持，直到按「全部」 */
+    var KEY = 'home-filter-category';
     var category = '';
+    try { category = localStorage.getItem(KEY) || ''; } catch (e) {}
+    if (!Array.prototype.some.call(chips, function (c) { return c.dataset.category === category; })) category = '';
     var shown = PAGE_SIZE;
 
     function render() {
-      var keyword = (input && input.value || '').trim().toLowerCase();
+      chips.forEach(function (c) { c.classList.toggle('active', c.dataset.category === category); });
+      /* 選了科目：那個科目的文章全部列出；「全部」：一次 PAGE_SIZE 篇 */
+      var limit = category ? Infinity : shown;
       var matched = 0;
-      cards.forEach(function (card) {
-        var ok = (!category || card.dataset.category === category) &&
-          (!keyword || card.textContent.toLowerCase().indexOf(keyword) !== -1);
+      items.forEach(function (li) {
+        var ok = !category || li.dataset.category === category;
         if (ok) matched++;
-        card.classList.toggle('d-none', !ok || matched > shown);
+        li.classList.toggle('d-none', !ok || matched > limit);
       });
-      empty.classList.toggle('d-none', matched > 0);
-      more.classList.toggle('d-none', matched <= shown);
+      more.classList.toggle('d-none', matched <= limit);
     }
 
     chips.forEach(function (chip) {
       chip.addEventListener('click', function () {
-        /* 再點一次選中的分類就取消，回到全部 */
-        category = category === chip.dataset.category ? '' : chip.dataset.category;
-        chips.forEach(function (c) { c.classList.toggle('active', c.dataset.category === category); });
+        category = chip.dataset.category;
+        try { localStorage.setItem(KEY, category); } catch (e) {}
         shown = PAGE_SIZE;
         render();
       });
@@ -150,41 +76,6 @@ layout: default
       shown += PAGE_SIZE;
       render();
     });
-
-    if (input) {
-      /* 首頁的搜尋直接篩卡片：攔下主題的搜尋，不跳到搜尋結果頁 */
-      ['input', 'keyup'].forEach(function (type) {
-        window.addEventListener(type, function (e) {
-          if (e.target !== input) return;
-          e.stopImmediatePropagation();
-          if (type === 'input') {
-            shown = PAGE_SIZE;
-            render();
-          }
-        }, true);
-      });
-
-      /* 手機版點放大鏡時，主題會把文章列表換成搜尋結果區，這裡換回來 */
-      var trigger = document.getElementById('search-trigger');
-      if (trigger) {
-        trigger.addEventListener('click', function () {
-          setTimeout(function () {
-            document.getElementById('search-result-wrapper').classList.add('d-none');
-            document.querySelectorAll('#main-wrapper>.container>.row').forEach(function (row) {
-              row.classList.remove('d-none');
-            });
-          });
-        });
-      }
-
-      var cancel = document.getElementById('search-cancel');
-      if (cancel) {
-        cancel.addEventListener('click', function () {
-          input.value = '';
-          render();
-        });
-      }
-    }
 
     render();
   })();

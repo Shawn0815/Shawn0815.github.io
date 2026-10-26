@@ -3,10 +3,16 @@ layout: page
 # All the Categories of posts
 ---
 
-<!-- 覆蓋 Chirpy 的分類頁：分類只有一層（科目），每個科目都可以展開看底下的文章（預設收合，依 source 也就是筆記的 x.y 編號排序）。
+<!-- 覆蓋 Chirpy 的分類總覽：每個科目預設收合，展開看子分類（沒有子分類的直接列文章），順序跟 VS Code 檔案總管一樣（front matter 的 order）。
+     子分類連到科目分類頁的錨點（/categories/python/#basics），因為子分類名稱會跨科目重複。
      展開收合用 Bootstrap 的 collapse；id 不用 Chirpy 的 l_ 前綴，避開 categories.js 換資料夾圖示，箭頭轉向寫在 custom.scss。 -->
 
 {% include lang.html %}
+
+<!-- 全部展開／全部收合（科目和子分類一起） -->
+<div class="d-flex justify-content-end categories-toggle-all">
+  <button type="button" class="btn btn-sm btn-link"><i class="fas fa-angles-down fa-fw me-1"></i><span>全部展開</span></button>
+</div>
 
 {% assign HEAD_PREFIX = 'h_' %}
 {% assign LIST_PREFIX = 'l_' %}
@@ -22,6 +28,7 @@ layout: page
 
   {% if category_name == first_post.categories[0] %}
     {% assign sub_categories = '' | split: '' %}
+    {% assign posts_of_category = posts_of_category | sort: "order" %}
 
     {% for post in posts_of_category %}
       {% assign second_category = post.categories[1] %}
@@ -32,7 +39,6 @@ layout: page
       {% endif %}
     {% endfor %}
 
-    {% assign sub_categories = sub_categories | sort %}
     {% assign sub_categories_size = sub_categories | size %}
 
     <div class="card categories">
@@ -42,7 +48,8 @@ layout: page
         class="card-header d-flex justify-content-between{% if sub_categories_size > 0 %} hide-border-bottom{% endif %}"
       >
         <span class="ms-2">
-          <i class="far fa-folder{% if sub_categories_size > 0 %}-open{% endif %} fa-fw"></i>
+          <!-- 科目用打開的資料夾、子分類用一般資料夾，跟文章卡片上的圖示一樣 -->
+          <i class="far fa-folder-open fa-fw"></i>
 
           {% capture _category_url %}/categories/{{ category_name | slugify | url_encode }}/{% endcapture %}
           <a href="{{ _category_url | relative_url }}" class="mx-2">{{ category_name }}</a>
@@ -85,11 +92,11 @@ layout: page
         <!-- arrow -->
         {% if sub_categories_size > 0 %}
           <a
-            href="#{{ LIST_PREFIX }}{{ group_index }}"
+            href="#sub_{{ group_index }}"
             data-bs-toggle="collapse"
-            aria-expanded="true"
+            aria-expanded="false"
             aria-label="{{ HEAD_PREFIX }}{{ group_index }}-trigger"
-            class="category-trigger hide-border-bottom"
+            class="category-trigger post-list-trigger hide-border-bottom collapsed"
           >
             <i class="fas fa-fw fa-angle-down"></i>
           </a>
@@ -109,40 +116,64 @@ layout: page
 
       <!-- Sub-categories -->
       {% if sub_categories_size > 0 %}
-        <div id="{{ LIST_PREFIX }}{{ group_index }}" class="collapse show" aria-expanded="true">
+        <div id="sub_{{ group_index }}" class="collapse" aria-expanded="false" data-key="{{ category_name | escape }}" data-level="1">
           <ul class="list-group">
             {% for sub_category in sub_categories %}
-              <li class="list-group-item">
-                <i class="far fa-folder fa-fw"></i>
+              {% assign sub_posts = posts_of_category | where_exp: "p", "p.categories[1] == sub_category" %}
+              <!-- 子分類：點名稱跳到科目分類頁的那一段，點右邊的箭頭在這裡展開文章 -->
+              <li class="list-group-item sub-category-item">
+                <div class="d-flex justify-content-between align-items-center">
+                  <span>
+                    <i class="far fa-folder fa-fw"></i>
 
-                {% capture _sub_ctg_url %}/categories/{{ sub_category | slugify | url_encode }}/{% endcapture %}
-                <a href="{{ _sub_ctg_url | relative_url }}" class="mx-2">{{ sub_category }}</a>
+                    {% capture _sub_ctg_url %}/categories/{{ category_name | slugify | url_encode }}/#{{ sub_category | slugify }}{% endcapture %}
+                    <a href="{{ _sub_ctg_url | relative_url }}" class="mx-2">{{ sub_category }}</a>
 
-                {% assign posts_size = site.categories[sub_category] | size %}
-                <span class="text-muted small font-weight-light">
-                  {{ posts_size }}
+                    <span class="text-muted small font-weight-light">
+                      {{ sub_posts.size }}
+                      {% if sub_posts.size > 1 %}
+                        {{
+                          site.data.locales[lang].categories.post_measure.plural
+                          | default: site.data.locales[lang].categories.post_measure
+                        }}
+                      {% else %}
+                        {{
+                          site.data.locales[lang].categories.post_measure.singular
+                          | default: site.data.locales[lang].categories.post_measure
+                        }}
+                      {% endif %}
+                    </span>
+                  </span>
 
-                  {% if posts_size > 1 %}
-                    {{
-                      site.data.locales[lang].categories.post_measure.plural
-                      | default: site.data.locales[lang].categories.post_measure
-                    }}
-                  {% else %}
-                    {{
-                      site.data.locales[lang].categories.post_measure.singular
-                      | default: site.data.locales[lang].categories.post_measure
-                    }}
-                  {% endif %}
-                </span>
+                  <a
+                    href="#sub_{{ group_index }}_{{ forloop.index }}"
+                    data-bs-toggle="collapse"
+                    aria-expanded="false"
+                    class="category-trigger post-list-trigger collapsed"
+                  >
+                    <i class="fas fa-fw fa-angle-down"></i>
+                  </a>
+                </div>
+
+                <div id="sub_{{ group_index }}_{{ forloop.index }}" class="collapse" aria-expanded="false" data-key="{{ category_name | escape }}/{{ sub_category | escape }}" data-level="2">
+                  <ul class="list-unstyled sub-category-posts">
+                    {% for post in sub_posts %}
+                      <li>
+                        <i class="far fa-file-lines fa-fw"></i>
+                        <a href="{{ post.url | relative_url }}" class="mx-2">{{ post.title | split: "  " | last }}</a>
+                      </li>
+                    {% endfor %}
+                  </ul>
+                </div>
               </li>
             {% endfor %}
           </ul>
         </div>
       {% else %}
         <!-- 沒有子分類：列出這個科目的文章 -->
-        <div id="posts_{{ group_index }}" class="collapse" aria-expanded="false">
+        <div id="posts_{{ group_index }}" class="collapse" aria-expanded="false" data-key="{{ category_name | escape }}" data-level="1">
           <ul class="list-group">
-            {% assign sorted_posts = posts_of_category | sort: "source" %}
+            {% assign sorted_posts = posts_of_category %}
             {% for post in sorted_posts %}
               <li class="list-group-item">
                 <i class="far fa-file-lines fa-fw"></i>
@@ -158,3 +189,52 @@ layout: page
     {% assign group_index = group_index | plus: 1 %}
   {% endif %}
 {% endfor %}
+
+<script>
+  /* 預設全部收合；自己點過的記在這台瀏覽器（key → true 展開 / false 收合），點進文章或分類再回來、重新整理都維持。 */
+  (function () {
+    var KEY = 'categories-state';
+    var state = {};
+    try { state = JSON.parse(localStorage.getItem(KEY) || '{}'); } catch (e) {}
+    function save() { try { localStorage.setItem(KEY, JSON.stringify(state)); } catch (e) {} }
+
+    var all = document.querySelectorAll('.categories .collapse[data-key]');
+
+    /* 一開始就切好，不跑動畫 */
+    function set(el, on) {
+      el.classList.toggle('show', on);
+      el.setAttribute('aria-expanded', on);
+      document.querySelectorAll('[href="#' + el.id + '"]').forEach(function (trigger) {
+        trigger.classList.toggle('collapsed', !on);
+        trigger.setAttribute('aria-expanded', on);
+      });
+    }
+
+    all.forEach(function (el) {
+      if (el.dataset.key in state) set(el, state[el.dataset.key]);
+      /* 子分類的事件會冒泡到科目，只處理自己的 */
+      el.addEventListener('shown.bs.collapse', function (e) { if (e.target === el) { state[el.dataset.key] = true; save(); label(); } });
+      el.addEventListener('hidden.bs.collapse', function (e) { if (e.target === el) { state[el.dataset.key] = false; save(); label(); } });
+    });
+
+    /* 全部展開／收合同一個鍵：「全部展開」只打開科目（看到所有子分類，文章仍收著）；
+       「全部收合」科目、子分類全部收起來。有科目還收著就顯示「全部展開」。 */
+    var tops = document.querySelectorAll('.categories .collapse[data-level="1"]');
+    var toggleAll = document.querySelector('.categories-toggle-all button');
+    function allOpen() {
+      return Array.prototype.every.call(tops, function (el) { return el.classList.contains('show'); });
+    }
+    function label() {
+      var on = allOpen();
+      toggleAll.querySelector('span').textContent = on ? '全部收合' : '全部展開';
+      toggleAll.querySelector('i').className = 'fas fa-fw me-1 ' + (on ? 'fa-angles-up' : 'fa-angles-down');
+    }
+    toggleAll.addEventListener('click', function () {
+      var on = !allOpen();
+      (on ? tops : all).forEach(function (el) { set(el, on); state[el.dataset.key] = on; });
+      save();
+      label();
+    });
+    label();
+  })();
+</script>

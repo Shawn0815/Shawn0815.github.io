@@ -226,11 +226,14 @@ script_includes:
     <!-- categories -->
     {% if page.categories.size > 0 %}
       <div class="post-meta mb-3">
+        <!-- 子分類連到科目分類頁的那一段（子分類名稱會跨科目重複，沒有自己的頁面）；圖示跟分類總覽一樣 -->
+        {% assign top_category = page.categories | first %}
         <i class="far fa-folder-open fa-fw me-1"></i>
-        {% for category in page.categories %}
-          <a href="{{ site.baseurl }}/categories/{{ category | slugify | url_encode }}/">{{ category }}</a>
-          {%- unless forloop.last -%},{%- endunless -%}
-        {% endfor %}
+        <a href="{{ site.baseurl }}/categories/{{ top_category | slugify | url_encode }}/">{{ top_category }}</a>
+        {% if page.categories[1] %}
+          <i class="far fa-folder fa-fw ms-2 me-1"></i>
+          <a href="{{ site.baseurl }}/categories/{{ top_category | slugify | url_encode }}/#{{ page.categories[1] | slugify }}">{{ page.categories[1] }}</a>
+        {% endif %}
       </div>
     {% endif %}
 

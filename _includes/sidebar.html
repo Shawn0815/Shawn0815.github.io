@@ -27,115 +27,76 @@
       </li>
       <!-- the real tabs -->
       {% for tab in site.tabs %}
-        {% if tab.url contains 'categories' %}
-          {% capture tab_name %}{{ tab.url | split: '/' }}{% endcapture %}
-          <!-- 分類：點了在下面展開分類樹（大分類 › 子分類 › 文章），像 Notion 側欄。
-               文章依 source（筆記路徑，含 x.y 編號）排序；目前這篇所在的分支預設展開。 -->
-          <li class="nav-item category-tree-item{% if tab.url == page.url %}{{ " active" }}{% endif %}">
-            <!-- 像 Notion：滑鼠移到圖示上，圖示換成 ▸，點了在下面展開分類樹；點「分類」文字照舊進分類頁 -->
-            <a href="{{ tab.url | relative_url }}" class="nav-link">
-              <span class="tree-toggle" role="button" tabindex="0" aria-label="Toggle category tree" aria-expanded="false" aria-controls="category-tree-body">
-                <i class="fa-fw {{ tab.icon }}"></i>
-                <span class="tree-arrow" aria-hidden="true"><i class="fas fa-angle-right fa-fw"></i></span>
-              </span>
-              <span>{{ site.data.locales[include.lang].tabs.[tab_name] | default: tab.title | upcase }}</span>
-            </a>
-              <div class="category-tree-body" id="category-tree-body" hidden>
-    {% assign top_groups = site.posts | group_by_exp: "p", "p.categories[0]" | sort: "name" %}
-              {% for top in top_groups %}
-                {% assign has_sub = top.items | where_exp: "p", "p.categories[1]" | size %}
-                <details class="tree-node" data-key="{{ top.name }}">
-                  <summary><span class="tree-icon"><i class="far fa-folder{% if has_sub > 0 %}-open{% endif %} fa-fw"></i><span class="tree-arrow" aria-hidden="true"><i class="fas fa-angle-right fa-fw"></i></span></span><a class="tree-label" href="{% capture _url %}/categories/{{ top.name | slugify | url_encode }}/{% endcapture %}{{ _url | relative_url }}">{{ top.name }}</a><span class="tree-count">{{ top.size }}</span></summary>
-                  {% assign sub_groups = top.items | group_by_exp: "p", "p.categories[1]" | sort: "name" %}
-                  {% for sub in sub_groups %}
-                    {% assign posts = sub.items | sort: "source" %}
-                    {% if sub.name == "" or sub.name == nil %}
-                      <ul class="tree-posts">
-                        {% for post in posts %}
-                          <li{% if post.url == page.url %} class="active"{% endif %}><a href="{{ post.url | relative_url }}"><i class="far fa-file-lines fa-fw"></i><span>{{ post.title | split: "  " | last }}</span></a></li>
-                        {% endfor %}
-                      </ul>
-                    {% else %}
-                      <details class="tree-node tree-sub" data-key="{{ top.name }}/{{ sub.name }}">
-                        <summary><span class="tree-icon"><i class="far fa-folder fa-fw"></i><span class="tree-arrow" aria-hidden="true"><i class="fas fa-angle-right fa-fw"></i></span></span><a class="tree-label" href="{% capture _url %}/categories/{{ sub.name | slugify | url_encode }}/{% endcapture %}{{ _url | relative_url }}">{{ sub.name }}</a><span class="tree-count">{{ sub.size }}</span></summary>
-                        <ul class="tree-posts">
-                          {% for post in posts %}
-                            <li{% if post.url == page.url %} class="active"{% endif %}><a href="{{ post.url | relative_url }}"><i class="far fa-file-lines fa-fw"></i><span>{{ post.title | split: "  " | last }}</span></a></li>
-                          {% endfor %}
-                        </ul>
-                      </details>
-                    {% endif %}
-                  {% endfor %}
-                </details>
-              {% endfor %}
-              </div>
-          </li>
-          {% continue %}
-        {% endif %}
-        <li class="nav-item{% if tab.url == page.url %}{{ " active" }}{% endif %}">
+        <li class="nav-item{% if tab.url == page.url %}{{ " active" }}{% endif %}{% if tab.url contains 'categories' %} nav-categories{% endif %}">
           <a href="{{ tab.url | relative_url }}" class="nav-link">
-            <i class="fa-fw {{ tab.icon }}"></i>
+            {% if tab.url contains 'categories' %}
+              <!-- 像 Notion：滑鼠移到圖示上，圖示換成 ▸／▾，點了展開／收合底下的科目清單；點「分類」文字照舊進總覽頁 -->
+              <span class="nav-subjects-toggle" role="button" tabindex="0" aria-label="Toggle subjects" aria-expanded="true">
+                <i class="fa-fw {{ tab.icon }}"></i>
+                <span class="toggle-arrow" aria-hidden="true"><i class="fas fa-angle-down fa-fw"></i></span>
+              </span>
+            {% else %}
+              <i class="fa-fw {{ tab.icon }}"></i>
+            {% endif %}
             {% capture tab_name %}{{ tab.url | split: '/' }}{% endcapture %}
 
             <span>{{ site.data.locales[include.lang].tabs.[tab_name] | default: tab.title | upcase }}</span>
           </a>
         </li>
         <!-- .nav-item -->
+        {% if tab.url contains 'categories' %}
+          <!-- 「分類」底下直接列出各科目（只有一層），點了進那個科目的分類頁；目前所在的科目反白。
+               分類總覽（點「分類」）還是看完整結構的地方。 -->
+          {% assign nav_posts = site.posts | where_exp: 'item', 'item.hidden != true' %}
+          {% assign nav_categories = nav_posts | group_by_exp: "p", "p.categories[0]" | sort: "name" %}
+          {% if page.layout == 'category' %}{% assign current_category = page.title %}{% else %}{% assign current_category = page.categories | first %}{% endif %}
+          <li class="nav-subjects" id="nav-subjects">
+            <ul>
+              {% for category in nav_categories %}
+                {% capture _url %}/categories/{{ category.name | slugify | url_encode }}/{% endcapture %}
+                <li{% if current_category == category.name %} class="active"{% endif %}>
+                  <a href="{{ _url | relative_url }}"><span>{{ category.name }}</span></a>
+                </li>
+              {% endfor %}
+            </ul>
+          </li>
+        {% endif %}
       {% endfor %}
     </ul>
   </nav>
 
 
-
   <script>
-    /* 記住展開狀態（只存在這台瀏覽器）；預設全部收合，不會因為打開文章自動展開 */
+    /* 科目清單預設展開；收起來會記在這台瀏覽器 */
     (function () {
-      var KEY = 'category-tree-open';
-      var saved = {};
-      try { saved = JSON.parse(localStorage.getItem(KEY) || '{}'); } catch (e) {}
-      function save() { try { localStorage.setItem(KEY, JSON.stringify(saved)); } catch (e) {} }
-
-      var toggle = document.querySelector('.category-tree-item .tree-toggle');
-      var body = document.getElementById('category-tree-body');
-      if (toggle && body) {
-        var setOpen = function (open) {
-          body.hidden = !open;
-          toggle.setAttribute('aria-expanded', open);
-          toggle.closest('li').classList.toggle('tree-open', open);
-        };
-        setOpen(!!saved.__root);
-        var flip = function (e) {
-          e.preventDefault();      /* 圖示在 <a> 裡，點圖示只展開，不換頁 */
-          e.stopPropagation();
-          var open = body.hidden;
-          setOpen(open);
-          saved.__root = open;
-          save();
-        };
-        toggle.addEventListener('click', flip);
-        toggle.addEventListener('keydown', function (e) {
-          if (e.key === 'Enter' || e.key === ' ') flip(e);
-        });
+      var KEY = 'sidebar-subjects-collapsed';
+      var list = document.getElementById('nav-subjects');
+      var btn = document.querySelector('.nav-subjects-toggle');
+      if (!list || !btn) return;
+      function set(collapsed) {
+        list.hidden = collapsed;
+        btn.setAttribute('aria-expanded', !collapsed);
+        btn.classList.toggle('collapsed', collapsed);
       }
-
-      /* 資料夾：點名稱換頁，點圖示展開（跟「分類」一樣） */
-      document.querySelectorAll('.category-tree-body .tree-node > summary').forEach(function (summary) {
-        summary.addEventListener('click', function (e) {
-          if (!e.target.closest('.tree-icon')) {
-            e.preventDefault();          /* 不展開 */
-            var link = e.target.closest('a.tree-label');
-            if (link) window.location.href = link.href;
-          }
-        });
-      });
-
-      document.querySelectorAll('.category-tree-body details').forEach(function (node) {
-        var k = node.dataset.key;
-        if (!node.open && saved[k]) node.open = true;
-        node.addEventListener('toggle', function () { saved[k] = node.open; save(); });
+      var collapsed = false;
+      try { collapsed = localStorage.getItem(KEY) === '1'; } catch (e) {}
+      set(collapsed);
+      function flip(e) {
+        e.preventDefault();      /* 圖示在「分類」的連結裡，點圖示只展開收合、不換頁 */
+        e.stopPropagation();
+        collapsed = !collapsed;
+        set(collapsed);
+        try { localStorage.setItem(KEY, collapsed ? '1' : '0'); } catch (e) {}
+      }
+      btn.addEventListener('click', flip);
+      btn.addEventListener('keydown', function (e) {
+        if (e.key === 'Enter' || e.key === ' ') flip(e);
       });
     })();
   </script>
+
+
+
 
   <div class="sidebar-bottom d-flex flex-wrap  align-items-center w-100">
     {% unless site.theme_mode %}
@@ -200,6 +161,28 @@
   <!-- .sidebar-bottom -->
 </aside>
 <!-- #sidebar -->
+
+<script>
+    /* 換頁時側欄不要跳回最上面（放在 </aside> 後面：整個側欄都載入了才定位，畫面出現前就捲好）：離開前記下側欄的捲動位置（這個分頁內），下一頁還原；
+       沒有記錄（例如從外部連結進來）就把目前的科目捲到看得到的地方 */
+    (function () {
+      var KEY = 'sidebar-nav-scroll';
+      var nav = document.getElementById('sidebar');    /* Chirpy 的側欄整個是捲動區（overflow-y: auto） */
+      if (!nav) return;
+      var saved = null;
+      try { saved = sessionStorage.getItem(KEY); } catch (e) {}
+      nav.style.scrollBehavior = 'auto';    /* 直接定位，不要捲動動畫 */
+      if (saved !== null) {
+        nav.scrollTop = parseInt(saved, 10) || 0;
+      } else {
+        var active = nav.querySelector('.nav-subjects li.active');
+        if (active) active.scrollIntoView({ block: 'nearest' });
+      }
+      window.addEventListener('pagehide', function () {
+        try { sessionStorage.setItem(KEY, nav.scrollTop); } catch (e) {}
+      });
+    })();
+</script>
 
 <!-- 側欄右邊緣的拖拉把手：拖拉調整側欄寬度（200～480px），記在這台瀏覽器；雙擊回到預設寬度。手機版不顯示 -->
 <div class="sidebar-resizer" role="separator" aria-orientation="vertical" aria-label="Resize sidebar" title="拖拉調整寬度，雙擊還原"></div>

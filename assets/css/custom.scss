@@ -645,144 +645,6 @@ article > header .img-fluid {
   list-style-type: lower-roman;
 }
 
-// 左側分類樹（_includes/sidebar.html）：「分類」左邊的 ▸ 展開分類樹，像 Notion 側欄的展開收合清單
-#sidebar .sidebar-nav {
-  overflow-y: auto;    // 樹很長時只捲動導覽區，左下角按鈕不會被擠掉
-  min-height: 0;       // flex 子元素預設不會縮到比內容矮，要設 0 才會出現捲軸
-}
-
-#sidebar .category-tree-item {
-  position: relative;
-
-  // 圖示的位置：平常顯示原本的圖示，滑鼠移到圖示上換成 ▸（展開時 ▾），像 Notion
-  .tree-toggle {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    width: 1.4rem;
-    height: 1.4rem;
-    margin: 0 1.5rem 0 -0.2rem;    // 讓「分類」兩個字跟其他項目對齊
-    border-radius: 4px;
-    cursor: pointer;
-
-    i { margin-right: 0 !important; }
-
-    .tree-arrow {
-      display: none;
-
-      i { transition: transform 0.15s; }
-    }
-
-    &:hover {
-      background: var(--sidebar-hover-bg);
-
-      > i { display: none; }
-      .tree-arrow { display: inline-block; }
-    }
-  }
-
-  &.tree-open > a .tree-arrow i { transform: rotate(90deg); }
-
-  // 展開後的文字跟「首頁、分類、標籤」用同一套字型樣式（Chirpy 的 nav-link span：90%、粗體、0.2px 字距、同一個顏色）
-  .category-tree-body {
-    padding: 0.25rem 0 0.5rem 1rem;
-    font-size: 90%;
-    font-weight: 600;
-    letter-spacing: 0.2px;
-    color: var(--sidebar-muted-color);
-
-    a { color: inherit; }
-  }
-
-  // 每一列（大分類、子分類、文章）的外觀一樣
-  .tree-node > summary,
-  .tree-posts li a {
-    display: flex;
-    align-items: center;
-    padding: 0.3rem 0.5rem;
-    border-radius: 0.5rem;
-    overflow: hidden;
-    white-space: nowrap;
-    text-overflow: ellipsis;
-
-    &:hover { background-color: var(--sidebar-hover-bg); }
-  }
-
-  .tree-node > summary {
-    cursor: default;
-    list-style: none;
-
-    &::-webkit-details-marker { display: none; }
-  }
-
-  // 每一列的圖示：樣式跟「首頁、分類」的圖示一樣；分類的資料夾圖示滑鼠移上去換成 ▸（展開時 ▾），像 Notion
-  .tree-icon,
-  .tree-posts li a > i {
-    flex: none;
-    width: 1.25rem;
-    margin-right: 0.75rem;
-    font-size: 95%;
-    opacity: 0.8;
-    text-align: center;
-  }
-
-  // 資料夾圖示：跟「分類」的 toggle 一樣的大小、圓角和 hover 底框
-  .tree-icon {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    width: 1.4rem;
-    height: 1.4rem;
-    border-radius: 4px;
-    cursor: pointer;
-
-    &:hover { background: var(--sidebar-hover-bg); }
-
-    .tree-arrow {
-      display: none;
-
-      i { transition: transform 0.15s; }
-    }
-
-    &:hover {
-      > i { display: none; }
-      .tree-arrow { display: inline-block; }
-    }
-  }
-
-  .tree-node[open] > summary > .tree-icon .tree-arrow i { transform: rotate(90deg); }
-
-  .tree-label {
-    overflow: hidden;
-    text-overflow: ellipsis;
-  }
-
-  .tree-label {
-    flex: 1;
-  }
-
-  // 篇數：字型、顏色跟名稱一樣，靠右
-  .tree-count {
-    margin-left: 0.5rem;
-  }
-
-  .tree-sub { margin-left: 0.75rem; }
-
-  .tree-posts {
-    list-style: none;
-    margin: 0 0 0 0.75rem;  // Chirpy 給側欄所有 ul 下方 2rem，這裡歸零
-    padding: 0;
-
-    li a { display: flex; }
-
-    // 目前這篇：跟「首頁」被選到時一樣
-    li.active a {
-      color: var(--sidebar-active-color);
-      background-color: var(--sidebar-hover-bg);
-    }
-  }
-}
-
 // 導覽列（首頁、分類、標籤…）整排往左一點：Chirpy 預設左右 1.5rem（超寬螢幕 2.75rem）
 #sidebar ul li.nav-item {
   padding-left: 0.75rem !important;
@@ -846,11 +708,12 @@ article > header .img-fluid {
   transform: rotate(-90deg);
 }
 
-/* 首頁分類篩選：外觀跟標籤一致，選中的反白 */
+/* 首頁的科目 filter：外觀跟標籤一致，選中的反白 */
 #post-filter {
   gap: .5rem;
 
   .filter-chip {
+    text-decoration: none;
     border: 1px solid var(--btn-border-color);
     border-radius: 1rem;
     padding: .2rem .8rem;
@@ -860,9 +723,10 @@ article > header .img-fluid {
     line-height: 1.5;
     transition: background-color .15s, color .15s;
 
+    // 滑鼠移上去：框和字變藍（選中時才是藍色實心）
     &:hover {
-      background: var(--sidebar-hover-bg);
-      color: var(--text-color);
+      border-color: var(--link-color);
+      color: var(--link-color);
     }
 
     &.active {
@@ -879,7 +743,7 @@ article > header .img-fluid {
   }
 }
 
-/* 文章目錄：二標、三標一次全部展開，不顯示四標；長標題換行顯示，不截成「…」 */
+/* 文章目錄：長標題換行顯示，不截成「…」 */
 #toc-wrapper {
   padding-right: .75rem !important;
 
@@ -894,20 +758,18 @@ article > header .img-fluid {
   }
 }
 
+// 三標平常收合，捲到它的二標那一段才展開（tocbot 預設的 .is-collapsed）；四標不顯示
 #toc, #toc-popup-content {
-  .is-collapsed {
-    max-height: none !important;
-    opacity: 1 !important;
-  }
-
   ul ul ul { display: none; }
 }
 
 // 右側面板（_includes/sidebar.html 的 .panel-resizer 拖拉）：預設跟左側欄一樣寬，
 // 拖過就用 --panel-width；面板只在 1200px 以上出現
 @media all and (min-width: 1200px) {
+  // min-width: 0：flex 子元素預設不會比內容窄，文章裡有很寬的表格或程式碼時會撐開 main，把右側面板擠到下一行
   #main-wrapper .row > main {
     flex: 1 1 0;
+    min-width: 0;
     max-width: none;
     width: auto;
   }
@@ -949,4 +811,193 @@ article > header .img-fluid {
 
 @media all and (min-width: 1650px) {
   #panel-wrapper { --panel-default: var(--sidebar-width, 300px); }
+}
+
+// 分類頁（_layouts/category.html）和首頁選了科目時：子分類的分段標題，像筆記資料夾的名稱
+#page-category .subcategory-heading, #post-list > .subcategory-heading {
+  a { color: inherit; text-decoration: none; }
+  a:hover { color: var(--link-color); }
+
+  margin: 2rem 0 0.75rem;
+  padding-left: 0.25rem;
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: var(--text-muted-color);
+  scroll-margin-top: 4rem;    // 從分類總覽點錨點跳過來時，標題不會被上方的搜尋列擋住
+
+  .subcategory-count {
+    margin-left: 0.5rem;
+    font-size: 0.8rem;
+    font-weight: 400;
+    opacity: 0.7;
+  }
+}
+
+// 分類總覽：科目卡片之間的間距縮小（Chirpy 預設 2rem）
+.card.categories { margin-bottom: 0.75rem; }
+
+// 分類總覽的卡片用 1px 深灰框（文章卡片的 2px 黑框在這裡太重，主題預設的淡框又看不出來）
+.card.categories {
+  border: 1px solid rgba(0, 0, 0, .4) !important;
+}
+
+html[data-mode='dark'] .card.categories {
+  border: 1px solid rgba(255, 255, 255, .4) !important;
+}
+
+@media (prefers-color-scheme: dark) {
+  html:not([data-mode]) .card.categories {
+    border: 1px solid rgba(255, 255, 255, .4) !important;
+  }
+}
+
+// 分類總覽：子分類展開後的文章清單，縮排在子分類名稱底下
+.categories .sub-category-item {
+  .category-trigger { margin-right: -0.25rem; }
+
+  .sub-category-posts {
+    margin: 0.5rem 0 0 1.75rem;
+    padding: 0;
+
+    li { padding: 0.2rem 0; }
+  }
+}
+
+// 分類頁標題：科目名稱可以點（回到整個科目），顏色跟標題一樣
+#page-category .category-title-link {
+  color: inherit;
+  text-decoration: none;
+
+  &:hover { color: var(--link-color); }
+}
+
+// 從網址 #子分類 只看一個子分類時，段落標題跟頁面標題重複，藏起來（科目本來就只有一個子分類時照常顯示）
+#page-category #post-list:has(.subcategory-group.d-none) .subcategory-heading { display: none; }
+
+// 分類頁標題列：科目和子分類的資料夾圖示一樣大（Chirpy 只設了 h1 > i，子分類的圖示在 span 裡）
+#page-category h1 i { font-size: 1.25rem; }
+
+#page-category h1 .sub-link {
+  color: inherit;
+  text-decoration: none;
+}
+
+// 子分類段落標題可以點（只看那一段），平常跟標題同色
+#page-category .subcategory-heading a {
+  color: inherit;
+  text-decoration: none;
+
+  &:hover { color: var(--link-color); }
+}
+
+// 分類總覽的「全部展開／全部收合」：放在「分類」標題那一行的右邊，不另外佔一行
+.categories-toggle-all {
+  height: 0;
+  position: relative;
+  top: -3.6rem;
+}
+
+.categories-toggle-all .btn {
+  color: var(--text-muted-color);
+  font-size: .85rem;
+  text-decoration: none;
+
+  &:hover { color: var(--link-color); }
+}
+
+// 文章底部上一篇／下一篇：標題下面一行小字標子分類
+.post-navigation .post-nav-sub {
+  display: block;
+  margin-top: .25rem;
+  color: var(--text-muted-color);
+  font-size: .75rem;
+}
+
+
+// 側欄「分類」底下的科目清單（_includes/sidebar.html 的 .nav-subjects）：跟「首頁、分類」用同一套樣式
+// （Chirpy 的 li.nav-item / a.nav-link：圓角 0.75rem、粗體 600、字 90%、透明度 0.9），只是上下距離小一點；
+// 底色的左邊對齊「分類」的文字前、右邊跟「首頁」切齊，字對齊「分類」兩個字
+#sidebar .nav-subjects {
+  width: 100%;
+  opacity: 0.9;
+
+  ul {
+    list-style: none;
+    margin: 0 0 0.5rem;
+    padding: 0 1.5rem 0 3.4rem;
+  }
+
+  li + li { margin-top: 0.1rem; }
+
+  li a {
+    display: block;
+    padding: 0.3rem 1rem;
+    border-radius: 0.75rem;
+    color: var(--sidebar-muted-color);
+    font-weight: 600;
+    text-decoration: none;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+
+    span { font-size: 90%; letter-spacing: 0.2px; }
+
+    &:hover { background-color: var(--sidebar-hover-bg); }
+  }
+
+  li.active a {
+    color: var(--sidebar-active-color);
+    background-color: var(--sidebar-hover-bg);
+  }
+}
+
+// 側欄「分類」的圖示：滑鼠移上去換成 ▾（收合時 ▸），點了展開／收合科目清單，像 Notion
+#sidebar .nav-categories .nav-subjects-toggle {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.4rem;
+  height: 1.4rem;
+  margin: 0 1.5rem 0 -0.2rem;    // 跟其他項目的圖示佔一樣的寬度，「分類」兩個字才對齊
+  border-radius: 4px;
+  cursor: pointer;
+
+  i { margin-right: 0 !important; }
+
+  .toggle-arrow {
+    display: none;
+
+    i { transition: transform 0.15s; }
+  }
+
+  &:hover {
+    background: var(--sidebar-hover-bg);
+
+    > i { display: none; }
+    .toggle-arrow { display: inline-block; }
+  }
+
+  &.collapsed .toggle-arrow i { transform: rotate(-90deg); }
+}
+
+// 換頁時側欄原地不動、只有中間淡入淡出（瀏覽器的跨頁 View Transitions；不支援的瀏覽器照舊直接換頁）
+@view-transition {
+  navigation: auto;
+}
+
+#sidebar { view-transition-name: sidebar; }
+
+::view-transition-group(sidebar) { animation: none; }
+
+::view-transition-old(root),
+::view-transition-new(root) { animation-duration: 0.15s; }
+
+// 分類頁的主題 filter：上下跟科目標題、第一個子分類標題的距離一樣（都是 1.5rem）
+#page-category #post-filter {
+  margin-top: 1.5rem;
+  margin-bottom: 0 !important;
+
+  + #post-list { margin-top: 0; }    // Chirpy 給 #post-list 上邊距 2.5rem，會蓋過下面這條
+
+  + #post-list .subcategory-group:first-child .subcategory-heading { margin-top: 1.5rem; }
 }
