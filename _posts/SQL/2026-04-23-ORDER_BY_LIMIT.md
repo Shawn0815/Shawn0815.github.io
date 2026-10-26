@@ -9,7 +9,7 @@ image: {path: "assets/img/2026-04-23-MySQL.png"}
 math: true
 ---
 
-# ORDER BY / LIMIT 定義
+## ORDER BY / LIMIT 定義
 
 用來先把查出來的結果做排序，再取出前幾筆資料。
 
@@ -21,11 +21,11 @@ math: true
 
 ---
 
-# ORDER BY
+## ORDER BY
 
 將資料做排序，決定 **<mark><font color="#d11f1f">取出的結果以什麼順序呈現</font></mark>**。
 
-## 舉例
+### 舉例
 
 將商品以價格升序做排序。
 
@@ -55,21 +55,21 @@ ORDER BY price DESC;
 
 👉  ORDER BY 不會改變資料本身，只是改變順序。
 
-## ASC / DESC
+### ASC / DESC
 
 這個語法會接在排序的欄位後面，決定排序的方向。
 
-### **ASC**
+#### **ASC**
 
 - ASC = ascending，將資料由小到大排序。
 - 適用情境：最小 / 最便宜 / 最早。
 
-### **DESC**
+#### **DESC**
 
 - DESC = descending，將資料由大到小排序。
 - 適用情境：最大 / 最貴 / 最新 / 最高。
 
-## 多欄排序
+### 多欄排序
 
 多欄排序決定的是：**<mark><font color="#d11f1f">先用第一個欄位排序，若第一欄相同，再用第二欄做排序</font></mark>**。
 
@@ -103,7 +103,7 @@ ORDER BY status ASC, created_at DESC;
 
 ---
 
-# LIMIT
+## LIMIT
 
 LIMIT 的定義是，決定好資料以及順序後，**<mark><font color="#d11f1f">決定最後要取出幾筆資料</font></mark>**。
 
@@ -115,7 +115,7 @@ FROM products
 LIMIT 2;
 ```
 
-## LIMIT 本身不具商業意義
+### LIMIT 本身不具商業意義
 
 LIMIT 只說明要取前幾筆資料，假設今天希望：
 
@@ -125,7 +125,7 @@ LIMIT 只說明要取前幾筆資料，假設今天希望：
 
 👉  這些需要靠 ORDER BY 才能完成。
 
-## 常見用途
+### 常見用途
 
 **orders:**
 
@@ -137,7 +137,7 @@ LIMIT 只說明要取前幾筆資料，假設今天希望：
 | 104 | 4 | 300 | paid | 2025-01-04 |
 | 105 | 2 | 1200 | pending | 2025-01-01 |
 
-### 1. Top 1 題型
+#### 1. Top 1 題型
 
 Ｑ：取出最新的訂單？
 
@@ -157,7 +157,7 @@ ORDER BY total_amount DESC
 LIMIT 1;
 ```
 
-### 2. Top N 題型
+#### 2. Top N 題型
 
 Ｑ：取出最舊的兩筆訂單？
 
@@ -183,7 +183,7 @@ LIMIT 3;
 2. 大的在前面還是小的在前面？（DESC / ASC）
 3. 總共要取幾筆？（LIMIT 要填多少）
 
-### 3. Pagination
+#### 3. Pagination
 
 假設前端限定每頁只能顯示 20 筆商品資料，就需要使用到 LIMIT。
 
@@ -197,7 +197,7 @@ LIMIT 20;
 
 ---
 
-# 實戰練習題
+## 實戰練習題
 
 **products**
 
@@ -219,7 +219,7 @@ LIMIT 20;
 | 104 | 4 | 300 | paid | 2025-01-04 |
 | 105 | 2 | 1200 | pending | 2025-01-01 |
 
-## **題型 1：基本排序**
+### **題型 1：基本排序**
 
 Ｑ：列出所有商品名稱與價格，並依價格由小到大排序？
 
@@ -237,7 +237,7 @@ FROM products
 ORDER BY price DESC;
 ```
 
-## **題型 2：只取前幾筆**
+### **題型 2：只取前幾筆**
 
 Ｑ：列出前 3 筆商品資料？
 
@@ -249,7 +249,7 @@ LIMIT 3;
 
 👉  題目沒有指定順序，可能是用在 pagination 場景，單純取前三筆即可。
 
-## **題型 3：Top 1 題型**
+### **題型 3：Top 1 題型**
 
 Ｑ：找出最貴的商品？
 
@@ -269,7 +269,7 @@ ORDER BY created_at DESC
 LIMIT 1;
 ```
 
-## **題型 5：Top N 題型**
+### **題型 5：Top N 題型**
 
 Ｑ：找出最貴的前 2 個商品？
 
@@ -289,7 +289,7 @@ ORDER BY created_at ASC
 LIMIT 2;
 ```
 
-## **題型 6：多欄排序**
+### **題型 6：多欄排序**
 
 Ｑ：列出所有訂單，先依 status 排序；同 status 內再依 created_at 由新到舊排序？
 
@@ -299,7 +299,7 @@ FROM orders
 ORDER BY status ASC, created_at DESC;
 ```
 
-## **題型 7：WHERE + ORDER BY + LIMIT**
+### **題型 7：WHERE + ORDER BY + LIMIT**
 
 Ｑ：找出已付款訂單中最新的 2 筆？
 
@@ -313,7 +313,7 @@ LIMIT 2;
 
 ---
 
-# 補充：Performance 問題
+## 補充：Performance 問題
 
 1. 大量資料做排序時，成本可能很高，需要搭配 index。
 2. ORDER BY + LIMIT 是後端常用的查詢模式，所以排序欄位常常會用來當作 index，提高查詢效率。

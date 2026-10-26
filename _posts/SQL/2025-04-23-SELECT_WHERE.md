@@ -9,15 +9,15 @@ image: {path: "assets/img/2026-04-23-MySQL.png"}
 math: true
 ---
 
-# SELECT + WHERE 核心慨念
+## SELECT + WHERE 核心慨念
 
 SQL 的核心觀念是：拿資料 → 篩選資料 → 決定顯示的欄位。
 
-## SELECT
+### SELECT
 
 SELECT 語法就是拿完資料 + 篩選完資料，決定 **<mark><font color="#d11f1f">要顯示什麼欄位（column）</font></mark>**。
 
-### 1. 選欄位（基本）：
+#### 1. 選欄位（基本）：
 
 可以選擇要輸出的欄位：
 
@@ -38,7 +38,7 @@ FROM users;
 1. 可讀性差，不知道輸出哪些欄位。
 2. 若表很大、欄位很多，會降低搜尋效能。
 
-### 2. 做計算：
+#### 2. 做計算：
 
 ```sql
 SELECT price * 2
@@ -54,13 +54,13 @@ SELECT price * quantity
 FROM orders;
 ```
 
-### 3. 改名字（alias）：
+#### 3. 改名字（alias）：
 
 ```sql
 SELECT price * 2 AS double_price
 ```
 
-## WHERE
+### WHERE
 
 WHERE 語法就是 **<mark><font color="#d11f1f">篩選只留下符合條件的資料（row）</font></mark>**。
 
@@ -72,7 +72,7 @@ WHERE price > 100;
 
 只留下價格大於 100 的資料，並顯示所有欄位。
 
-## SELECT vs. WHERE
+### SELECT vs. WHERE
 
 | 功能 | 做什麼 |
 | --- | --- |
@@ -81,7 +81,7 @@ WHERE price > 100;
 
 👉 WHERE 是「先發生」，SELECT 是「後發生」。
 
-## 總結：SQL 執行順序
+### 總結：SQL 執行順序
 
 ```
 1. FROM（拿資料）
@@ -95,17 +95,17 @@ WHERE price > 100;
 
 ---
 
-# WHERE 詳細語法
+## WHERE 詳細語法
 
-## 比較運算子
+### 比較運算子
 
-### 等於
+#### 等於
 
 ```sql
 WHERE city = 'Taipei'
 ```
 
-### 不等於
+#### 不等於
 
 ```sql
 WHERE city <> 'Taipei'
@@ -113,7 +113,7 @@ WHERE city <> 'Taipei'
 
 有些資料庫也支援 `!=` ，但 `<>` 比較標準。
 
-### 大於/小於
+#### 大於/小於
 
 ```sql
 WHERE age > 30
@@ -124,7 +124,7 @@ WHERE age <= 30
 
 通常用在數值或日期條件。
 
-## 範圍（BETWEEN）
+### 範圍（BETWEEN）
 
 ```sql
 WHERE age BETWEEN 25 AND 30
@@ -138,7 +138,7 @@ WHERE age >= 25 AND age <= 30
 
 BETWEEN 是包含邊界的。
 
-## 多個值（IN）
+### 多個值（IN）
 
 IN 用來表示值屬於某個集合。
 
@@ -154,29 +154,29 @@ WHERE city = 'Taipei' OR city = 'Taichung'
 
 但 IN 更簡潔。
 
-## 模糊搜尋（LIKE）
+### 模糊搜尋（LIKE）
 
 LIKE 用來做字串模糊搜尋，% 指的是任意長度的字元。
 
-### 開頭
+#### 開頭
 
 ```sql
 WHERE name LIKE 'A%'
 ```
 
-### 結尾
+#### 結尾
 
 ```sql
 WHERE name LIKE '%A'
 ```
 
-### 包含
+#### 包含
 
 ```sql
 WHERE name LIKE '%A%'
 ```
 
-## 條件語法（AND / OR / NOT）
+### 條件語法（AND / OR / NOT）
 
 AND：兩個條件都要成立。
 
@@ -227,7 +227,7 @@ WHERE (city = 'Taipei' OR city = 'Taichung') AND age > 28
 
 </aside>
 
-## NULL
+### NULL
 
 NULL 在 SQL 中代表：未知 / 沒有值 / 缺失值，而不是 0、空字串或 false。
 
@@ -255,7 +255,7 @@ WHERE city IS NOT NULL
 
 ---
 
-# 實戰練習題
+## 實戰練習題
 
 假設我們有以下一張 table：
 
@@ -269,7 +269,7 @@ WHERE city IS NOT NULL
 | 4 | David | Taipei | 35 |
 | 5 | Eric | NULL | 22 |
 
-## 題型 1：單一條件過濾
+### 題型 1：單一條件過濾
 
 Q：找出台北的使用者姓名？
 
@@ -279,7 +279,7 @@ FROM users
 WHERE city = 'Taipei';
 ```
 
-## 題型 2：數值條件
+### 題型 2：數值條件
 
 Ｑ：找出年齡大於 30 的使用者？
 
@@ -289,7 +289,7 @@ FROM users
 WHERE age > 30;
 ```
 
-## 題型 3：區間條件
+### 題型 3：區間條件
 
 Ｑ：找出年齡介於 25 到 30 的使用者？
 
@@ -299,7 +299,7 @@ FROM users
 WHERE age BETWEEN 25 AND 30;
 ```
 
-## 題型 4：多值條件
+### 題型 4：多值條件
 
 Ｑ：找出台北或台中的使用者？
 
@@ -317,7 +317,7 @@ FROM users
 WHERE city = 'Taipei' OR city = 'Taichung';
 ```
 
-## 題型 5：模糊搜尋
+### 題型 5：模糊搜尋
 
 Ｑ：找出名字中包含字母 `a` 的使用者？
 
@@ -327,7 +327,7 @@ FROM users
 WHERE name LIKE '%a%';
 ```
 
-## 題型 6：複合條件
+### 題型 6：複合條件
 
 Ｑ：找出台北且年齡大於 30 的使用者？
 
@@ -337,7 +337,7 @@ FROM users
 WHERE city = 'Taipei' AND age > 30;
 ```
 
-## 題型 7：NULL 處理
+### 題型 7：NULL 處理
 
 Ｑ：找出 city 沒填的使用者？
 
@@ -349,7 +349,7 @@ WHERE city IS NULL;
 
 👉  考點：要用 IS NULL，不可以用 = NULL。
 
-## 題型 8：AND / OR 混用
+### 題型 8：AND / OR 混用
 
 Ｑ：找出「住在台北或台中」而且「年齡大於 25」的使用者？
 
