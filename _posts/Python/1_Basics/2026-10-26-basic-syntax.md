@@ -402,6 +402,7 @@ print(list(range(5)), list(range(2, 8, 2)), list(range(4, -1, -1)))
 | `range(n - 1, -1, -1)` | `n-1, …, 0` | 倒著走 |
 
 **`range` 不包含結尾**。
+要包含結尾 `b` 時，寫 `range(a, b + 1)`；Pseudo Code 寫的 `for i = 0 to len(nums) - 1`，翻成 `range(len(nums))`。
 倒著走到 0 時，結尾要寫 `-1`。
 
 ### enumerate：同時要 index 和值
@@ -415,8 +416,7 @@ for idx, val in enumerate(["a", "b", "c"]):
 ```
 
 需要 index 又需要值時，用 `enumerate` 比 `for i in range(len(nums)):` 再寫 `nums[i]` 更簡潔。
-**寫題很常用。
-**
+寫題很常用。
 
 ### zip：兩個序列一起走
 
@@ -474,6 +474,19 @@ print(lo, hi, min_max([3, 1, 4]))
 
 - 用 `def` 定義，不用寫回傳型別。
 - **可以一次回傳多個值**：實際上回傳的是一個 tuple `(1, 4)`，接收時用多個變數拆開（unpacking，細節在 1.3）。
+- 跑到函式結尾都沒有 `return`，會回傳 `None`，不會報錯。
+
+```python
+def find(nums, target):
+    for x in nums:
+        if x == target:
+            return x
+
+print(find([1, 2], 3))
+# → None
+```
+
+題目保證有答案時，最後的 `return []` 不會跑到，但留著比較好：回傳型別和型別標註一致，翻成 Java 時也一定要有。
 
 ### 交換兩個變數
 
