@@ -1058,7 +1058,8 @@ html[data-mode='dark'] .card.categories {
   font-size: 0.75rem;
   font-weight: 600;
   line-height: 1.4rem;
-  flex-shrink: 0;
+  vertical-align: middle;
+  white-space: nowrap;
 
   &.level-easy { color: #065f46; background: #d1fae5; }
   &.level-medium { color: #92400e; background: #fef3c7; }

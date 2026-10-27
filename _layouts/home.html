@@ -39,8 +39,12 @@ layout: default
     var chips = document.querySelectorAll('#post-filter .filter-chip');
     var more = document.getElementById('post-filter-more');
 
-    /* 最近更新的在最上面（last_modified_at，沒有就用發佈日期） */
-    items.sort(function (a, b) { return b.dataset.updated - a.dataset.updated; });
+    /* 最近更新的在最上面（last_modified_at，沒有就用發佈日期）；同時更新的，再照發佈日期新到舊；
+       連發佈時間都一樣（一次發佈好幾篇），照科目、筆記順序排，順序才固定 */
+    items.sort(function (a, b) {
+      return (b.dataset.updated - a.dataset.updated) || (b.dataset.posted - a.dataset.posted) ||
+        (a.dataset.category + a.dataset.order).localeCompare(b.dataset.category + b.dataset.order);
+    });
     items.forEach(function (li) { list.appendChild(li); });
 
     /* 選的科目記在這台瀏覽器：重新整理、從文章回首頁都維持，直到按「全部」 */

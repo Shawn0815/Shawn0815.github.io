@@ -1,6 +1,6 @@
 <!-- 文章卡片（首頁、分類頁共用）：傳入 post -->
 {% assign post = include.post %}
-<article class="card-wrapper card" data-category="{{ post.categories | first | escape }}" data-sub="{{ post.categories[1] | escape }}" data-sub-url="{{ site.baseurl }}/categories/{{ post.categories[0] | slugify | url_encode }}/#{{ post.categories[1] | slugify }}" data-order="{{ post.order | escape }}" data-updated="{{ post.last_modified_at | default: post.date | date: '%s' }}">
+<article class="card-wrapper card" data-category="{{ post.categories | first | escape }}" data-sub="{{ post.categories[1] | escape }}" data-sub-url="{{ site.baseurl }}/categories/{{ post.categories[0] | slugify | url_encode }}/#{{ post.categories[1] | slugify }}" data-order="{{ post.order | escape }}" data-updated="{{ post.last_modified_at | default: post.date | date: '%s' }}" data-posted="{{ post.date | date: '%s' }}">
   <a href="{{ post.url | relative_url }}" class="post-preview row g-0 flex-md-row-reverse">
     {% assign card_body_col = '12' %}
 
@@ -46,7 +46,8 @@
 
     <div class="col-md-{{ card_body_col }}">
       <div class="card-body d-flex flex-column">
-        <h1 class="card-title my-2 mt-md-0">{{ post.title }}</h1>
+        <!-- LeetCode 難度接在標題後面，顏色跟文章裡的資訊框一樣 -->
+        <h1 class="card-title my-2 mt-md-0">{{ post.title }}{% if post.level %}<span class="level-badge level-{{ post.level | downcase }} ms-2">{{ post.level }}</span>{% endif %}</h1>
 
         <div class="card-text content mt-0 mb-3">
           <p>{% include post-summary.html %}</p>
@@ -54,9 +55,10 @@
 
         <div class="post-meta flex-grow-1 d-flex align-items-end">
           <div class="me-auto">
-            <!-- posted date -->
+            <!-- 日期：顯示最後更新（推上 git 的時間），跟首頁的日期分組一致；沒更新過就是發佈日期 -->
+            {% assign shown_date = post.last_modified_at | default: post.date %}
             <i class="far fa-calendar fa-fw me-1"></i>
-            {% include datetime.html date=post.date lang=lang %}
+            {% include datetime.html date=shown_date lang=lang %}
 
             <!-- categories -->
             <!-- 科目用打開的資料夾、子分類用一般資料夾，跟分類總覽的圖示一樣 -->
@@ -69,11 +71,6 @@
               </span>
             {% endif %}
           </div>
-
-          <!-- LeetCode 難度：放在這一行的最後（不放在左邊那段裡，那段太長會被截成 …），顏色跟文章裡的資訊框一樣 -->
-          {% if post.level %}
-            <span class="level-badge level-{{ post.level | downcase }} ms-2">{{ post.level }}</span>
-          {% endif %}
 
           {% if post.pin %}
             <div class="pin ms-1">
