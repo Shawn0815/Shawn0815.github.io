@@ -30,7 +30,7 @@ Token 放 LocalStorage 怕 XSS，放 `HttpOnly` Cookie 要防 CSRF，沒有絕�
 
 Server 回應 `Set-Cookie: SESSION_ID=abc123`，瀏覽器存起來，之後對同一個網域的任何請求都自動帶上 `Cookie: SESSION_ID=abc123`。
 
-==帶不帶 Cookie 只看目標網域，不管請求是從哪個網頁發出的。==
+**帶不帶 Cookie 只看目標網域，不管請求是從哪個網頁發出的。**
 
 | 屬性 | 作用 |
 |---|---|
@@ -48,7 +48,7 @@ Server 回應 `Set-Cookie: SESSION_ID=abc123`，瀏覽器存起來，之後對�
 Access to fetch ... has been blocked by CORS policy
 ```
 
-==CORS 是瀏覽器的限制，不是 Server 擋下請求。==
+**CORS 是瀏覽器的限制，不是 Server 擋下請求。**
 請求其實已經送到後端、也處理完了，只是後端沒有明確允許這個來源，瀏覽器就不把回應交給 JavaScript。
 
 解法是後端在 response 加上：
@@ -98,7 +98,7 @@ Access-Control-Allow-Origin: http://localhost:3000
 - XSS：注入程式碼，在使用者的瀏覽器裡執行，能做的事很多。
 - CSRF：冒用身份發請求，只是利用 Cookie 會被自動帶上。
 
-`HttpOnly` 只讓 JavaScript 讀不到 Cookie，==瀏覽器發請求時照樣會帶==，所以用 Cookie 存 Token 還是要防 CSRF：
+`HttpOnly` 只讓 JavaScript 讀不到 Cookie，**瀏覽器發請求時照樣會帶**，所以用 Cookie 存 Token 還是要防 CSRF：
 
 - CSRF Token：Server 產生隨機 Token，前端發請求時另外帶上；Cookie 會自動帶，這個 Token 不會。
 - `SameSite` 設成 `Strict` 或 `Lax`：跨站請求不帶 Cookie。

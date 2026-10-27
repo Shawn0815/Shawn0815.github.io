@@ -112,7 +112,7 @@ stack trace 和內部細節留在後端 Log。
 }
 ```
 
-欄位名稱可以依團隊調整，==同一個系統的格式要一致==。
+欄位名稱可以依團隊調整，**同一個系統的格式要一致**。
 
 ---
 
@@ -133,7 +133,7 @@ stack trace 和內部細節留在後端 Log。
 | 放什麼 | `code`、`message`、`details`、`fieldErrors`、`traceId` | exception type、stack trace、request path、traceId、user id、重要參數 |
 | 不能放 | stack trace、SQL 原文、table / column、class / method 名稱 | token、密碼、信用卡、個資 |
 
-==Log 也不能記 token、密碼、信用卡、個資。==
+**Log 也不能記 token、密碼、信用卡、個資。**
 
 ---
 

@@ -25,7 +25,7 @@ render_with_liquid: false
 - 連線重建（reconnect / re-establish）後，把重建前還沒送出的舊資料補送出來，時間點卻晚於重建後的新資料。
 - 底層有重送（retransmission），同一份資料可能送達不只一次。
 
-==順序保證需要額外的機制才能建立。==
+**順序保證需要額外的機制才能建立。**
 
 ---
 

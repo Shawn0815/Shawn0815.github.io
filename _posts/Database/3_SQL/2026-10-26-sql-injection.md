@@ -51,7 +51,7 @@ stmt.setString(1, email);
 
 ## 排序欄位要用白名單
 
-==參數綁定只能綁值（Value），不能綁識別字（Identifier）==，例如欄位名稱、表名稱：
+**參數綁定只能綁值（Value），不能綁識別字（Identifier）**，例如欄位名稱、表名稱：
 
 ```sql
 SELECT * FROM books WHERE category_id = ?   -- 可以，? 是值

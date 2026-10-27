@@ -32,7 +32,7 @@ orders 從 10 萬筆長到 100 億筆，即使有 index 也會遇到：
 
 大部分查詢只查最近三個月或今年的訂單，很少查 10 年前的，那就沒必要全部放在一起。
 
-Partitioning 把一張大表切成多個區塊，==對程式來說仍然是同一張表==：
+Partitioning 把一張大表切成多個區塊，**對程式來說仍然是同一張表**：
 
 ```sql
 SELECT * FROM orders WHERE order_date >= '2026-01-01';
@@ -52,7 +52,7 @@ SELECT * FROM orders WHERE order_date >= '2026-01-01';
 
 - Partition Key 要選對：用 `order_date` 切，`WHERE user_id = 123` 不一定有幫助，可能還是要掃多個 partition。
 - 跨 partition 的查詢（2024 到 2026）還是要查所有 partition。
-- ==所有 partition 還在同一台機器上==，CPU、記憶體、儲存空間的上限沒變，單機撐不住時解決不了。
+- **所有 partition 還在同一台機器上**，CPU、記憶體、儲存空間的上限沒變，單機撐不住時解決不了。
 
 ---
 

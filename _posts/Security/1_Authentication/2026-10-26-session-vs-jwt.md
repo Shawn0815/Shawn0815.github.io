@@ -25,7 +25,7 @@ Session 掌控力強、能立即失效，但要共享 Session Store；JWT 適合
 4. 之後每次 request，瀏覽器自動帶上 `Cookie: SESSION_ID=abc123`。
 5. Server 用 Session ID 查表，得到 `userId`。
 
-Session 可信的關鍵不是 ID 多難猜，而是 ==ID 對應到誰這張對照表存在 Server，Client 沒辦法自己決定或竄改==。
+Session 可信的關鍵不是 ID 多難猜，而是 **ID 對應到誰這張對照表存在 Server，Client 沒辦法自己決定或竄改**。
 Cookie 只是 Session ID 的載體，本身不是 Authentication，也不是 Session。
 
 ### 優缺點

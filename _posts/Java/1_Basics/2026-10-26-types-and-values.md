@@ -28,7 +28,7 @@ char letter = 'a';
 boolean visited = false;
 ```
 
-可能超過 `int` 範圍時用 `long`，而且==要先轉型再計算==：
+可能超過 `int` 範圍時用 `long`，而且**要先轉型再計算**：
 
 ```java
 int a = 2_000_000_000, b = 2_000_000_000;
@@ -76,7 +76,7 @@ boolean[] visited = new boolean[3]; // [false, false, false]
 String[] words = new String[3];    // [null, null, null]
 ```
 
-==區域變數不會自動初始化==，`int number; System.out.println(number);` 會編譯錯誤。
+**區域變數不會自動初始化**，`int number; System.out.println(number);` 會編譯錯誤。
 
 ---
 

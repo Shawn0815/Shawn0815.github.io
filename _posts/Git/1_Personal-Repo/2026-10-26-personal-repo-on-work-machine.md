@@ -87,11 +87,11 @@ git 會試著用「使用者名稱@電腦名稱」自己猜一個 email，但電
 | global | `--global` | `~/.gitconfig` | 這個使用者的所有 repo |
 | local | `--local` | repo 裡的 `.git/config` | **只有這個 repo** |
 
-同一個設定在多個層級都有時，==越小的範圍越優先==：local > global > system。
+同一個設定在多個層級都有時，**越小的範圍越優先**：local > global > system。
 
 ### 解法：只對這個 repo 設定
 
-錯誤訊息建議用 `--global`，但==工作電腦不要這樣做==：global 會套用到所有 repo，之後在工作的 repo commit，作者也會變成個人帳號。
+錯誤訊息建議用 `--global`，但**工作電腦不要這樣做**：global 會套用到所有 repo，之後在工作的 repo commit，作者也會變成個人帳號。
 所以只設在這個 repo：
 
 ```sh
@@ -125,7 +125,7 @@ file:.git/config	F7123542@gmail.com
 Shawn0815 <F7123542@gmail.com>
 ```
 
-==email 要用 GitHub 帳號有登記的 email==，GitHub 才會把 commit 算在這個帳號上（顯示頭像、算進貢獻圖）。
+**email 要用 GitHub 帳號有登記的 email**，GitHub 才會把 commit 算在這個帳號上（顯示頭像、算進貢獻圖）。
 
 ---
 
@@ -143,7 +143,7 @@ Shawn0815 <F7123542@gmail.com>
 ### HTTPS 的帳密怎麼存
 
 remote 是 `https://...` 時，git 把帳密交給 `credential.helper` 管理。
-這台的 helper 是 `osxkeychain`，帳密存在 macOS 鑰匙圈，==依「主機 + 帳號名稱」分開存==。
+這台的 helper 是 `osxkeychain`，帳密存在 macOS 鑰匙圈，**依「主機 + 帳號名稱」分開存**。
 
 網址沒有寫帳號名稱時（`https://github.com/...`），git 只知道主機是 `github.com`，可能拿到鑰匙圈裡已經存的工作帳號。
 
@@ -163,14 +163,14 @@ origin	https://Shawn0815@github.com/Shawn0815/Leetcode.git (push)
 
 ### 密碼要用 Personal Access Token
 
-GitHub 從 2021 年起，HTTPS 的 git 操作==不接受帳號密碼==，要用 Personal Access Token（PAT）代替密碼。
+GitHub 從 2021 年起，HTTPS 的 git 操作**不接受帳號密碼**，要用 Personal Access Token（PAT）代替密碼。
 
-產生 token（用==個人帳號==登入 GitHub）：
+產生 token（用**個人帳號**登入 GitHub）：
 
-1. 右上角頭像 → ==Settings== → ==Developer settings== → ==Personal access tokens== → ==Fine-grained tokens== → ==Generate new token==
-2. ==Repository access== 選 ==Only select repositories== → 選 `Leetcode`
-3. ==Permissions== → ==Contents== 設為 ==Read and write==
-4. 產生後==馬上複製==，離開頁面就看不到了
+1. 右上角頭像 → **Settings** → **Developer settings** → **Personal access tokens** → **Fine-grained tokens** → **Generate new token**
+2. **Repository access** 選 **Only select repositories** → 選 `Leetcode`
+3. **Permissions** → **Contents** 設為 **Read and write**
+4. 產生後**馬上複製**，離開頁面就看不到了
 
 Fine-grained token 可以限定只能存取哪些 repo、能做什麼，就算外流，影響範圍也只有這個 repo。
 
@@ -181,7 +181,7 @@ git commit -m "Add Python solutions for 1, 217"
 git push
 ```
 
-要求輸入密碼時，==貼上 token，不是 GitHub 的登入密碼==。
+要求輸入密碼時，**貼上 token，不是 GitHub 的登入密碼**。
 鑰匙圈會記住，之後 push 就不會再問。
 
 `[待確認]`：第一次 push 的實際提示和輸出，push 後補上。

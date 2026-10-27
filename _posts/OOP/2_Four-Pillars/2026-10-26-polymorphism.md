@@ -106,7 +106,7 @@ Runtime Polymorphism 只發生在可以被 Override 的 Instance Method：
 
 - `static` Method 是 Method Hiding。
 - `private`、`final` Method 不能被 Override。
-- ==Field 沒有多型==，用哪個看 Reference Type：
+- **Field 沒有多型**，用哪個看 Reference Type：
 
 ```java
 class Animal { String type = "Animal"; }

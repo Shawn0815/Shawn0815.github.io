@@ -51,7 +51,7 @@ SELECT name FROM users WHERE name = 'Amy' OR name = 'Bob' AND id >= 3;
 ```
 
 實際上被當成 `name = 'Amy' OR (name = 'Bob' AND id >= 3)`，Bob 的 id 是 2，所以只剩 Amy。
-==AND 和 OR 混用時一律自己加括號。==
+**AND 和 OR 混用時一律自己加括號。**
 
 ---
 
@@ -95,7 +95,7 @@ SELECT price * 2 AS double_price FROM products WHERE price * 2 > 200;     -- 正
 SELECT price * 2 AS double_price FROM products ORDER BY double_price DESC; -- 可以
 ```
 
-SQLite 比較寬鬆，第一句也會執行成功，==不要因為在 SQLite 試過可以就以為其他資料庫也行==。
+SQLite 比較寬鬆，第一句也會執行成功，**不要因為在 SQLite 試過可以就以為其他資料庫也行**。
 
 ---
 
@@ -110,7 +110,7 @@ SQLite 比較寬鬆，第一句也會執行成功，==不要因為在 SQLite 試
 
 `SELECT *` 留給 debug 和臨時查資料用。
 
-`DISTINCT` 去除重複的結果，==判斷重複看的是 SELECT 出來的所有欄位組合，不是只看第一個欄位==：
+`DISTINCT` 去除重複的結果，**判斷重複看的是 SELECT 出來的所有欄位組合，不是只看第一個欄位**：
 
 ```txt
 name | age          SELECT DISTINCT name, age  →  Amy | 20

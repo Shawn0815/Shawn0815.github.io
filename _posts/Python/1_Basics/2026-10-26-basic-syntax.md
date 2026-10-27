@@ -77,7 +77,7 @@ x = 5
 x = "now a string"    # 同一個變數可以換成別種值
 ```
 
-Python 是==動態型別==：變數只是一個名字，型別屬於值。
+Python 是**動態型別**：變數只是一個名字，型別屬於值。
 用 `type()` 看值的型別：
 
 ```python
@@ -125,7 +125,7 @@ print(add("a", "b"))
 # → ab          ← 傳字串也照跑，不會報錯
 ```
 
-`a: int`、`-> int` 是給人和工具（編輯器、檢查器）看的提示，==執行時不檢查==。
+`a: int`、`-> int` 是給人和工具（編輯器、檢查器）看的提示，**執行時不檢查**。
 可寫可不寫。
 
 LeetCode 模板的 `List[int]` 來自 `typing` 模組。
@@ -148,13 +148,13 @@ list("abc")
 ```
 
 建立空容器用 `{}`、`[]` 不會用到這些名字，所以 `dict = {}` 這行本身能跑。
-出問題的是之後的==轉換==，例如 `list("abc")` 把字串轉成 list、`list(d.keys())`，錯誤訊息又看不出原因，很難查。
+出問題的是之後的**轉換**，例如 `list("abc")` 把字串轉成 list、`list(d.keys())`，錯誤訊息又看不出原因，很難查。
 
 變數名稱取「它存了什麼」，例如 `seen`、`count`、`index_of`，讀的人也比較好懂。
 
 ### 編輯器裡變灰色的變數
 
-VS Code 的 Python 擴充（Pylance）會把==有定義、但後面沒有用到==的變數顯示成灰色：
+VS Code 的 Python 擴充（Pylance）會把**有定義、但後面沒有用到**的變數顯示成灰色：
 
 ```python
 seen = {}                      # 後面還沒用到 → 灰色
@@ -218,7 +218,7 @@ print(int(-7 / 2))
 
 - **整數除法一律用 `//`**。
   用 `/` 會得到 float，拿去當 index 會報錯。
-- `//` 是往==負無限大==取整，所以 `-7 // 2` 是 `-4`，不是 `-3`。
+- `//` 是往**負無限大**取整，所以 `-7 // 2` 是 `-4`，不是 `-3`。
   只有正數時（例如 Binary Search 的 `(left + right) // 2`）不會有差別。
 - 需要「往 0 取整」時寫 `int(a / b)`，例如 `-7` 除以 `2` 要得到 `-3`（LeetCode 150 Evaluate Reverse Polish Notation 就要這樣）。
 - `%` 的結果正負號跟除數一樣，所以 `-7 % 2` 是 `1`。
@@ -243,8 +243,8 @@ if not visited and 0 <= r < rows:
 
 ### 比較：`==` 和 `is`
 
-- `==`：比較==值是否相等==
-- `is`：比較==是不是同一個物件==
+- `==`：比較**值是否相等**
+- `is`：比較**是不是同一個物件**
 
 ```python
 a = [1, 2]
@@ -276,14 +276,14 @@ print("even" if i % 2 == 0 else "odd")
 # → odd
 ```
 
-順序是「==值 if 條件 else 另一個值==」。
+順序是「**值 if 條件 else 另一個值**」。
 
 ---
 
 ## 真假值（Truthiness）
 
 `if` 和 `while` 後面可以放任何值，不一定要是 `True` / `False`。
-以下這些都當作 ==False==，其他都是 True：
+以下這些都當作 **False**，其他都是 True：
 
 ```python
 for v in [None, False, 0, 0.0, "", [], {}, set(), "0", [0]]:
@@ -339,9 +339,47 @@ else:
 
 `elif` 是 else if 的縮寫，寫成 `else if` 會報錯。
 
+### if、for 裡建立的變數，出來後還能用
+
+`if`、`for`、`while` 不會產生新的變數範圍，在裡面建立的變數，整個函式都看得到：
+
+```python
+if True:
+    group = []
+print(group)
+# → []
+
+for word in ["eat", "tea"]:
+    pass
+print(word)    # 迴圈變數在迴圈結束後也還在，是最後一個值
+# → tea
+```
+
+所以可以在 if、else 兩個分支各自給變數值，出了 if 再一起用：
+
+```python
+if key not in groups:
+    group = []
+    groups[key] = group
+else:
+    group = groups[key]
+group.append(word)
+```
+
+陷阱是：如果某個分支沒有給值，要等到真的執行到使用的那一行才會報錯：
+
+```python
+if False:
+    group = []
+print(group)
+# → NameError: name 'group' is not defined
+```
+
+每個會走到後面的分支，都要給這個變數值。
+
 ### for：逐一取出序列的值
 
-Python 的 `for` 一律是「==從一個序列裡逐一取值==」：
+Python 的 `for` 一律是「**從一個序列裡逐一取值**」：
 
 ```python
 for x in nums:          # 逐一取出 list 的元素
@@ -451,7 +489,7 @@ Two Pointers 交換兩個位置：`nums[l], nums[r] = nums[r], nums[l]`。
 
 ### 函式裡的函式（DFS 常用）
 
-函式裡可以再定義函式，內層函式可以直接==讀==外層的變數：
+函式裡可以再定義函式，內層函式可以直接**讀**外層的變數：
 
 ```python
 def num_islands(grid):
@@ -463,7 +501,7 @@ def num_islands(grid):
     ...
 ```
 
-內層要==重新賦值==外層的變數（例如 `count += 1`）時，要先宣告 `nonlocal`，否則會報錯：
+內層要**重新賦值**外層的變數（例如 `count += 1`）時，要先宣告 `nonlocal`，否則會報錯：
 
 ```python
 def outer():
@@ -485,7 +523,7 @@ def outer():
 # → 1
 ```
 
-只是==修改內容==（`visited.add(x)`、`result.append(x)`）不算重新賦值，不需要 `nonlocal`。
+只是**修改內容**（`visited.add(x)`、`result.append(x)`）不算重新賦值，不需要 `nonlocal`。
 
 ### 預設參數的陷阱 ⚠️
 
@@ -498,7 +536,7 @@ print(append_to(1), append_to(2))
 # → [1, 2] [1, 2]       ← 第二次呼叫還留著第一次的 1
 ```
 
-預設值只在==定義函式時建立一次==。
+預設值只在**定義函式時建立一次**。
 預設值是 list、dict 這種可修改的物件時，每次呼叫都會共用同一個。
 
 正確寫法：預設值用 `None`，在函式裡才建新的：
@@ -558,6 +596,31 @@ print("".join(chars))
 `"".join(list)` 是把 list 裡的字串用 `""` 接起來。
 迴圈裡一直用 `s += ch` 也能跑，但每次都會建立新字串；量大時，先收集到 list，最後再 `join`。
 
+### 排序字串
+
+字串沒有 `.sort()`（字串不能修改），要用 `sorted()`。
+`sorted()` 回傳的是字元的 list，要字串就再 `join` 回來：
+
+```python
+print(sorted("eat"))
+# → ['a', 'e', 't']
+
+print("".join(sorted("eat")))
+# → aet
+```
+
+拿排序後的結果當 dict 的 key 時，一定要先 `join` 成字串，list 不能當 key：
+
+```python
+groups = {}
+groups[sorted("eat")] = []
+# → TypeError: cannot use 'list' as a dict key (unhashable type: 'list')
+
+groups["".join(sorted("eat"))] = []
+print(groups)
+# → {'aet': []}
+```
+
 ### 字元和數字互轉
 
 ```python
@@ -607,3 +670,4 @@ print("%s-%d" % ("a", 1), "{}-{}".format("a", 1))
 | `TypeError: 'dict' object is not callable`（或 `'list'`） | 前面把 `dict`、`list` 當成變數名稱，蓋掉了內建的名字 |
 | `UnboundLocalError: cannot access local variable ...` | 內層函式重新賦值外層變數，要加 `nonlocal` |
 | `IndexError: list index out of range` | index 越界，檢查 `range` 的邊界和 `len()` |
+| `NameError: name 'x' is not defined`（變數是在 if 裡建立的） | 有某個分支沒有給這個變數值，每個分支都要給 |

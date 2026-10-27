@@ -140,7 +140,7 @@ Parent 和 Child 定義同名的 Field 會兩個同時存在（Field Hiding）�
 
 - 耦合高：Child 依賴 Parent 的 Field、Method、Constructor、`protected` 成員，Parent 一改所有 Child 都可能受影響。
 - 只為了重用而錯誤繼承：Car 和 AirConditioner 都有 `turnOn()`，但 Car is not an AirConditioner。
-- Parent 的內容不適用所有 Child：Penguin 是 Bird 但不會飛，問題是 `fly()` 根本不是所有 Bird 共有的。==Child 常常需要把 Parent Method 寫成空的或丟出不支援的錯誤，代表 Parent 抽錯了。==
+- Parent 的內容不適用所有 Child：Penguin 是 Bird 但不會飛，問題是 `fly()` 根本不是所有 Bird 共有的。**Child 常常需要把 Parent Method 寫成空的或丟出不支援的錯誤，代表 Parent 抽錯了。**
 - 層級太深：A → B → C → D，理解 D 要一路追 Field 和 Override 在哪一層。
 
 ---

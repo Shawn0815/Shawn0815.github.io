@@ -27,9 +27,9 @@ You can return the answer in any order.
 > Output: [["bat"],["nat","tan"],["ate","eat","tea"]]
 >
 > Explanation:
-> - There is no string in strs that can be rearranged to form "bat".
-> - The strings "nat" and "tan" are anagrams as they can be rearranged to form each other.
-> - The strings "ate", "eat", and "tea" are anagrams as they can be rearranged to form each other.
+> - There is no string in strs that can be rearranged to form `"bat"`.
+> - The strings `"nat"` and `"tan"` are anagrams as they can be rearranged to form each other.
+> - The strings `"ate"`, `"eat"`, and `"tea"` are anagrams as they can be rearranged to form each other.
 
 **Example 2:**
 
@@ -51,98 +51,174 @@ You can return the answer in any order.
 
 ---
 
-## 主解法：HashMap + Frequency Array
+## 解法 1：Sorting
 
-### 題型
+### 辨識訊號
 
-Grouping by Signature
+- 「anagram」：字母和次數一樣、順序不同，排序後會變成同一個字串。
+- 「group the anagrams together」：要分組，用 map 收集特徵一樣的字串。
+- `strs.length` 最大 10^4：兩兩比較 O(n²) 約 10^8 次，太慢；要每個字串只看一次，就知道它屬於哪一組。
 
-### 思考流程
+### 思路
 
-1. 怎麼判斷兩個字串是同一組（anagram）？
-   - 用 frequency array 算每個字母出現的次數。
-   - 兩個字串的 frequency array 一樣，就是同一組。
-2. 怎麼把同一組的字串放在一起？
-   - 用 HashMap 分組：key 是共同特徵（signature），value 是屬於這組的字串 list。
-3. frequency array 可以直接當 key 嗎？
-   - ==不行，array 比的是 reference，不是內容==。
-   - 要先把 frequency array 轉成字串，再當 HashMap 的 key。
+- 同一組的字串排序後會一樣：`"eat"`、`"tea"`、`"ate"` 排序後都是 `"aet"`。
+- 用 map 分組：
+  - key：排序後的字串。
+  - value：這一組的字串 list。
+- 每個字串算出 key，放進對應的那一組，最後回傳所有 value。
+- map 存的是 list 的參考，先放進 map 再加入字串也可以。
 
-### 步驟
+### Pseudo Code
 
-1. Loop 每個字串。
-2. 建立這個字串的 frequency array。
-3. 把 frequency array 轉成字串，當作 key。
-4. HashMap 裡還沒有這個 key，就建立新的 list。
-5. 把目前的字串加進對應的 list。
-6. 回傳 HashMap 所有的 value。
+```text
+groups = new empty map (key = sorted string, value = list of anagrams)
+
+for word in strs:
+    key = word with letters sorted
+
+    if key not in groups:
+        group = new empty list
+        groups[key] = group
+    else:
+        group = groups[key]
+
+    add word into group
+
+return groups.values() and convert to list
+```
 
 ### 程式碼
 
-```java
-public class Solution {
-    public List<List<String>> groupAnagrams(String[] strs) {
-        // key：frequency array 轉成的字串，value：同一組的字串
-        Map<String, List<String>> group = new HashMap<>();
+```python
+class Solution:
+    def groupAnagrams(self, strs: list[str]) -> list[list[str]]:
+        groups = {}
 
-        for (String str: strs) {
-            int[] counter = new int[26];
+        for word in strs:
+            key = "".join(sorted(word))
 
-            for (char c: str.toCharArray()) {
-                counter[c - 'a']++;
-            }
+            if key not in groups:
+                group = []
+                groups[key] = group
+            else:
+                group = groups[key]
 
-            // 直接 put 會蓋掉原本的 list，所以用 putIfAbsent
-            group.putIfAbsent(Arrays.toString(counter), new ArrayList<>());
-            group.get(Arrays.toString(counter)).add(str);
-        }
+            group.append(word)
 
-        // values() 是 Collection，轉成 ArrayList
-        return new ArrayList<>(group.values());
-    }
-}
+        return list(groups.values())
 ```
 
-### 複雜度分析
+### 複雜度
 
-- Time complexity: O(n * k)
-  - n 是字串數量，k 是字串長度，每個字串都要統計一次。
-- Space complexity: O(n * k)
-  - HashMap 存所有字串，每個 key 也要空間。
+- n 是字串的數量，k 是最長字串的長度。
+- Time complexity: O(n · k log k)
+  - 每個字串都要排序一次，O(k log k)。
+  - 用 key 查 map、放進去是 O(k)，比排序小，不影響整體。
+- Space complexity: O(n · k)
+  - key：最多 n 個（每個字串都自成一組時），每個最長 k。
+  - value：所有組加起來剛好 n 個字串，每個最長 k。
 
-### 容易錯
+### 瓶頸
 
-- 要想到用 HashMap 分組：key 放共同特徵，value 放字串 list。
-- ==key 不能直接放 array，要先轉成字串==。
-- 每個字串都要重新建立 frequency array，不能共用。
-- Java：
-  - Array 轉字串用 `Arrays.toString(arr)`，`arr.toString()` 得到的是物件的 reference。
-  - 不存在就建立 list 再加入，可以寫成 `computeIfAbsent(key, k -> new ArrayList<>()).add(str)`。
-  - `map.values()` 是 Collection，要用 `new ArrayList<>(map.values())` 轉成 List。
+- 時間都花在排序，每個字串 O(k log k)。
+- 排序只是為了算出「同一組都一樣」的特徵，如果有更快的方法算出特徵，就不用排序。
 
-### 其他解法
+---
 
-把每個字串排序後當作 signature。
-排序要 O(k log k)，所以 frequency array 通常比較快。
+## 解法 2：Frequency Array
+
+### 辨識訊號
+
+- 「anagram」：同一組的字串，每個字母的次數一樣，次數也能當特徵。
+- `strs[i]` consists of lowercase English letters：只有 26 種字母，26 格陣列就能計數。
+
+### 思路
+
+- key 改成 26 個字母的出現次數：`"eat"`、`"tea"`、`"ate"` 都是 a、e、t 各 1 次，其他字母 0 次。
+- 數次數只要把字串看過一次，O(k)，比排序的 O(k log k) 快。
+- 次數存在 list 裡，但 list 不能當 dict 的 key：
+  - Python：轉成 tuple。
+  - Java：用 `Arrays.toString` 轉成字串。
+  - 不能直接把次數接成字串：`[1, 11]` 和 `[11, 1]` 都會變成 `"111"`，要有分隔符號。
+
+### Pseudo Code
+
+```text
+groups = new empty map (key = frequency array, value = list of anagrams)
+
+for word in strs:
+    freq = new array with 26 zeros
+    
+    for c in word:
+        freq[c - 'a'] += 1
+    
+    key = convert freq to tuple or string
+    
+    if key not in groups:
+        group = new empty list
+        groups[key] = group
+    else:
+        group = groups[key]
+    
+    group.add(word)
+
+return groups.values() and convert to list
+```
+
+### 程式碼
+
+```python
+class Solution:
+    def groupAnagrams(self, strs: list[str]) -> list[list[str]]:
+        groups = {}
+
+        for word in strs:
+            freq = [0] * 26
+
+            for c in word:
+                freq[ord(c) - ord('a')] += 1
+
+            key = tuple(freq)
+
+            if key not in groups:
+                group = []
+                groups[key] = group
+            else:
+                group = groups[key]
+
+            group.append(word)
+
+        return list(groups.values())
+```
+
+### 複雜度
+
+- Time complexity: O(n · k)
+  - 每個字串數字母 O(k)，建 key O(26) 是常數。
+  - 每個字母至少要看一次，O(n · k) 已經是下限。
+- Space complexity: O(n · k)
+  - key：最多 n 個，每個固定 26 個數字，O(n)，比解法 1 小。
+  - value：跟解法 1 一樣是 O(n · k)，所以整體不變。
+
+---
+
+## 卡點
+
+- 想法：覺得 Constraints 沒影響，沒讀出訊號。
+  - 只有 26 個小寫字母：可以用 26 格陣列計數，這是解法 2 的關鍵。
+  - 長度可以是 0：`["", ""]` 的答案是 `[["", ""]]`，不是各自一組。
+  - n 最大 10^4：O(n²) 不夠快。
+- 實作：Pseudo Code 寫的和腦中想的不一樣，三次都是漏寫一步。
+  - 解法 1：value 寫成字串 `word` 而不是 list，下一個同組的字串加不進去。
+  - 解法 1：新的 list 沒放進 map，map 一直是空的，回傳空答案。
+  - 解法 2：漏了加進 group 那一行，每一組都是空的。
+  - **寫完 Pseudo Code 要用小 Example，照寫下來的一行一行走，不要照腦中想的走。**
 
 ---
 
 ## 解題紀錄
 
-### 第一次
-
-- 想法：沒有想法。
-- 錯誤：不會做。
-- 結果：沒完成。
-
-### 第二次
-
-- 想法：有想到用 Valid Anagram 判斷是否同一組。
-- 錯誤：沒想到用 HashMap 分組，以及用 frequency array 字串當 signature。
-- 結果：看答案後理解。
-
-### 第三次
-
-- 想法：有想到 frequency array + HashMap 分組。
-- 錯誤：忘記每個字串要重新建立 array，也忘了一些 Java 語法。
-- 結果：AC。
+| 日期 | 解法 | 結果 | 時間 | 卡在 |
+|---|---|---|---|---|
+| 2026-10-27 | 解法 1：Sorting | AC | 約 57 分 | 實作：Pseudo Code 漏寫細節 |
+| 2026-10-27 | 解法 2：Frequency Array | AC | 約 16 分 | 實作：漏寫加入那一行 |

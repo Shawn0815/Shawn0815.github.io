@@ -17,7 +17,7 @@ render_with_liquid: false
 
 ## Question
 
-Given a string `s`, find the ==first non-repeating character== in it and return its index.
+Given a string `s`, find the **first non-repeating character** in it and return its index.
 If it does not exist, return `-1`.
 
 **Example 1:**
@@ -101,7 +101,7 @@ class Solution {
 
 ### 容易錯
 
-- ==統計完要再照字串的順序掃一次==；用 HashMap 時，不能直接從 map 找第一個次數是 1 的字元，map 的順序不是字串的順序。
+- **統計完要再照字串的順序掃一次**；用 HashMap 時，不能直接從 map 找第一個次數是 1 的字元，map 的順序不是字串的順序。
 - 暴力解檢查重複要掃整個字串（前面也要看），而且要跳過自己。
 
 ---

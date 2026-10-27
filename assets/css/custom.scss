@@ -220,22 +220,31 @@ html[data-mode='dark'] .content hr {
 
 
 /*
-設定螢光：==重點== 是紅字加黃色螢光筆底線（_plugins/highlight-mark.rb）；**粗體** 維持一般粗體
+重點：**粗體** 是紅字加黃色螢光筆底線。
+一般粗體：帶冒號的標籤（**Example 1:**、**Time**：…，_plugins/bold-highlight.rb 加 .plain）、手寫的 <b>、表格和標題裡的粗體。
 */
-.content mark {
+.content strong:not(.plain) {
   color: #c0392b;
   background: linear-gradient(transparent 60%, rgb(255 230 0 / 35%) 60%);
   padding: 0 2px;
   font-weight: 600;
 }
 
-html[data-mode='dark'] .content mark {
+// 深色模式的選擇器比較具體，用 !important 確保表格、標題裡的粗體不上色
+.content table strong,
+.content :is(h1, h2, h3, h4, h5, h6) strong {
+  color: inherit !important;
+  background: none !important;
+  padding: 0;
+}
+
+html[data-mode='dark'] .content strong:not(.plain) {
   color: #ff7b72;
   background: linear-gradient(transparent 60%, rgb(255 215 0 / 25%) 60%);
 }
 
 @media (prefers-color-scheme: dark) {
-  html:not([data-mode]) .content mark {
+  html:not([data-mode]) .content strong:not(.plain) {
     color: #ff7b72;
     background: linear-gradient(transparent 60%, rgb(255 215 0 / 25%) 60%);
   }

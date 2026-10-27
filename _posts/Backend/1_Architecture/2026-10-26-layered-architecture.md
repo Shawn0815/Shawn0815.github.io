@@ -57,7 +57,7 @@ Use Case 是一個完整的業務操作（建立訂單、取消訂單、註冊�
 - 格式驗證：靠近 Controller / Request DTO。
 - 業務驗證：放在 Service。
 
-==Transaction 放在 Service==，因為它要包住一個完整的 Use Case。
+**Transaction 放在 Service**，因為它要包住一個完整的 Use Case。
 建立訂單會呼叫好幾個 Repository（建立 Order、建立 OrderItem、扣庫存），任何一步失敗都要全部 rollback。
 放在 Controller 會讓 HTTP 層管到資料一致性；只放在單一 Repository 又包不住整個流程。
 

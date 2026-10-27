@@ -106,7 +106,7 @@ public class Solution {
 
 ### 容易錯
 
-- ==從右往左時，要先乘上 suffixProduct，再更新 suffixProduct==；順序反了會把自己也乘進去。
+- **從右往左時，要先乘上 suffixProduct，再更新 suffixProduct**；順序反了會把自己也乘進去。
 
 ### 其他解法
 

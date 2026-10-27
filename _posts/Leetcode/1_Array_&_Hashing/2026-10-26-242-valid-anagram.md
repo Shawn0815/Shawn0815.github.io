@@ -47,7 +47,7 @@ Frequency Count
 ### 思考流程
 
 1. 怎麼判斷兩個字串是 anagram？
-   - ==每個字母出現的次數都一樣==，不是只有字母種類一樣。
+   - **每個字母出現的次數都一樣**，不是只有字母種類一樣。
 2. 怎麼記錄每個字母出現的次數？
    - HashMap 或 frequency array 都可以。
 3. HashMap 和 frequency array 哪個好？
@@ -97,7 +97,7 @@ public class Solution {
 
 ### 容易錯
 
-- ==不能只比字母種類，要比每個字母的次數==。
+- **不能只比字母種類，要比每個字母的次數**。
 - HashMap 寫法容易忘記 `getOrDefault()`。
 - 兩個 HashMap 可以直接用 `map.equals()` 比較。
 - 題目限定小寫字母時，要想到 frequency array。

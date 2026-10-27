@@ -56,7 +56,7 @@ IoC（Inversion of Control）Container：把物件的建立和管理交給容器
 Spring Boot：java -jar app.jar → 服務直接起來
 ```
 
-==這裡的「內嵌容器」是內嵌的 Java Web Server（Tomcat），不是 Docker Container。==
+**這裡的「內嵌容器」是內嵌的 Java Web Server（Tomcat），不是 Docker Container。**
 前者是讓應用自己帶 Web Server，後者是把整個執行環境打包部署。
 
 ---

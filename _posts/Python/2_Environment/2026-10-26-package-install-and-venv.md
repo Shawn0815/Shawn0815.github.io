@@ -71,7 +71,7 @@ Error=To install Python packages system-wide, try brew install
 ...
 ```
 
-這是 Python 的標準機制 ==PEP 668==：Python 底下如果有 `EXTERNALLY-MANAGED` 這個檔案，就代表「這個 Python 由別的工具管理」，pip 會拒絕往裡面裝東西，並印出檔案裡 `Error=` 後面的訊息。
+這是 Python 的標準機制 **PEP 668**：Python 底下如果有 `EXTERNALLY-MANAGED` 這個檔案，就代表「這個 Python 由別的工具管理」，pip 會拒絕往裡面裝東西，並印出檔案裡 `Error=` 後面的訊息。
 
 找出自己的 Python 有沒有這個檔：
 
@@ -128,7 +128,7 @@ python3 -m venv .venv
 └ pyvenv.cfg
 ```
 
-`bin/` 裡的 `python` 不是複製一份，而是==連結==回 Homebrew 的 Python：
+`bin/` 裡的 `python` 不是複製一份，而是**連結**回 Homebrew 的 Python：
 
 ```
 .venv/bin/python -> python3.14
@@ -146,7 +146,7 @@ executable = /opt/homebrew/Cellar/python@3.14/3.14.8/Frameworks/Python.framework
 command = /opt/homebrew/opt/python@3.14/bin/python3.14 -m venv /Users/shawn_yu/DDAN_Usandbox/0_Personal/Leetcode/.venv
 ```
 
-`include-system-site-packages = false`：venv 裡==看不到== Homebrew Python 裝的套件，只有自己裝的。
+`include-system-site-packages = false`：venv 裡**看不到** Homebrew Python 裝的套件，只有自己裝的。
 
 ### Python 怎麼知道自己在 venv 裡
 
@@ -212,7 +212,7 @@ ModuleNotFoundError: No module named 'pytest'
 
 ### 為什麼寫 `python -m pip`，不直接寫 `pip`
 
-`python -m pip` 的意思是「用==這個== python 執行 pip 模組」，套件一定裝進這個 python 對應的環境。
+`python -m pip` 的意思是「用**這個** python 執行 pip 模組」，套件一定裝進這個 python 對應的環境。
 直接打 `pip`，用的是 PATH 上找到的第一個 pip，不一定是你以為的那個。
 電腦上有多個 Python 時，`python -m pip` 比較不會裝錯地方。
 `python -m pytest` 也是同樣道理。
@@ -244,7 +244,7 @@ which python3
 
 - `source .venv/bin/activate`：啟用，terminal 提示字元前面通常會多出 `(.venv)`。
 - `deactivate`：恢復原狀。
-- ==只對目前這個 terminal 有效==，開新的 terminal 要重新 `source`。
+- **只對目前這個 terminal 有效**，開新的 terminal 要重新 `source`。
 - 不想 activate，就直接寫完整路徑：`.venv/bin/python -m pytest ...`，效果一樣。
 
 VS Code 也要指定用這個 venv，不然編輯器會說找不到 `pytest`（`import pytest` 下面出現波浪線）。
@@ -254,7 +254,7 @@ VS Code 也要指定用這個 venv，不然編輯器會說找不到 `pytest`（`
 
 ## 不要把 venv commit 進 git
 
-venv 裡的連結指向==這台電腦==的 Python 路徑，換一台電腦就不能用；而且裝的套件可以隨時重裝。
+venv 裡的連結指向**這台電腦**的 Python 路徑，換一台電腦就不能用；而且裝的套件可以隨時重裝。
 所以 `.venv/` 要加進 `.gitignore`。
 
 `0_Personal/Leetcode/.gitignore`：
@@ -276,7 +276,7 @@ __pycache__/
 ### `__pycache__` 是什麼
 
 Python 執行 `.py` 前會先把它編譯成 bytecode。
-==被 import 的檔案==，Python 會把編譯結果存進同一層的 `__pycache__/`，下次檔案沒改就直接用，省下重新編譯的時間。
+**被 import 的檔案**，Python 會把編譯結果存進同一層的 `__pycache__/`，下次檔案沒改就直接用，省下重新編譯的時間。
 
 pytest 跑測試時會 import `Solution.py`，所以跑完題目資料夾裡就多了：
 
@@ -302,7 +302,7 @@ git 已經在 `.gitignore` 排除了。
 }
 ```
 
-`files.exclude` 只是讓 VS Code 的檔案總管==不顯示==，資料夾還在硬碟上。
+`files.exclude` 只是讓 VS Code 的檔案總管**不顯示**，資料夾還在硬碟上。
 `**/` 代表任何一層底下的同名資料夾。
 這個設定放在工作區的 `.vscode/` 裡，只影響這個工作區。
 
@@ -319,7 +319,7 @@ python3 -m venv .venv
 ## 另一個選擇：uv 臨時帶入套件
 
 `uv` 是另一套 Python 套件管理工具，這台電腦已經用 Homebrew 裝好。
-它可以==不建 venv==，臨時把套件帶進來執行一次：
+它可以**不建 venv**，臨時把套件帶進來執行一次：
 
 ```sh
 uv run --no-project --with pytest pytest test_add_demo.py -v
@@ -364,7 +364,7 @@ def test_add(a, b, expected):
     assert Solution().add(a, b) == expected
 ```
 
-- 測試函式要放在 `class` ==外面==（不要縮排），名稱用 `test_` 開頭。
+- 測試函式要放在 `class` **外面**（不要縮排），名稱用 `test_` 開頭。
 - 同一個檔案裡，直接用 `Solution()` 就好，不用 import。
 - 交到 LeetCode 時只複製 `class Solution` 的部分。
 
@@ -392,7 +392,7 @@ _999_Demo/Solution.py::test_add[negative] PASSED                         [100%]
 no tests ran in 0.00s
 ```
 
-原因：pytest ==自動搜尋==時，只收集檔名符合 `test_*.py` 或 `*_test.py` 的檔案，`Solution.py` 不符合；但==直接指定的檔案==不受這個規則限制，裡面的 `test_` 函式都會被收集。
+原因：pytest **自動搜尋**時，只收集檔名符合 `test_*.py` 或 `*_test.py` 的檔案，`Solution.py` 不符合；但**直接指定的檔案**不受這個規則限制，裡面的 `test_` 函式都會被收集。
 
 如果沒有做下面的設定，直接 `python3 Solution.py` 執行不會跑測試：檔案裡只有定義 class 和函式，沒有人去呼叫測試函式，所以什麼都不會發生（exit code 0，沒有任何輸出），看起來像是通過了，其實根本沒測。
 
@@ -426,17 +426,17 @@ ModuleNotFoundError: No module named 'pytest'
 ```
 
 **一定要放最下面嗎？
-** 不一定，但要放在 `import pytest` ==後面==。
+** 不一定，但要放在 `import pytest` **後面**。
 實際測試：
 
 - 放在 class 上面也能跑（`1 passed`）。
-  因為 `pytest.main` 不會用「現在執行到一半的這份程式」，而是==自己重新載入整個檔案==再收集測試，所以這時 class 和測試函式有沒有定義好都沒關係。
+  因為 `pytest.main` 不會用「現在執行到一半的這份程式」，而是**自己重新載入整個檔案**再收集測試，所以這時 class 和測試函式有沒有定義好都沒關係。
 - 放在 `import pytest` 前面就會失敗，因為程式由上往下執行，跑到這裡時 `pytest` 還不存在：
   ```
   NameError: name 'pytest' is not defined. Did you mean: 'bytes'?
   ```
 
-慣例還是==放在最下面==：上面放定義，最下面放「直接執行時要做的事」，大家一看就知道這是程式的進入點。
+慣例還是**放在最下面**：上面放定義，最下面放「直接執行時要做的事」，大家一看就知道這是程式的進入點。
 
 ### 另一種放法：獨立的 test_solution.py
 
@@ -449,7 +449,7 @@ _001_Two_Sum/
 ```
 
 這樣就可以只指定資料夾（`pytest _001_Two_Sum/`）。
-`from Solution import Solution` 能 import，是因為 pytest 會把==測試檔所在的資料夾==加進 `sys.path`（資料夾裡沒有 `__init__.py` 時的預設行為）。
+`from Solution import Solution` 能 import，是因為 pytest 會把**測試檔所在的資料夾**加進 `sys.path`（資料夾裡沒有 `__init__.py` 時的預設行為）。
 
 但每題都叫 `test_solution.py`，在 `Leetcode/` 一次跑全部題目會出錯：
 

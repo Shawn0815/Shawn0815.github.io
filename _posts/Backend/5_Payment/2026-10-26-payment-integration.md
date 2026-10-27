@@ -30,7 +30,7 @@ COMMIT;
 ```
 
 包進去會讓 Lock 持有太久、堵住其他下單，timeout 時本地資料和外部付款狀態也更難對齊。
-==Transaction 只包本地一定要一起成功的資料變動，外部金流放在 Transaction 外面。==
+**Transaction 只包本地一定要一起成功的資料變動，外部金流放在 Transaction 外面。**
 
 ---
 

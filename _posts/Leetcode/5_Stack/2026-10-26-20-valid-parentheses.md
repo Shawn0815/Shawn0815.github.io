@@ -142,9 +142,9 @@ class Solution {
 
 ### 容易錯
 
-- ==掃描到右括號時 stack 可能是空的==，要直接 return false，不能 pop。
+- **掃描到右括號時 stack 可能是空的**，要直接 return false，不能 pop。
 - 右括號跟最近的左括號不匹配時，直接 return false。
-- ==最後要檢查 stack 是否為空==，可能還有多的左括號沒有配對。
+- **最後要檢查 stack 是否為空**，可能還有多的左括號沒有配對。
 - Java：loop 字串前要先用 `toCharArray()` 轉成 char 陣列。
 
 ---

@@ -77,7 +77,7 @@ print(sum(nums), min(nums), max(nums))
 | `a[i]`、`a[i] = x` | 用 index 存取 | O(1) |
 | `len(a)` | 長度 | O(1) |
 
-==要從開頭取出就不要用 list==（`pop(0)` 是 O(n)），改用 `deque`，==要頻繁判斷「有沒有在裡面」也不要用 list==，改用 `set`。
+**要從開頭取出就不要用 list**（`pop(0)` 是 O(n)），改用 `deque`，**要頻繁判斷「有沒有在裡面」也不要用 list**，改用 `set`。
 
 ### Slicing（切片）
 
@@ -170,7 +170,7 @@ print(grid_bad)
 # → [[1, 0, 0], [1, 0, 0]]      ← 改一列，兩列都變了
 ```
 
-`[[0] * 3] * 2` 是把==同一個== list 放兩次，兩列其實是同一個物件。
+`[[0] * 3] * 2` 是把**同一個** list 放兩次，兩列其實是同一個物件。
 正確寫法是用 comprehension 每列各建一個：
 
 ```python
@@ -266,7 +266,7 @@ print(d.pop("b"), d)
 # → 2 {}
 ```
 
-用 `d[key]` 取==不存在的 key 會報錯==：
+用 `d[key]` 取**不存在的 key 會報錯**：
 
 ```python
 d["z"]
@@ -293,7 +293,7 @@ print(2 in d, 2 in d.values(), "b" in d)
 - `x in d` 只看 key，所以 `2 in d` 是 False。
 - 要查 value 可以寫 `x in d.values()`，但這是從頭一個一個比，O(n)，跟在 list 裡找一樣慢。
 
-所以設計 dict 時要反過來想：==之後要「查」的東西當 key，查到之後要「拿」的東西當 value==。
+所以設計 dict 時要反過來想：**之後要「查」的東西當 key，查到之後要「拿」的東西當 value**。
 這樣查詢永遠是 O(1)。
 
 ### 走訪
@@ -310,6 +310,7 @@ print(list(d.keys()), list(d.values()))
 ```
 
 - `for k in d:` 只拿 key。
+- `d.values()`、`d.keys()` 回傳的是 view，不是 list：可以拿來跑 for 迴圈，但不能用 `[0]` 取值。題目要回傳 list 時，要用 `list(...)` 轉。
 - dict 會保持加入的順序。
 - 走訪時不能新增或刪除 key，否則會報錯；要刪除就先收集起來，迴圈結束後再刪。
 
@@ -325,6 +326,40 @@ print(cnt)
 
 `get(ch, 0)` 讓第一次出現時從 0 開始算。
 同樣的事用 `Counter` 一行就能做到。
+
+### 分組的寫法
+
+把有相同特徵的東西收在一起：key 是特徵，value 是這一組的 list。
+第一次遇到某個特徵時，先建一個空的 list 放進 dict，之後都往那個 list 加：
+
+```python
+groups = {}
+for word in ["eat", "tea", "tan"]:
+    key = "".join(sorted(word))    # 特徵：排序後的字串
+    if key not in groups:
+        groups[key] = []
+    groups[key].append(word)
+print(groups)
+# → {'aet': ['eat', 'tea'], 'ant': ['tan']}
+
+print(list(groups.values()))
+# → [['eat', 'tea'], ['tan']]
+```
+
+dict 裡存的是 list 的參考，所以也可以先把空的 list 放進 dict，再透過另一個變數往裡面加，dict 裡會看到同一個 list：
+
+```python
+group = []
+groups["aet"] = group
+group.append("eat")
+print(groups)
+# → {'aet': ['eat']}
+```
+
+value 是 list 這種可以修改的東西才能這樣做。
+value 是數字時，`count += 1` 只改到變數本身，要寫回 dict：`d[key] = d.get(key, 0) + 1`。
+
+同樣的事用 `defaultdict(list)` 不用判斷 key 存不存在。
 
 ### key 必須是不可修改的值
 
@@ -439,7 +474,7 @@ print(dc)
 # → defaultdict(<class 'int'>, {'x': 1})
 ```
 
-陷阱：只是==讀取==不存在的 key，也會把它建立起來：
+陷阱：只是**讀取**不存在的 key，也會把它建立起來：
 
 ```python
 print(g["zzz"])
@@ -513,7 +548,7 @@ print(arr)
 ### 要取最大值：存負數
 
 `heapq` 預設是 min-heap。
-要 max-heap 的通用做法是==放進去時加負號，取出來再加負號==：
+要 max-heap 的通用做法是**放進去時加負號，取出來再加負號**：
 
 ```python
 mh = []
@@ -572,7 +607,7 @@ print(bisect.bisect_left(sa, 3), bisect.bisect_right(sa, 3),
 - 兩個都是 O(log n)。
 - 判斷 `x` 在不在裡面：`i = bisect_left(a, x)`，再檢查 `i < len(a) and a[i] == x`。
 - `bisect_right(a, x) - bisect_left(a, x)` 就是 `x` 出現的次數。
-- ==list 必須已經排序==，否則結果沒有意義。
+- **list 必須已經排序**，否則結果沒有意義。
 
 插入並保持排序：
 

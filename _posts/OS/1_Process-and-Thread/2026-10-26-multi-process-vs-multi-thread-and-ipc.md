@@ -61,7 +61,7 @@ Thread 之間不需要 IPC，本來就共享 Heap 和全域變數，可以直接
 
 為什麼最快：Pipe、Message Queue 的資料要從一個 Process 的 User Space 寫進 Kernel，再複製到另一個 Process，來回複製兩次；Shared Memory 直接讀寫同一塊記憶體，不經過 Kernel 複製。
 
-==代價是作業系統不幫你同步。==
+**代價是作業系統不幫你同步。**
 兩個 Process 同時讀到同一個計數器、各自加 1 寫回，就會少加一次。
 要自己保護 critical section：
 

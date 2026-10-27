@@ -30,7 +30,7 @@ User Entity 可能有 `id`、`email`、`passwordHash`、`createdAt`、`updatedAt
 - API 跟資料庫綁死：資料庫欄位改名、拆分、新增，前端就跟著壞。DTO 把資料庫結構和 API 合約拆開，各自演進。
 - 每支 API 要的欄位不同：商品列表只要 `id`、`name`、`price`，商品詳情還要 `description`、`stock`、`category`，共用 Entity 會拿太多或不夠。
 
-==API 合約不應該等於資料庫結構。==
+**API 合約不應該等於資料庫結構。**
 
 ---
 

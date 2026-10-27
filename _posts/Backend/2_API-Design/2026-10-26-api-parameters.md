@@ -70,7 +70,7 @@ Response 要格式一致（例如都包一層 `data`），錯誤訊息的格式�
 ?price[gte]=100&price[lte]=500
 ```
 
-用哪種都可以，==同一支 API 裡的篩選參數命名要一致==。
+用哪種都可以，**同一支 API 裡的篩選參數命名要一致**。
 
 ### 排序
 
@@ -79,7 +79,7 @@ Response 要格式一致（例如都包一層 `data`），錯誤訊息的格式�
 ?sort=-price                  - 前綴代表降序，可以多欄位：sort=-price,createdAt
 ```
 
-==排序欄位一定要用白名單或 Enum 限制==，不能把使用者傳的字串直接拼進 SQL 的 `ORDER BY`，否則會有 SQL Injection。
+**排序欄位一定要用白名單或 Enum 限制**，不能把使用者傳的字串直接拼進 SQL 的 `ORDER BY`，否則會有 SQL Injection。
 
 ---
 

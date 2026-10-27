@@ -43,7 +43,7 @@ GROUP BY category;
 ```
 
 一個分類有很多商品，分組後一列只代表一個分類，資料庫不知道要顯示哪一個 `name`。
-==不是 Group Key 的欄位要包在 Aggregate Function 裡。==
+**不是 Group Key 的欄位要包在 Aggregate Function 裡。**
 有些資料庫設定允許這樣寫，但會隨便挑一個值，不要依賴。
 
 ---

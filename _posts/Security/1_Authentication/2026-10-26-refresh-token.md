@@ -54,5 +54,5 @@ Authorization: Bearer <access_token>
 
 Session 登出直接刪 Session 就好；JWT 的 Access Token 發出去之後在過期前都還有效。
 
-常見做法是==登出時刪掉 Refresh Token==：使用者換不到新的 Access Token，現有的那張讓它自然過期，所以 Access Token 效期要設短。
+常見做法是**登出時刪掉 Refresh Token**：使用者換不到新的 Access Token，現有的那張讓它自然過期，所以 Access Token 效期要設短。
 如果連 Access Token 都要立即失效，就要加 Blacklist 或 Token Version，但設計會變得更 Stateful，看安全需求決定。

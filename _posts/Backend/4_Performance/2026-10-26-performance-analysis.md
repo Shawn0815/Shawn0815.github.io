@@ -108,4 +108,4 @@ External API 例子：下單成功後寄 Email，使用者不需要等 Email API
 | CPU / Memory 高 | 找熱點、降低計算和資料量，必要時 scale out |
 | Connection Pool 滿 | 縮短 SQL 和 Transaction、查 connection leak、調整 pool size |
 
-==加 Cache、加 Index、加機器都可能是解法，但要先知道瓶頸在哪。==
+**加 Cache、加 Index、加機器都可能是解法，但要先知道瓶頸在哪。**
