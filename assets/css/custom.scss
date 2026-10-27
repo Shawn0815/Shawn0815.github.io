@@ -1065,3 +1065,17 @@ html[data-mode='dark'] .card.categories {
   &.level-medium { color: #92400e; background: #fef3c7; }
   &.level-hard { color: #991b1b; background: #fee2e2; }
 }
+
+// LeetCode 解題紀錄（_plugins/solve-log-table.rb 加的 class）：卡點寫得長，給它最寬；解法是簡稱，窄一點
+.content table.solve-log {
+  table-layout: fixed;
+  width: 100%;
+
+  th, td { white-space: normal; }
+  th:nth-child(1) { width: 10%; }    // 類型
+  th:nth-child(2) { width: 14%; }    // 日期
+  th:nth-child(3) { width: 14%; }    // 解法
+  th:nth-child(4) { width: 13%; }    // 結果
+  th:nth-child(5) { width: 8%; }     // 時間
+  th:nth-child(6) { width: 41%; }    // 卡點
+}

@@ -9,7 +9,7 @@ level: "Medium"
 leetcode_url: "https://leetcode.com/problems/group-anagrams/"
 neetcode_url: "https://neetcode.io/problems/anagram-groups"
 class: "🧠 Blind 75"
-important: "⭐️⭐️⭐️"
+important: "⭐️⭐️⭐️⭐️"
 company:
 source: DDAN_Usandbox/0_Personal/Leetcode/1_Array_&_Hashing/_049_Group_Anagrams/Document.md
 render_with_liquid: false
@@ -51,27 +51,32 @@ You can return the answer in any order.
 
 ---
 
+## 辨識訊號
+
+- 看到「anagram」→ 字母一樣、只是順序不同，想到：
+  - 排序：排完就一模一樣，可以當 key
+  - 數字母：同一組的字串，每個字母出現的次數一樣，也可以當 key
+- 看到「group the anagrams together」→ 想到 HashMap：特徵一樣的放同一組
+- 看到「lowercase English letters」→ 想到 26 格陣列：只有 26 種字母
+- 看到 `strs.length` 最大 10^4 → 不能兩兩比較：O(n²) 約 10^8 次，太慢
+
+---
+
 ## 解法 1：Sorting
-
-### 辨識訊號
-
-- 「anagram」：字母和次數一樣、順序不同。
-- 「group the anagrams together」：要把一樣的東西分在同一組。
-- `strs.length` 最大 $10^4$：兩兩比較 $O(n²)$ 約 $10^8$ 次，太慢。
 
 ### 關鍵提問
 
 1. 同一組的字串，有什麼東西會長得一樣？
-2. 這個東西能不能拿來當 Map 的 key？value 要放什麼？
-3. 能不能每個字串只看一次，就知道它屬於哪一組？
+2. 這個東西能不能拿來當 Map 的 key？value 放什麼？
+3. 能不能每個字串只看一次，就知道它是哪一組？
 
 ### 思路
 
-1. 同一組的字串排序後會一樣，所以用排序後的字串當 key。  
-   例：`"eat"`、`"tea"`、`"ate"` 排序後都是 `"aet"`。
-2. 用 Map 分組，key 是排序後的字串，value 是這一組的字串 list。
-3. 每個字串算出 key，放進對應的那一組；沒有這一組就先建立。
-4. 最後回傳 Map 裡所有的 value。
+1. 同一組的字串排完會一模一樣，就拿排完的字串當 key。
+   例：`"eat"`、`"tea"`、`"ate"` 排完都是 `"aet"`。
+2. 用 Map 分組，key 是排完的字串，value 是這一組的字串 list。
+3. 每個字串算出 key，丟進對應的那組；還沒有這組就先建一個。
+4. 最後把 Map 裡所有的 value 拿出來回傳。
 
 ### Pseudo Code
 
@@ -132,25 +137,20 @@ class Solution:
 
 ## 解法 2：Frequency Array
 
-### 辨識訊號
-
-- 「anagram」：同一組的字串，每個字母出現的次數一樣。
-- `strs[i]` consists of lowercase English letters：只有 26 種字母。
-
 ### 關鍵提問
 
-1. 排序是瓶頸。除了排序後的字串，同一組還有什麼東西一樣？
-2. 字母只有幾種？能不能用固定大小的陣列計數？
+1. 排序是瓶頸。除了排完的字串，同一組還有什麼一樣？
+2. 字母只有 26 種，能不能用固定大小的陣列來數？
 3. 陣列能不能當 key？不能的話要轉成什麼？
 
 ### 思路
 
-1. 同一組的字串，每個字母出現的次數一樣，所以改用次數當 key。  
+1. 同一組的字串，每個字母出現的次數一樣，改用次數當 key。
    例：`"eat"`、`"tea"`、`"ate"` 都是 a、e、t 各 1 次，其他字母 0 次。
 2. 每個字串用 26 格陣列數一次字母，O(k)，比排序的 O(k log k) 快。
-3. 陣列不能當 key，要先轉換：Python 轉成 tuple，Java 用 `Arrays.toString`。  
-   不能直接把數字接成字串，`[1, 11]` 和 `[11, 1]` 都會變成 `"111"`。
-4. 分組和回傳的方式跟解法 1 一樣。
+3. **陣列不能當 key**，要先轉：Python 轉 tuple，Java 用 `Arrays.toString`。
+   **不能直接把數字接成字串**，`[1, 11]` 跟 `[11, 1]` 都會變成 `"111"`。
+4. 分組跟回傳的方式跟解法 1 一樣。
 
 ### Pseudo Code
 
@@ -215,22 +215,22 @@ class Solution:
 
 ## 卡點
 
-- 想法：覺得 Constraints 沒影響，沒讀出訊號。
-  - 只有 26 個小寫字母：可以用 26 格陣列計數，這是解法 2 的關鍵。
-  - 長度可以是 0：`["", ""]` 的答案是 `[["", ""]]`，不是各自一組。
-  - n 最大 10^4：O(n²) 不夠快。
+**想法：**
+
+- 覺得 Constraints 沒影響，沒讀出「只有 26 個小寫字母」可以用 26 格陣列計數，這是解法 2 的關鍵。
   - 下次先問：每一條 Constraint 限制了什麼、又讓什麼做法變得可行？
-- 實作：Pseudo Code 寫的和腦中想的不一樣，三次都是漏寫一步。
-  - 解法 1：value 寫成字串 `word` 而不是 list，下一個同組的字串加不進去。
-  - 解法 1：新的 list 沒放進 map，map 一直是空的，回傳空答案。
-  - 解法 2：漏了加進 group 那一行，每一組都是空的。
+
+**實作：**
+
+- Pseudo Code 跟腦中想的不一樣，三次都是漏寫一步（value 寫成字串、新的 list 沒放進 Map、漏了加進 group）。
   - 下次先問：照寫下來的 Pseudo Code，用小 Example 一行一行走，結果對嗎？
 
 ---
 
 ## 解題紀錄
 
-| 日期 | 解法 | 結果 | 時間 | 卡在 |
-|---|---|---|---|---|
-| 2026-10-27 | 解法 1：Sorting | AC | 約 57 分 | 實作：Pseudo Code 漏寫細節 |
-| 2026-10-27 | 解法 2：Frequency Array | AC | 約 16 分 | 實作：漏寫加入那一行 |
+| 類型 | 日期 | 解法 | 結果 | 時間 | 卡點 |
+|---|---|---|---|---|---|
+| 第一次 | 2025-08-10 | 計數陣列 | 看答案 | — | 想法：完全沒想法，沒想到用 HashMap 分組、字母次數當 key |
+| 複習 1 | 2026-07-30 | 計數陣列 | AC | — | 實作：每個字串沒重建陣列，次數一直累加 |
+| 複習 2 | 2026-10-27 | 排序、計數陣列 | AC | — | 實作：Pseudo Code 三次都漏寫一步 |
